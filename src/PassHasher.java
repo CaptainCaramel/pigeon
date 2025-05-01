@@ -22,7 +22,7 @@ public class PassHasher
         ArrayList<Integer> Indasci = new ArrayList<>();
         for(int i = password.length() - 1; i > -1;i--)
         {
-            Indasci.add(Integer.valueOf(passwordindchars.get(i)));
+            Indasci.add(Integer.valueOf(passwordindchars.get(i) * (i + 1)));
         }
         Integer sum = Indasci.stream().reduce(0, (tmp1, tmp2) -> tmp1 + tmp2);
         return sum;
