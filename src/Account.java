@@ -1,3 +1,4 @@
-public interface Account {
+public interface Account
+{
     
 }

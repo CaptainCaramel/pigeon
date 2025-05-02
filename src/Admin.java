@@ -1,2 +1,3 @@
-public class Admin implements Account{
+public class Admin implements Account
+{
 }
