@@ -3,6 +3,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Email
@@ -10,6 +11,7 @@ public class Email
     private User sender, receiver;
     private String subject, text;
     private Media attachment;
+    private ArrayList<String> Spamblacklist = new ArrayList<>();
 
     public void emailComposition()
     {
@@ -80,6 +82,25 @@ public class Email
         catch (IOException e)
         {
             e.printStackTrace();
+        }
+    }
+
+    //unfinished for now
+    public void SpamCurrentlyupload(StringBuilder log, String sender)
+    {
+        if(Spamblacklist.contains(sender))
+        {
+            try
+            {
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\User\\Documents\\Pigeon\\Spam.txt"));
+                bufferedWriter.append(log);
+                bufferedWriter.append("___________________________");
+                bufferedWriter.close();
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
