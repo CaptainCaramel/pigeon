@@ -1,4 +1,5 @@
-public class NegativeIDException extends RuntimeException {
+public class NegativeIDException extends RuntimeException
+{
     public NegativeIDException(String m) {
         super(m);
     }

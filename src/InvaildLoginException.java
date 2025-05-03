@@ -1,4 +1,5 @@
-public class InvaildLoginException extends RuntimeException {
+public class InvaildLoginException extends RuntimeException
+{
     public InvaildLoginException(String message) {
         super(message);
     }

@@ -1,5 +1,8 @@
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.stream.Stream;
+
+import static java.lang.Math.random;
 
 public class PassHasher
 {
@@ -13,7 +16,7 @@ public class PassHasher
 
     private int Asciier(String password)
     {
-        //მოცემულ მეთოდში password-ს ვაქცევთ ციფრად რომელიც არის მისი ყველა ასოს ასკი მნიშვნელობის ჯამი
+        //მოცემულ მეთოდში password-ს ვაქცევთ ციფრად რომელიც არის მისი ყველა ასოს ასკი მნიშვნელობა გამრავლებული შემდეგ i-მნიშვნელობასთან, დაჯამებული.
         ArrayList<Character> passwordindchars = new ArrayList<>();
         for(char c : password.toCharArray())
         {
@@ -22,7 +25,7 @@ public class PassHasher
         ArrayList<Integer> Indasci = new ArrayList<>();
         for(int i = password.length() - 1; i > -1;i--)
         {
-            Indasci.add(Integer.valueOf(passwordindchars.get(i)));
+            Indasci.add(Integer.valueOf(passwordindchars.get(i) * (i + 1)));
         }
         Integer sum = Indasci.stream().reduce(0, (tmp1, tmp2) -> tmp1 + tmp2);
         return sum;
@@ -33,11 +36,26 @@ public class PassHasher
         //მოცემულ მეთოდში, ზემოთხსენებულ ინტს ვამრავლებთ თავის თავზე password-ის სიგრძემდე
         for(int i = 0; i < password.length(); i++)
         {
-            ascivalue *= ascivalue;
+            ascivalue = ascivalue + (ascivalue + Integer.valueOf(password.charAt(i)));
         }
         StringBuilder stringBuilder = new StringBuilder(String.valueOf(ascivalue));
         stringBuilder.reverse();
         String result = stringBuilder.toString();
+        return result;
+    }
+
+    public String backuppassword()
+    {
+        //მოცემულ მეთოდში, წარმოვქნით შემთხვევით მეთოდის მიხედვით backup password-ს
+        String result = "";
+        char[] greenlitchars = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890_!@#$%&*\";:<>-+=()".toCharArray();
+        for(int i = 0; i < 12; i++)
+        {
+            Random random = new Random();
+            int h = random.nextInt(70);
+
+            result += String.valueOf(greenlitchars[h]);
+        }
         return result;
     }
 }
