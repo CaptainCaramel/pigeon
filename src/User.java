@@ -16,19 +16,15 @@ public class User{
         return null;
     }
 
-    public static User signup(String login, String email) {
+    public static User signup(String login, String email, String password) {
         return null;
     }
 
 
     public static boolean validateLogin(String login) {
-        //String regex1 = "[^a-zA-Z0-9_]";
+        String regex1 = "[^a-zA-Z0-9_]";
 
-        //Pattern p = Pattern.compile(regex1);
-        //Matcher m = p.matcher(login);
-
-        //return !(m.matches()) && (login.length() >= 3 && login.length() <= 12);
-        return false;
+        return !(login.matches(regex1)) && (login.length() >= 3 && login.length() <= 12);
     }
 
     public int getId() {

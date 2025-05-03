@@ -7,11 +7,11 @@ public class PassHasher
     {
         //პაროლის hashing
         StringBuilder stringBuilder = new StringBuilder(password);
-        String hashedpassword = AsciMult(stringBuilder.toString(), Ascier(stringBuilder.toString()));
+        String hashedpassword = AsciiMult(stringBuilder.toString(), Asciier(stringBuilder.toString()));
         return hashedpassword;
     }
 
-    private int Ascier(String password)
+    private int Asciier(String password)
     {
         //მოცემულ მეთოდში password-ს ვაქცევთ ციფრად რომელიც არის მისი ყველა ასოს ასკი მნიშვნელობის ჯამი
         ArrayList<Character> passwordindchars = new ArrayList<>();
@@ -28,7 +28,7 @@ public class PassHasher
         return sum;
     }
 
-    private String AsciMult(String password, long ascivalue)
+    private String AsciiMult(String password, long ascivalue)
     {
         //მოცემულ მეთოდში, ზემოთხსენებულ ინტს ვამრავლებთ თავის თავზე password-ის სიგრძემდე
         for(int i = 0; i < password.length(); i++)
