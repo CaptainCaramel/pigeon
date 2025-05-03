@@ -1,9 +1,13 @@
+import java.awt.image.AreaAveragingScaleFilter;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Email
@@ -12,18 +16,34 @@ public class Email
     private String subject, text;
     private Media attachment;
     private ArrayList<String> Spamblacklist = new ArrayList<>();
+    Scanner scanner = new Scanner(System.in);
+
+    public void Hub()
+    {
+        System.out.println("********Welcome to Pigeon********");
+        System.out.println();
+        System.out.println("1.Compose E-mail");
+        System.out.println("2.Inbox");
+        System.out.println("3.Access diffrent folders");
+
+        int decision = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("*******************************");
+        if (decision == 1)  emailComposition();
+        else if (decision == 2) Inbox();
+        else if (decision == 3) FolderAcess();
+    }
 
     public void emailComposition()
     {
         try
         {
-            Scanner scanner = new Scanner(System.in);
             StringBuilder log = new StringBuilder();
 
             System.out.print("To: ");
             log.append("To: ");
-            String sender = scanner.nextLine();
-            log.append(sender).append("\n");
+            String receiver = scanner.nextLine();
+            log.append(receiver).append("\n");
 
             System.out.print("Subject: ");
             log.append("Subject: ");
@@ -31,70 +51,42 @@ public class Email
             log.append(subject).append("\n");
 
             System.out.println("---------------------------");
-            log.append("---------------------------");
+            log.append("---------------------------\n");
 
             String text = scanner.nextLine();
             log.append(text).append("\n");
             if (text.length() > 7500) throw new InvalidEmailException("Limit of 7500 characters has been exceeded");
 
-            System.out.println("\nSend/Draft");
-            String decision = scanner.nextLine().toLowerCase();
-            if(decision.equals("send"))
+            System.out.println("Destination: ");
+            System.out.println("1.Send");
+            System.out.println("2.Draft");
+            int decision = scanner.nextInt();
+            if (decision == 1)
             {
-                Sendcurrentlyupload(log);
+                EmailSender(1, log);
             }
-            else if(decision.equals("draft"))
+            else if (decision == 1)
             {
-                Draftcurrentlyupload(log);
+                EmailSender(2, log);
             }
             else throw new InvalidEmailException("Invalid response");
         }
-        catch (InvalidEmailException e)
-        {
+        catch (InvalidEmailException e) {
             System.out.println("ERROR: " + e.getMessage());
+            Hub();
         }
     }
 
-    public void Sendcurrentlyupload(StringBuilder log)
+    public void EmailSender(int decision, StringBuilder log)
     {
-        try
+        if(decision == 1)
         {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\User\\Documents\\Pigeon\\Sent.txt"));
-            bufferedWriter.append(log);
-            bufferedWriter.append("___________________________");
-            bufferedWriter.close();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    public void Draftcurrentlyupload(StringBuilder log)
-    {
-        try
-        {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\User\\Documents\\Pigeon\\Draft.txt"));
-            bufferedWriter.append(log);
-            bufferedWriter.append("___________________________");
-            bufferedWriter.close();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    //unfinished for now
-    public void SpamCurrentlyupload(StringBuilder log, String sender)
-    {
-        if(Spamblacklist.contains(sender))
-        {
+            //aq mere serveris shit ra rom imena miuvdes u get me brochacho
             try
             {
-                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\User\\Documents\\Pigeon\\Spam.txt"));
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\User\\Documents\\Pigeon\\Sent.txt", true));
                 bufferedWriter.append(log);
-                bufferedWriter.append("___________________________");
+                bufferedWriter.write("\n---EMAIL-END---\n");
                 bufferedWriter.close();
             }
             catch (IOException e)
@@ -102,5 +94,279 @@ public class Email
                 throw new RuntimeException(e);
             }
         }
+        else if(decision == 2)
+        {
+            try
+            {
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\User\\Documents\\Pigeon\\Draft.txt", true));
+                bufferedWriter.append(log);
+                bufferedWriter.write("\n---EMAIL-END---\n");
+                bufferedWriter.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            System.out.println("E-mail Uploaded to Draft");
+        }
+        Hub();
+    }
+    public void Inbox()
+    {
+        System.out.println("Inbox action: ");
+        System.out.println("1.View inbox");
+        System.out.println("2.Delete all in inbox ");
+
+        int decision1 = scanner.nextInt();
+
+        if(decision1 == 1) Folderviewer(4);
+        else if(decision1 == 2) FolderDeleter(4);
+    }
+    public void FolderAcess()
+    {
+        System.out.println("Select folder: ");
+        System.out.println();
+        System.out.println("1.Spam");
+        System.out.println("2.Draft");
+        System.out.println("3.All E-mails sent");
+
+        int decision = scanner.nextInt();
+        System.out.println("*******************************");
+        if(decision == 1)
+        {
+            System.out.println("Spam folder action: ");
+            System.out.println();
+            System.out.println("1.View all in spam");
+            System.out.println("2.Delete all in spam");
+            System.out.println("3.Add a new user in the spamlist");
+
+            int decision1 = scanner.nextInt();
+            System.out.println("*******************************");
+
+            if (decision1 == 1) Folderviewer(1);
+            if (decision1 == 2) FolderDeleter(1);
+            if (decision1 == 3) Newadditiontospam();
+
+        }
+        else if(decision == 2)
+        {
+            System.out.println("Draft folder action: ");
+            System.out.println();
+            System.out.println("1.View all in Draft");
+            System.out.println("2.Delete all in Draft");
+
+            int decision1 = scanner.nextInt();
+            System.out.println("*******************************");
+
+            if (decision1 == 1) Folderviewer(2);
+            if (decision == 2) FolderDeleter(2);
+        }
+        else if(decision == 3)
+        {
+            System.out.println("All-Emails sent folder action: ");
+            System.out.println();
+            System.out.println("1.View all in All-Emails sent");
+            System.out.println("2.Delete all in All-Emails sent (this will only delete the emails on your own end)");
+
+            int decision1 = scanner.nextInt();
+
+            System.out.println("*******************************");
+
+            if(decision1 == 1) Folderviewer(3);
+            if(decision1 == 2) FolderDeleter(3);
+        }
+    }
+    public void Newadditiontospam()
+    {
+        System.out.println("Spam-List user: ");
+
+        String decision = scanner.nextLine();
+
+        Spamblacklist.add(decision);
+        System.out.println(decision + " added to the spam-List");
+        System.out.println("*******************************");
+        Hub();
+    }
+    public void FolderDeleter(int decision)
+    {
+        if(decision == 1)
+        {
+            try
+            {
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\User\\Documents\\Pigeon\\Spam.txt"));
+                bufferedWriter.write("");
+                System.out.println("Spam folder cleared out");
+                bufferedWriter.close();
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        else if(decision == 2)
+        {
+            try
+            {
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\User\\Documents\\Pigeon\\Draft.txt"));
+                bufferedWriter.write("");
+                System.out.println("Draft folder cleared out");
+                bufferedWriter.close();
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        else if(decision == 3)
+        {
+            try
+            {
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\User\\Documents\\Pigeon\\Sent.txt"));
+                bufferedWriter.write("");
+                System.out.println("Sent folder cleared out");
+                bufferedWriter.close();
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        else if(decision == 4)
+        {
+            try
+            {
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\User\\Documents\\Pigeon\\Inbox.txt"));
+                bufferedWriter.write("");
+                System.out.println("Inbox folder cleared out");
+                bufferedWriter.close();
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        Hub();
+    }
+    public void Folderviewer(int decision)
+    {
+        StringBuilder currentmail = new StringBuilder();
+        if(decision == 1)
+        {
+            ArrayList<String> Spamemails = new ArrayList<>();
+            try
+            {
+                List<String> jumpbledemails = Files.readAllLines(Paths.get("C:\\Users\\User\\Documents\\Pigeon\\Spam.txt"));
+                for (String line : jumpbledemails)
+                {
+                    if (line.equals("---EMAIL-END---"))
+                    {
+                        Spamemails.add(currentmail.toString().trim());
+                        currentmail.setLength(0);
+                    }
+                    else
+                    {
+                        currentmail.append(line).append("\n");
+                    }
+                    for (int i = 0; i < Spamemails.size(); i++)
+                    {
+                        System.out.println("\nSpam Email: " + (i + 1));
+                        System.out.println(Spamemails.get(i));
+                    }
+                }
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        else if (decision == 2)
+        {
+            ArrayList<String> Draftemails = new ArrayList<>();
+            try
+            {
+                List<String> jumpbledemails = Files.readAllLines(Paths.get("C:\\Users\\User\\Documents\\Pigeon\\Draft.txt"));
+                for (String line : jumpbledemails)
+                {
+                    if (line.equals("---EMAIL-END---"))
+                    {
+                        Draftemails.add(currentmail.toString().trim());
+                        currentmail.setLength(0);
+                    }
+                    else
+                    {
+                        currentmail.append(line).append("\n");
+                    }
+                    for (int i = 0; i < Draftemails.size(); i++)
+                    {
+                        System.out.println("\nDraft Email: " + (i + 1));
+                        System.out.println(Draftemails.get(i));
+                    }
+                }
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        else if(decision == 3)
+        {
+            ArrayList<String> Sentemails = new ArrayList<>();
+            try
+            {
+                List<String> jumpbledemails = Files.readAllLines(Paths.get("C:\\Users\\User\\Documents\\Pigeon\\Sent.txt"));
+                for (String line : jumpbledemails)
+                {
+                    if (line.equals("---EMAIL-END---"))
+                    {
+                        Sentemails.add(currentmail.toString().trim());
+                        currentmail.setLength(0);
+                    }
+                    else
+                    {
+                        currentmail.append(line).append("\n");
+                    }
+                    for (int i = 0; i < Sentemails.size(); i++)
+                    {
+                        System.out.println("\nSent Email: " + (i + 1));
+                        System.out.println(Sentemails.get(i));
+                    }
+                }
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        else if(decision == 4)
+        {
+
+            ArrayList<String> emails = new ArrayList<>();
+            try
+            {
+                List<String> jumpbledemails = Files.readAllLines(Paths.get("C:\\Users\\User\\Documents\\Pigeon\\Inbox.txt"));
+                for (String line : jumpbledemails)
+                {
+                    if (line.equals("---EMAIL-END---"))
+                    {
+                        emails.add(currentmail.toString().trim());
+                        currentmail.setLength(0);
+                    }
+                    else
+                    {
+                        currentmail.append(line).append("\n");
+                    }
+                    for (int i = 0; i < emails.size(); i++)
+                    {
+                        System.out.println("\nSent Email: " + (i + 1));
+                        System.out.println(emails.get(i));
+                    }
+                }
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        Hub();
     }
 }
