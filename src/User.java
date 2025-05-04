@@ -16,15 +16,19 @@ public class User{
         return null;
     }
 
-    public static User signup(String login, String email, String password) {
-        return null;
-    }
 
 
     public static boolean validateLogin(String login) {
         String regex1 = "[^a-zA-Z0-9_]";
+        boolean valid = true;
 
-        return !(login.matches(regex1)) && (login.length() >= 3 && login.length() <= 12);
+
+        validateLoop:
+        for (int i = 0; i < login.length(); i++) {
+            if((login.charAt(i) + "").matches(regex1)) {valid = false; break validateLoop;}
+        }
+        if(valid) return login.length() >= 4 && login.length() <= 25;
+        else return false;
     }
 
     public int getId() {
@@ -41,11 +45,6 @@ public class User{
     public String getLogin() {
         return login;
     }
-
-    //        if(login.matches(".[^1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM_]") || login.length() < 4 || login.length() > 20)
-    //        {
-    //            throw new InvaildLoginException("Invalid Login! Login can only contain : a-z, A-Z, 0-9, _ and be 4-20 characters long");
-    //        }
 
     public void setLogin(String login){
         this.login = login;
