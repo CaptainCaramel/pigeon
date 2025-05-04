@@ -7,10 +7,10 @@ public class SQLServer {
     String password = "Iamme113";
 
     private Connection connection;
-    private PreparedStatement signUpStatement;
-    private PreparedStatement checkLogin;
-    private PreparedStatement checkPassword;
-    private PreparedStatement getUserFromDB;
+    private final PreparedStatement signUpStatement;
+    private final PreparedStatement checkLogin;
+    private final PreparedStatement checkPassword;
+    private final PreparedStatement getUserFromDB;
     private final Statement statement;
 
     SQLServer(){

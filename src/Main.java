@@ -7,18 +7,10 @@ import java.util.regex.Pattern;
 public class Main {
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         Client client = new Client();
         client.pages(0);
 
     }
-
-public class Main
-{
-     public static void main(String[] args)
-     {
-         Email mail = new Email();
-         mail.Hub();
-     }
 }

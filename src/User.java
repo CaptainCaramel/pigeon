@@ -19,7 +19,7 @@ public class User{
 
 
     public static boolean validateLogin(String login) {
-        String regex1 = "[^a-zA-Z0-9_]";
+        String regex1 = "[^a-zA-Z0-9_-]";
         boolean valid = true;
 
 
@@ -27,9 +27,35 @@ public class User{
         for (int i = 0; i < login.length(); i++) {
             if((login.charAt(i) + "").matches(regex1)) {valid = false; break validateLoop;}
         }
-        if(valid) return login.length() >= 4 && login.length() <= 25;
+        if(valid) return login.length() >= 4 && login.length() <= 20;
         else return false;
     }
+
+    public static boolean validateEmail(String email) {
+        String regex1 = "[^a-zA-Z0-9_-]";
+        boolean valid = true;
+
+
+        validateLoop:
+        for (int i = 0; i < email.length(); i++) {
+            if((email.charAt(i) + "").matches(regex1)) {valid = false; break validateLoop;}
+        }
+        if(valid) return email.length() >= 4 && email.length() <= 20;
+        else return false;
+    }
+
+    public static boolean validatePassword(String password) {
+        String regex1 = "[^a-zA-Z0-9_!@#$%^&*()+/{}~<>,.:-]";
+        boolean valid = true;
+
+        validateLoop:
+        for (int i = 0; i < password.length(); i++) {
+            if((password.charAt(i) + "").matches(regex1)) {valid = false; break validateLoop;}
+        }
+        if(valid) return password.length() >= 8 && password.length() <= 25;
+        else return false;
+    }
+
 
     public int getId() {
         return id;
