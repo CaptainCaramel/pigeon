@@ -84,4 +84,18 @@ public class SQLServer {
             throw new RuntimeException(e);
         }
     }
+
+    public User logIn(String login){
+        try {
+            getUserFromDB.setString(1, login);
+            ResultSet user = getUserFromDB.executeQuery();
+            user.next();
+            int id = user.getInt("id");
+            String email = user.getString("email");
+            return new User(id, login, email);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

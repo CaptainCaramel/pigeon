@@ -1,9 +1,7 @@
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Client implements Serializable {
@@ -14,11 +12,12 @@ public class Client implements Serializable {
 
     private final String filePath = new File("").getAbsolutePath();
 
-    private final SQLServer sqlServer;
+    private final transient SQLServer sqlServer;
 
     private User user;
 
     private ArrayList<String> spamblacklist = new ArrayList<>();
+    private ArrayList<String> Recepients = new ArrayList<>();
 
     Client(){
         if (!loadSettings()) {
@@ -38,13 +37,17 @@ public class Client implements Serializable {
             Client loadedClient = (Client)objectInputStream.readObject();
 
             this.rememberMe = loadedClient.rememberMe;
-            if(rememberMe) this.user = loadedClient.user;
+            if(rememberMe) {
+                this.user = loadedClient.user;
+                System.out.println("User loaded, username : " + user.getLogin());
+                this.Recepients = loadedClient.Recepients;
+
+            }
+
 
             objectInputStream.close();
 
-        }catch (IOException | ClassNotFoundException e){
-            //throw new RuntimeException(e);
-            //e.printStackTrace();
+        }catch (IOException | ClassNotFoundException | NullPointerException e){
             System.out.println("Error while importing settings! Resetting to defaults...");
             return false;
         }
@@ -139,6 +142,12 @@ public class Client implements Serializable {
                 else System.out.println("Invalid input! Use \"True\" or \"False\"!");
             }
             System.out.println("**************************");
+
+            user = sqlServer.logIn(login);
+            if(rememberMe) saveSettings();
+
+
+            pages(3);
         }
 
         //Sign up page
@@ -200,14 +209,33 @@ public class Client implements Serializable {
 
         //Email Hub
         else if (pID == 3){
-            System.out.println("********Welcome, " + "********");
+
+            System.out.println("********Welcome, " + user.getLogin() +  " ********");
             System.out.println();
             System.out.println("1.Compose E-mail");
             System.out.println("2.Inbox");
             System.out.println("3.Folders");
+            System.out.println("4.Settings");
 
             int decision = scanner.nextInt();
-            scanner.nextLine();
+
+            if(decision == 1) {
+                pages(4);
+                return;
+            }
+            if(decision == 2){
+                pages(5);
+                return;
+            }
+            if(decision == 3) {
+                FolderAcess();
+                return;
+            }
+            if(decision == 4){
+                pages(6);
+                return;
+            }
+
             System.out.println("*******************************");
         }
 
@@ -217,7 +245,17 @@ public class Client implements Serializable {
             {
                 StringBuilder log = new StringBuilder();
 
-                System.out.print("To: ");
+                if(Recepients.isEmpty()) System.out.print("To: ");
+                else
+                {
+                    System.out.print("To (Recommended - ");
+                    for(String str : Mostcommonrecepeints(Recepients))
+                    {
+                        System.out.print(str + ";");
+                    }
+                    System.out.print("):");
+                }
+
                 log.append("To: ");
                 String receiver = scanner.nextLine();
                 log.append(receiver).append("\n");
@@ -257,6 +295,48 @@ public class Client implements Serializable {
 
             if(decision1 == 1) Folderviewer(4);
             else if(decision1 == 2) FolderDeleter(4);
+        }
+
+        //Settings
+        else if(pID == 6){
+            System.out.println("*****Settings*****");
+            System.out.println();
+            System.out.println("1.Remember Me");
+            System.out.println("2.Log Out");
+
+            int decision1 = scanner.nextInt();
+
+            if(decision1 == 1) pages(7);
+            else if(decision1 == 2) pages(8);
+        }
+
+        else if(pID == 7){
+            System.out.println("*****Remember Me*****");
+            System.out.println("Currently set to : " + rememberMe);
+            rememberMeLoop:
+            while(true){
+                String remMe = scanner.nextLine();
+                if(remMe.equalsIgnoreCase("true")){
+                    setRememberMe(true);
+                    saveSettings();
+                    break rememberMeLoop;
+                }
+                else if(remMe.equalsIgnoreCase("false")){
+                    setRememberMe(false);
+                    saveSettings();
+                    break rememberMeLoop;
+                }
+                else System.out.println("Invalid input! Use \"True\" or \"False\"!");
+            }
+            System.out.println("**************************");
+            pages(6);
+
+        }
+        else if(pID == 8){
+            rememberMe = false;
+            user = null;
+            saveSettings();
+            pages(0);
         }
     }
 
@@ -553,6 +633,25 @@ public class Client implements Serializable {
 
     public void setRememberMe(boolean rememberMe) {
         this.rememberMe = rememberMe;
+    }
+
+    public ArrayList<String> Mostcommonrecepeints(ArrayList<String> recepients)
+    {
+        HashMap<String, Integer> frequencymap = new HashMap<>();
+        for(String  str : recepients)
+        {
+            frequencymap.put(str, frequencymap.getOrDefault(str, 0) + 1);
+        }
+
+        List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(frequencymap.entrySet());
+
+        sortedList.sort((a, b) -> b.getValue().compareTo(a.getValue()));
+        ArrayList<String> topapperances = new ArrayList<>();
+        for(int i = 0; i < Math.min(3, sortedList.size()); i++)
+        {
+            topapperances.add(sortedList.get(i).getKey());
+        }
+        return topapperances;
     }
 
 }

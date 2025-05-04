@@ -449,15 +449,9 @@ public class Email
                 spam = (ArrayList<String>) objectInputStream.readObject();
                 objectInputStream.close();
             }
-            catch (FileNotFoundException e)
-            {
-
+            catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
-            catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            catch (ClassNotFoundException e) {throw new RuntimeException(e);}
             return spam;
         }
         else
