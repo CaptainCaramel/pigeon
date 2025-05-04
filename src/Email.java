@@ -1,14 +1,12 @@
+import javax.swing.*;
 import java.awt.image.AreaAveragingScaleFilter;
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReferenceArray;
+import java.util.stream.Collectors;
 
 public class Email
 {
@@ -16,10 +14,14 @@ public class Email
     private String subject, text;
     private Media attachment;
     private ArrayList<String> Spamblacklist = new ArrayList<>();
+    private ArrayList<String> Recepients = new ArrayList<>();
     Scanner scanner = new Scanner(System.in);
 
     public void Hub()
     {
+        Spamblacklist = Fileloader(0);
+        Recepients = Fileloader(1);
+
         System.out.println("********Welcome to Pigeon********");
         System.out.println();
         System.out.println("1.Compose E-mail");
@@ -40,7 +42,17 @@ public class Email
         {
             StringBuilder log = new StringBuilder();
 
-            System.out.print("To: ");
+            if(Recepients.isEmpty()) System.out.print("To: ");
+            else
+            {
+                System.out.print("To (Recomended - ");
+                for(String str : Mostcommonrecepeints(Recepients))
+                {
+                    System.out.print(str + ";");
+                }
+                System.out.print("):");
+            }
+
             log.append("To: ");
             String receiver = scanner.nextLine();
             log.append(receiver).append("\n");
@@ -63,11 +75,11 @@ public class Email
             int decision = scanner.nextInt();
             if (decision == 1)
             {
-                EmailSender(1, log);
+                EmailSender(1, log, receiver);
             }
             else if (decision == 1)
             {
-                EmailSender(2, log);
+                EmailSender(2, log, "0");
             }
             else throw new InvalidEmailException("Invalid response");
         }
@@ -77,7 +89,7 @@ public class Email
         }
     }
 
-    public void EmailSender(int decision, StringBuilder log)
+    public void EmailSender(int decision, StringBuilder log, String Receiver)
     {
         if(decision == 1)
         {
@@ -88,6 +100,7 @@ public class Email
                 bufferedWriter.append(log);
                 bufferedWriter.write("\n---EMAIL-END---\n");
                 bufferedWriter.close();
+                Recepients.add(Receiver);
             }
             catch (IOException e)
             {
@@ -111,6 +124,26 @@ public class Email
         }
         Hub();
     }
+
+    public ArrayList<String> Mostcommonrecepeints(ArrayList<String> recepients)
+    {
+        HashMap<String, Integer> frequencymap = new HashMap<>();
+        for(String  str : recepients)
+        {
+            frequencymap.put(str, frequencymap.getOrDefault(str, 0) + 1);
+        }
+
+        List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(frequencymap.entrySet());
+
+        sortedList.sort((a, b) -> b.getValue().compareTo(a.getValue()));
+        ArrayList<String> topapperances = new ArrayList<>();
+        for(int i = 0; i < Math.min(3, sortedList.size()); i++)
+        {
+            topapperances.add(sortedList.get(i).getKey());
+        }
+        return topapperances;
+    }
+
     public void Inbox()
     {
         System.out.println("Inbox action: ");
@@ -185,6 +218,7 @@ public class Email
         Spamblacklist.add(decision);
         System.out.println(decision + " added to the spam-List");
         System.out.println("*******************************");
+        Savefiler(0);
         Hub();
     }
     public void FolderDeleter(int decision)
@@ -368,5 +402,83 @@ public class Email
             }
         }
         Hub();
+    }
+    public void Savefiler(int indicator)
+    {
+        if(indicator == 0)
+        {
+            try
+            {
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("")));
+                objectOutputStream.writeObject(Spamblacklist);
+                objectOutputStream.close();
+            }
+            catch (FileNotFoundException e) {
+
+                throw new RuntimeException(e);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if(indicator == 1)
+        {
+            try
+            {
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("")));
+                objectOutputStream.writeObject(Recepients);
+                objectOutputStream.close();
+            }
+            catch (FileNotFoundException e) {
+
+                throw new RuntimeException(e);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    public ArrayList Fileloader(int indicator)
+    {
+        if(indicator == 0)
+        {
+            ArrayList<String> spam = new ArrayList<>();
+            try
+            {
+                ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream("")));
+                spam = (ArrayList<String>) objectInputStream.readObject();
+                objectInputStream.close();
+            }
+            catch (FileNotFoundException e)
+            {
+
+                throw new RuntimeException(e);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            catch (ClassNotFoundException e) {throw new RuntimeException(e);}
+            return spam;
+        }
+        else
+        {
+            ArrayList<String> recepeints = new ArrayList<>();
+            try
+            {
+                ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream("")));
+                recepeints = (ArrayList<String>) objectInputStream.readObject();
+                objectInputStream.close();
+            }
+            catch (FileNotFoundException e) {
+
+                throw new RuntimeException(e);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            catch (ClassNotFoundException e){throw new RuntimeException(e);}
+            return recepeints;
+
+        }
     }
 }
