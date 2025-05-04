@@ -50,20 +50,19 @@ public class Email
 
             log.append("To: ");
             SQLServer sqlServer = new SQLServer();
+            String receiver1 = "";
             while(true)
             {
-                String receiver = scanner.nextLine() + ";";
-                ArrayList<String> everyreceiver = Indorgroupchecker(receiver);
-                int i = 0;
-                for (String str : everyreceiver)
+                String strreceiver = scanner.nextLine() + ";";
+                ArrayList<String> everyreceiver = Indorgroupchecker(strreceiver);
+                for (int i = 0; i < everyreceiver.size(); i++)
                 {
-
-                    if (!sqlServer.validateLogin(str)) System.out.println("Invalid email" + str);
-                    i++;
-                    if(i == everyreceiver.size()) break;
+                    if (!sqlServer.validateLogin(everyreceiver.get(i))) System.out.println("Invalid email: " + everyreceiver.get(i) + " ");
                 }
+                receiver1 = strreceiver;
+                break;
             }
-            log.append(receiver).append("\n");
+            log.append(receiver1).append("\n");
 
             System.out.print("Subject: ");
             log.append("Subject: ");
@@ -83,7 +82,7 @@ public class Email
             int decision = scanner.nextInt();
             if (decision == 1)
             {
-                EmailSender(1, log, receiver);
+                EmailSender(1, log, receiver1);
             }
             else if (decision == 1)
             {
