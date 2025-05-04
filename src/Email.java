@@ -49,13 +49,19 @@ public class Email
             }
 
             log.append("To: ");
-            String receiver = scanner.nextLine() + ";";
-            ArrayList<String> everyreceiver = Indorgroupchecker(receiver);
             SQLServer sqlServer = new SQLServer();
-            for(String str : everyreceiver)
+            while(true)
             {
-                if (!sqlServer.validateLogin(str)) throw new InvalidEmailException("No user found");
-                else break;
+                String receiver = scanner.nextLine() + ";";
+                ArrayList<String> everyreceiver = Indorgroupchecker(receiver);
+                int i = 0;
+                for (String str : everyreceiver)
+                {
+
+                    if (!sqlServer.validateLogin(str)) System.out.println("Invalid email" + str);
+                    i++;
+                    if(i == everyreceiver.size()) break;
+                }
             }
             log.append(receiver).append("\n");
 
@@ -69,7 +75,7 @@ public class Email
 
             String text = scanner.nextLine();
             log.append(text).append("\n");
-            if (text.length() > 7500) throw new InvalidEmailException("Limit of 7500 characters has been exceeded");
+            if (text.length() > 65000) throw new InvalidEmailException("Limit of 65000 characters has been exceeded");
 
             System.out.println("Destination: ");
             System.out.println("1.Send");
