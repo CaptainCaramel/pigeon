@@ -1,12 +1,7 @@
-import javax.swing.*;
-import java.awt.image.AreaAveragingScaleFilter;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.SQLOutput;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReferenceArray;
-import java.util.stream.Collectors;
 
 public class Email
 {
@@ -54,7 +49,14 @@ public class Email
             }
 
             log.append("To: ");
-            String receiver = scanner.nextLine();
+            String receiver = scanner.nextLine() + ";";
+            ArrayList<String> everyreceiver = Indorgroupchecker(receiver);
+            SQLServer sqlServer = new SQLServer();
+            for(String str : everyreceiver)
+            {
+                if (!sqlServer.validateLogin(str)) throw new InvalidEmailException("No user found");
+                else break;
+            }
             log.append(receiver).append("\n");
 
             System.out.print("Subject: ");
@@ -281,6 +283,33 @@ public class Email
         }
         Hub();
     }
+
+    public ArrayList<String> Indorgroupchecker (String string)
+    {
+        StringBuilder currentUser = new StringBuilder();
+        ArrayList<String> Users = new ArrayList<>();
+
+        for (Character c : string.toCharArray())
+        {
+            if (c.equals(';'))
+            {
+                Users.add(currentUser.toString().trim());
+                currentUser.setLength(0);
+            }
+            else
+            {
+                currentUser.append(c).append("\n");
+            }
+
+            for (int i = 0; i < Users.size(); i++)
+            {
+                System.out.println("\nSpam Email: " + (i + 1));
+                System.out.println(Users.get(i));
+            }
+        }
+        return Users;
+    }
+
     public void Folderviewer(int decision)
     {
         StringBuilder currentmail = new StringBuilder();

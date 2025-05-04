@@ -11,6 +11,7 @@ public class SQLServer {
     private final PreparedStatement checkLogin;
     private final PreparedStatement checkPassword;
     private final PreparedStatement getUserFromDB;
+    private final PreparedStatement checkEmail;
     private final Statement statement;
 
     SQLServer(){
@@ -24,6 +25,7 @@ public class SQLServer {
             checkLogin = connection.prepareStatement("Select id from user where login = ?");
             checkPassword = connection.prepareStatement("Select hashedPass from user where login = ?");
             getUserFromDB = connection.prepareStatement("Select * from user where login = ?");
+            checkEmail = connection.prepareStatement("Select * from user where email = ?");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -95,6 +97,21 @@ public class SQLServer {
             return new User(id, login, email);
 
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Boolean ValidateUser(String email)
+    {
+        try
+        {
+            checkEmail.setString(1, email);
+            ResultSet dbResult = checkEmail.executeQuery();
+            dbResult.next();
+            return dbResult.isBeforeFirst();
+        }
+        catch (SQLException e)
+        {
             throw new RuntimeException(e);
         }
     }
