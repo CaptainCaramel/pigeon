@@ -10,6 +10,10 @@ public class Client implements Serializable {
 
     private final String filePath = new File("").getAbsolutePath();
 
+    private final SQLServer sqlServer;
+
+    private User user;
+
     Client(){
         if (!loadSettings()) {
             //aq default settingebi
@@ -18,6 +22,8 @@ public class Client implements Serializable {
 
             saveSettings();
         }
+
+        sqlServer = new SQLServer();
     }
 
     public boolean loadSettings(){
@@ -72,17 +78,37 @@ public class Client implements Serializable {
         //Login Page
         else if(pID == 1){
             System.out.println("**********Log In**********\n");
-            System.out.print("Enter Login : ");
-            String login = scanner.nextLine();
-            //LOGIN VALIDATION AQ
 
-            //CHECK WITH THE DATABASE
+            String login;
+
+            loginLoop:
+            while(true) {
+                System.out.print("Enter Login : ");
+                login = scanner.nextLine();
+                if(!User.validateLogin(login)) {
+                    System.out.println("Invalid Login! Login can only contain : a-z, A-Z, 0-9, _ and be 4-25 characters long");
+                    continue loginLoop;
+                }
+
+                if(sqlServer.validateLogin(login)) break;
+                else System.out.println("User with this login not found!");
+            }
+
+            passwordLoop:
+            while(true) {
+                System.out.println();
+                System.out.print("Enter Password : ");
+                String password = scanner.nextLine();
+                PassHasher passHasher = new PassHasher();
+                String c_hashedPass = passHasher.hasher(password);
+                if(sqlServer.validatePassword(login, c_hashedPass)){
+                    System.out.println("Login successful!");
+                    break passwordLoop;
+                }
+                else System.out.println("Wrong Password!");
+            }
+
             System.out.println();
-            System.out.print("Enter Password : ");
-            String password = scanner.nextLine();
-            System.out.println();
-            PassHasher passHasher = new PassHasher();
-            String hashedPass = passHasher.hasher(password);
             System.out.println("Remember me? (Currently : " + this.rememberMe + ")");
 
             rememberMeLoop:
@@ -108,16 +134,22 @@ public class Client implements Serializable {
             System.out.println("**********Sign Up**********\n");
             System.out.print("Enter Login : ");
             String login = scanner.nextLine();
-            //LOGIN VALIDATION AQ
+
 
             System.out.println();
             System.out.print("Enter Password : ");
             String password = scanner.nextLine();
-            System.out.println();
+            //PASSWORD VALIDATION AQ
+
             PassHasher passHasher = new PassHasher();
             String hashedPass = passHasher.hasher(password);
-            //String recoveryPass = passHasher.
+            String recoveryPass = passHasher.backuppassword();
+            System.out.println();
+            System.out.print("Enter Email (@pigeon.com will be auto-added) : ");
+            String email = scanner.nextLine() + "@pigeon.com";
+            //Email VALIDATION AQ
 
+            user = sqlServer.SignUp(login, email, hashedPass, recoveryPass);
         }
     }
 
