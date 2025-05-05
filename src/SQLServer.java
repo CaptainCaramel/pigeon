@@ -1,5 +1,8 @@
-import javax.xml.transform.Result;
 import java.sql.*;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class SQLServer {
     String url = "jdbc:mysql://localhost:3306/pigeondb";
@@ -10,8 +13,11 @@ public class SQLServer {
     private final PreparedStatement signUpStatement;
     private final PreparedStatement checkLogin;
     private final PreparedStatement checkPassword;
-    private final PreparedStatement getUserFromDB;
-    private final PreparedStatement checkEmail;
+    private final PreparedStatement getUserFromLogin;
+    private final PreparedStatement getUserFromEmail;
+    private final PreparedStatement sendEmailNoAttachment;
+    private final PreparedStatement getEmailFromID;
+    private final PreparedStatement getUserFromID;
     private final Statement statement;
 
     SQLServer(){
@@ -24,8 +30,15 @@ public class SQLServer {
 
             checkLogin = connection.prepareStatement("Select id from user where login = ?");
             checkPassword = connection.prepareStatement("Select hashedPass from user where login = ?");
-            getUserFromDB = connection.prepareStatement("Select * from user where login = ?");
-            checkEmail = connection.prepareStatement("Select * from user where email = ?");
+            getUserFromLogin = connection.prepareStatement("Select * from user where login = ?");
+            getUserFromEmail = connection.prepareStatement("Select * from user where email = ?");
+            getUserFromID = connection.prepareStatement("Select * from user where id = ?");
+
+            sendEmailNoAttachment = connection.prepareStatement("Insert into mails(senderID, receiverID, emailText, sendTime, subject) " +
+                    "values(?, ?, ?, ?, ?)");
+            getEmailFromID = connection.prepareStatement("Select * from mails where receiverID = ?");
+
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -40,6 +53,8 @@ public class SQLServer {
             throw new RuntimeException(e);
         }
     }
+
+
 
     public boolean validateLogin(String login){
         try{
@@ -65,6 +80,44 @@ public class SQLServer {
         }
     }
 
+    public void sendEmail(int sender, int receiver, String text, String subject) {
+        try {
+            sendEmailNoAttachment.setInt(1, sender);
+            sendEmailNoAttachment.setInt(2, receiver);
+            sendEmailNoAttachment.setString(3, text);
+
+            LocalDateTime localDateTime = LocalDateTime.now();
+            String dateTime = Email.dateTimeToString(localDateTime);
+
+            sendEmailNoAttachment.setString(4, String.valueOf(dateTime));
+            sendEmailNoAttachment.setString(5, subject);
+            sendEmailNoAttachment.execute();
+
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+    public User userFromEmail(String email){
+        try {
+            getUserFromEmail.setString(1, email);
+            ResultSet user = getUserFromEmail.executeQuery();
+            user.next();
+            return new User(user.getInt("id"), user.getString("login"), user.getString("email"));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public User userFromID(int id){
+        try {
+            getUserFromID.setInt(1, id);
+            ResultSet user = getUserFromID.executeQuery();
+            user.next();
+            return new User(user.getInt("id"), user.getString("login"), user.getString("email"));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public User SignUp(String login, String email, String hashedPass, String recoveryPass){
         try {
@@ -76,8 +129,8 @@ public class SQLServer {
             signUpStatement.execute();
 
 
-            getUserFromDB.setString(1, login);
-            ResultSet user = getUserFromDB.executeQuery();
+            getUserFromLogin.setString(1, login);
+            ResultSet user = getUserFromLogin.executeQuery();
             user.next();
             int id = user.getInt("id");
 
@@ -89,8 +142,8 @@ public class SQLServer {
 
     public User logIn(String login){
         try {
-            getUserFromDB.setString(1, login);
-            ResultSet user = getUserFromDB.executeQuery();
+            getUserFromLogin.setString(1, login);
+            ResultSet user = getUserFromLogin.executeQuery();
             user.next();
             int id = user.getInt("id");
             String email = user.getString("email");
@@ -101,17 +154,44 @@ public class SQLServer {
         }
     }
 
-    public Boolean ValidateUser(String email)
+    public Boolean validateUser(String email)
     {
         try
         {
-            checkEmail.setString(1, email);
-            ResultSet dbResult = checkEmail.executeQuery();
-            dbResult.next();
+            getUserFromEmail.setString(1, email);
+            ResultSet dbResult = getUserFromEmail.executeQuery();
             return dbResult.isBeforeFirst();
         }
         catch (SQLException e)
         {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<Email> getInbox(int id){
+        try {
+            getEmailFromID.setInt(1, id);
+
+            ResultSet dbResult = getEmailFromID.executeQuery();
+
+            ArrayList<Email> inbox = new ArrayList<>();
+
+            while(dbResult.next()){
+                User sender = userFromID(dbResult.getInt("senderID"));
+                User receiver = userFromID(dbResult.getInt("receiverID"));
+                String text = dbResult.getString("emailText");
+                String subject = dbResult.getString("subject");
+                //Blob attachment = dbResult.getBlob("Attachemnt");
+                Timestamp dateTime = dbResult.getTimestamp("sendTime");
+
+                Email email = new Email(sender, receiver, text, subject);
+                email.setDateTime(Email.dateTimeToString(dateTime.toLocalDateTime()));
+
+                inbox.add(email);
+            }
+
+            return inbox;
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
