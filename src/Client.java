@@ -165,8 +165,11 @@ public class Client implements Serializable {
             user = sqlServer.logIn(login);
             if(rememberMe) saveSettings();
 
-
-            pages(3);
+            if(user.isBanned()){
+                System.out.println("You are banned!");
+                pages(8);
+            }
+            else pages(3);
         }
 
         //Sign up page
@@ -236,6 +239,7 @@ public class Client implements Serializable {
             System.out.println("2.Inbox");
             System.out.println("3.Folders");
             System.out.println("4.Settings");
+            if(user.isAdmin())System.out.println("\n5.Admin Dashboard");
 
             int decision = scanner.nextInt();
 
@@ -253,6 +257,11 @@ public class Client implements Serializable {
             }
             if(decision == 4){
                 pages(6);
+                return;
+            }
+
+            if(decision == 5){
+                pages(9);
                 return;
             }
 
@@ -386,6 +395,54 @@ public class Client implements Serializable {
             user = null;
             saveSettings();
             pages(0);
+        }
+
+        else if(pID == 9){
+            System.out.println("*****Admin Dashboard*****");
+            System.out.println("1.Get user info");
+            System.out.println("2.Ban user");
+            System.out.println("3.Unban user");
+
+            int dec1 = scanner.nextInt();
+
+            if(dec1 == 1){
+                System.out.println("Choose method :" +
+                        "\n1.Get by ID" +
+                        "\n2.Get by Email" +
+                        "\n3.Get by Login");
+
+                int dec2 = scanner.nextInt();
+
+                if(dec2 == 1){
+                    System.out.print("Enter user ID : ");
+                    int userID = scanner.nextInt();
+
+                    System.out.println(sqlServer.userFromID(userID).toString());
+                }
+                else if(dec2 == 2){
+                    System.out.println("Enter user Email : ");
+                    String userEmail = scanner.nextLine();
+
+                    System.out.println(sqlServer.userFromEmail(userEmail));
+                }
+                else if(dec2 == 3) {
+                    System.out.println("Enter user login : ");
+                    String userLogin = scanner.nextLine();
+
+                    System.out.println(sqlServer.userFromLogin(userLogin));
+                }
+                else{
+                    pages(9);
+                    return;
+                }
+            }
+
+            if(dec1 == 2){
+                System.out.println("Enter user ID : ");
+                int userID = scanner.nextInt();
+
+
+            }
         }
     }
 

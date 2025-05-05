@@ -1,3 +1,4 @@
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -7,6 +8,10 @@ public class User implements Serializable {
     private int id;
     private String login;
     private String email;
+    private boolean isBanned;
+
+    @Serial
+    private final static long serialVersionUID = 7032;
 
     ArrayList<Email> receivedEmails;
 
@@ -86,5 +91,25 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isBanned() {
+        return isBanned;
+    }
+
+    public void setBanned(boolean banned) {
+        isBanned = banned;
+    }
+
+    public boolean isAdmin(){
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "User " + login + " :" +
+                "\nUser ID : " + id +
+                "\nEmail : " + email +
+                "\nIsBanned : " + isBanned;
     }
 }

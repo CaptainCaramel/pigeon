@@ -119,6 +119,17 @@ public class SQLServer {
         }
     }
 
+    public User userFromLogin(String login){
+        try {
+            getUserFromLogin.setString(1, login);
+            ResultSet user = getUserFromLogin.executeQuery();
+            user.next();
+            return new User(user.getInt("id"), user.getString("login"), user.getString("email"));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public User SignUp(String login, String email, String hashedPass, String recoveryPass){
         try {
             signUpStatement.setString(1, login);
@@ -160,6 +171,20 @@ public class SQLServer {
         {
             getUserFromEmail.setString(1, email);
             ResultSet dbResult = getUserFromEmail.executeQuery();
+            return dbResult.isBeforeFirst();
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Boolean validateID(int ID)
+    {
+        try
+        {
+            getUserFromID.setInt(1, ID);
+            ResultSet dbResult = getUserFromID .executeQuery();
             return dbResult.isBeforeFirst();
         }
         catch (SQLException e)
