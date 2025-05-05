@@ -28,6 +28,25 @@ public class Client implements Serializable {
             saveSettings();
         }
 
+        try {
+            File sent = new File(filePath + "\\Sent.txt");
+            File draft = new File(filePath + "\\Draft.txt");
+            File inbox = new File(filePath + "\\Inbox.txt");
+            File spam = new File(filePath + "\\Spam.txt");
+            File settings = new File(filePath + "\\settings.txt");
+
+            File[] files = {sent, draft, inbox, spam ,settings};
+
+
+            for (File file : files) {
+                if (!file.exists()) {
+                    FileWriter fileWriter = new FileWriter(file);
+                }
+            }
+
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
         sqlServer = new SQLServer();
     }
 
@@ -205,6 +224,7 @@ public class Client implements Serializable {
             }
 
             user = sqlServer.SignUp(login, email, hashedPass, recoveryPass);
+            pages(3);
         }
 
         //Email Hub
@@ -228,7 +248,7 @@ public class Client implements Serializable {
                 return;
             }
             if(decision == 3) {
-                FolderAcess();
+                FolderAccess();
                 return;
             }
             if(decision == 4){
@@ -257,8 +277,23 @@ public class Client implements Serializable {
                 }
 
                 log.append("To: ");
-                String receiver = scanner.nextLine();
-                log.append(receiver).append("\n");
+                String receiver1 = "";
+                ArrayList<String> everyreceiver;
+                receiverLoop:
+                while(true)
+                {
+                    String strreceiver = scanner.nextLine() + ";";
+                    everyreceiver = Indorgroupchecker(strreceiver);
+                    for (String s : everyreceiver) {
+                        if (!sqlServer.validateUser(s)) {
+                            System.out.println("Invalid email: " + s + " ");
+                            continue receiverLoop;
+                        }
+                    }
+                    receiver1 = strreceiver;
+                    break;
+                }
+                log.append(receiver1).append("\n");
 
                 System.out.print("Subject: ");
                 log.append("Subject: ");
@@ -270,14 +305,25 @@ public class Client implements Serializable {
 
                 String text = scanner.nextLine();
                 log.append(text).append("\n");
-                if (text.length() > 7500) throw new InvalidEmailException("Limit of 7500 characters has been exceeded");
+                if (text.length() > 6000) throw new InvalidEmailException("Limit of 6000 characters has been exceeded");
 
                 System.out.println("Destination: ");
                 System.out.println("1.Send");
                 System.out.println("2.Draft");
                 int decision = scanner.nextInt();
-                if(decision != 1 && decision != 2)throw new InvalidEmailException("Invalid response");
-                EmailSender(decision, log);
+                if(decision != 1 && decision != 2) throw new InvalidEmailException("Invalid response");
+
+                else if(decision == 1){
+                    for (String recEmail : everyreceiver) {
+                        EmailSender(new Email(this.user, sqlServer.userFromEmail(recEmail), text, subject));
+                    }
+                }
+
+                else {
+                    for (String recEmail : everyreceiver) {
+                        EmailDrafter(new Email(this.user, sqlServer.userFromEmail(recEmail), text, subject));
+                    }
+                }
             }
             catch (InvalidEmailException e) {
                 System.out.println("ERROR: " + e.getMessage());
@@ -310,6 +356,7 @@ public class Client implements Serializable {
             else if(decision1 == 2) pages(8);
         }
 
+        //Settings/RememberMe
         else if(pID == 7){
             System.out.println("*****Remember Me*****");
             System.out.println("Currently set to : " + rememberMe);
@@ -332,6 +379,8 @@ public class Client implements Serializable {
             pages(6);
 
         }
+
+        //Settings/LogOut
         else if(pID == 8){
             rememberMe = false;
             user = null;
@@ -340,15 +389,49 @@ public class Client implements Serializable {
         }
     }
 
-    public void EmailSender(int decision, StringBuilder log)
-    {
-        if(decision == 1)
+    public void EmailDrafter(Email email){
+        try
         {
-            //aq mere serveris shit ra rom imena miuvdes u get me brochacho
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filePath + "\\Draft.txt", true)));
+            objectOutputStream.writeObject(email);
+            objectOutputStream.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        System.out.println("E-mail Uploaded to Draft");
+    }
+
+    public void EmailDrafter(ArrayList<Email> emails){
+        try
+        {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filePath + "\\Draft.txt")));
+
+            for(Email email : emails) {
+                objectOutputStream.writeObject(email);
+            }
+            objectOutputStream.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        System.out.println("Drafts saved!");
+    }
+
+    public void EmailSender(Email email)
+    {
             try
             {
+                User sender = this.user;
+                User receiver = sqlServer.userFromEmail(email.getReceiver().getEmail());
+
+                sqlServer.sendEmail(sender.getId(), receiver.getId(), email.getText(), email.getSubject());
+
+                //Sentebshi shenaxva
                 BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\Sent.txt", true));
-                bufferedWriter.append(log);
+                bufferedWriter.append(email.toString());
                 bufferedWriter.write("\n---EMAIL-END---\n");
                 bufferedWriter.close();
             }
@@ -356,26 +439,11 @@ public class Client implements Serializable {
             {
                 throw new RuntimeException(e);
             }
-        }
-        else if(decision == 2)
-        {
-            try
-            {
-                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter( filePath + "\\Draft.txt", true));
-                bufferedWriter.append(log);
-                bufferedWriter.write("\n---EMAIL-END---\n");
-                bufferedWriter.close();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-            System.out.println("E-mail Uploaded to Draft");
-        }
+
         pages(3);
     }
 
-    public void FolderAcess()
+    public void FolderAccess()
     {
         Scanner scanner = new Scanner(System.in);
 
@@ -538,32 +606,42 @@ public class Client implements Serializable {
         }
         else if (decision == 2)
         {
-            ArrayList<String> Draftemails = new ArrayList<>();
-            try
-            {
-                List<String> jumpbledemails = Files.readAllLines(Paths.get(filePath + "\\Draft.txt"));
-                for (String line : jumpbledemails)
-                {
-                    if (line.equals("---EMAIL-END---"))
-                    {
-                        Draftemails.add(currentmail.toString().trim());
-                        currentmail.setLength(0);
-                    }
-                    else
-                    {
-                        currentmail.append(line).append("\n");
-                    }
-                    for (int i = 0; i < Draftemails.size(); i++)
-                    {
-                        System.out.println("\nDraft Email: " + (i + 1));
-                        System.out.println(Draftemails.get(i));
-                    }
+            Scanner scanner = new Scanner(System.in);
+            ArrayList<Email> draftEmails = getDrafts();
+
+            draftLoop:
+            while(true) {
+                for (int i = 0; i < draftEmails.size(); i++) {
+                    Email email = draftEmails.get(i);
+                    System.out.println(i + 1 + ". " + email.getSubject() + " | To : " + email.getReceiver().getEmail());
                 }
+
+                System.out.print("Choose email (hub : -1) : ");
+                int emailChoice = scanner.nextInt();
+                if(emailChoice == -1) break draftLoop;
+                else if (emailChoice > 0 && emailChoice <= draftEmails.size()) {
+                    System.out.println("\n*******************************");
+                    System.out.println("\n" + draftEmails.get(emailChoice - 1).toString() + "\n");
+                    System.out.println("*******************************");
+
+                    System.out.println("\n1. Send" +
+                            "\n2. Delete from drafts" +
+                            "\n3. Back");
+
+                    int input = scanner.nextInt();
+                    if(input == 1){
+                        EmailSender(draftEmails.get(emailChoice-1));
+                    }
+                    else if (input == 2) {
+                        draftEmails.remove(emailChoice - 1);
+                    }
+
+                }
+                else System.out.println("Invalid choice!");
             }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
-            }
+
+
+
         }
         else if(decision == 3)
         {
@@ -596,35 +674,51 @@ public class Client implements Serializable {
         }
         else if(decision == 4)
         {
+            Scanner scanner = new Scanner(System.in);
+            ArrayList<Email> emails = sqlServer.getInbox(this.user.getId());
 
-            ArrayList<String> emails = new ArrayList<>();
-            try
-            {
-                List<String> jumpbledemails = Files.readAllLines(Paths.get(filePath + "\\Inbox.txt"));
-                for (String line : jumpbledemails)
-                {
-                    if (line.equals("---EMAIL-END---"))
-                    {
-                        emails.add(currentmail.toString().trim());
-                        currentmail.setLength(0);
-                    }
-                    else
-                    {
-                        currentmail.append(line).append("\n");
-                    }
-                    for (int i = 0; i < emails.size(); i++)
-                    {
-                        System.out.println("\nSent Email: " + (i + 1));
-                        System.out.println(emails.get(i));
-                    }
+            inboxLoop:
+            while(true) {
+                for (int i = 0; i < emails.size(); i++) {
+                    Email email = emails.get(i);
+                    System.out.println(i + 1 + ". " + email.getSubject() + " | From : " + email.getSender().getEmail());
                 }
-            }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
+
+                System.out.print("Choose email (hub : -1) : ");
+                int emailChoice = scanner.nextInt();
+                if(emailChoice == -1) break inboxLoop;
+                else if (emailChoice > 0 && emailChoice <= emails.size()) {
+                    System.out.println("\n*******************************");
+                    System.out.println("\n" + emails.get(emailChoice - 1).toString() + "\n");
+                    System.out.println("*******************************");
+                }
+                else System.out.println("Invalid choice!");
             }
         }
         pages(3);
+    }
+
+    private ArrayList<Email> getDrafts() {
+        ArrayList<Email> draftEmails = new ArrayList<>();
+        try
+        {
+            ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filePath + "\\Draft.txt")));
+
+            Email cEmail = (Email) objectInputStream.readObject();
+            while(cEmail != null){
+                draftEmails.add(cEmail);
+                cEmail = (Email) objectInputStream.readObject();
+            }
+
+        }
+        catch (EOFException eof){
+            System.out.println("Drafts read!");
+        }
+        catch (IOException | ClassNotFoundException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return draftEmails;
     }
 
     public boolean isRememberMe() {
@@ -652,6 +746,26 @@ public class Client implements Serializable {
             topapperances.add(sortedList.get(i).getKey());
         }
         return topapperances;
+    }
+
+    public ArrayList<String> Indorgroupchecker (String string)
+    {
+        StringBuilder currentUser = new StringBuilder();
+        ArrayList<String> Users = new ArrayList<>();
+
+        for (Character c : string.toCharArray())
+        {
+            if (c.equals(';'))
+            {
+                Users.add(currentUser.toString().trim());
+                currentUser.setLength(0);
+            }
+            else
+            {
+                currentUser.append(c);
+            }
+        }
+        return Users;
     }
 
 }

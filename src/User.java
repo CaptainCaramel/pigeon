@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -6,6 +7,8 @@ public class User implements Serializable {
     private int id;
     private String login;
     private String email;
+
+    ArrayList<Email> receivedEmails;
 
     User(int id, String login, String email){
         setId(id);
