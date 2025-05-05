@@ -84,13 +84,14 @@ public class Email
             {
                 EmailSender(1, log, receiver1);
             }
-            else if (decision == 1)
+            else if (decision == 2)
             {
                 EmailSender(2, log, "0");
             }
             else throw new InvalidEmailException("Invalid response");
         }
-        catch (InvalidEmailException e) {
+        catch (InvalidEmailException e)
+        {
             System.out.println("ERROR: " + e.getMessage());
             Hub();
         }
