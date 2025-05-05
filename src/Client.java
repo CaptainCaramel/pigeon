@@ -309,10 +309,10 @@ public class Client implements Serializable
 
                 for (String recEmail : everyreceiver)
                 {
-                    toField.append(recEmail);
+                    toField.append(recEmail).append("\n");
                 }
 
-                log.append("To: ").append(toField.toString()).append("\n");
+                log.append("To:\n").append(toField.toString());
 
                 System.out.print("Subject: ");
                 log.append("Subject: ");
