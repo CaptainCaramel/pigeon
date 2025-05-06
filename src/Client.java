@@ -544,7 +544,6 @@ public class Client implements Serializable
             if (decision1 == 1) Folderviewer(1);
             if (decision1 == 2) FolderDeleter(1);
             if (decision1 == 3) Newadditiontospam();
-
         }
         else if(decision == 2)
         {
@@ -773,14 +772,15 @@ public class Client implements Serializable
 
     private ArrayList<Email> getFolder(String foldername)
     {
-        ArrayList<Email> draftEmails = new ArrayList<>();
+        ArrayList<Email> Emails = new ArrayList<>();
         try
         {
             ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filePath + "\\" + foldername + ".txt")));
 
             Email cEmail = (Email) objectInputStream.readObject();
-            while(cEmail != null){
-                draftEmails.add(cEmail);
+            while(cEmail != null)
+            {
+                Emails.add(cEmail);
                 cEmail = (Email) objectInputStream.readObject();
             }
 
@@ -792,7 +792,7 @@ public class Client implements Serializable
         {
             throw new RuntimeException(e);
         }
-        return draftEmails;
+        return Emails;
     }
 
     public boolean isRememberMe() {
