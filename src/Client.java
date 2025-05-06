@@ -839,6 +839,10 @@ public class Client implements Serializable
                 currentUser.append(c);
             }
         }
+        if (currentUser.length() > 0)
+        {
+            Users.add(currentUser.toString().trim());
+        }
         return Users;
     }
 
