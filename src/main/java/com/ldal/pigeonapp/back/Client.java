@@ -1,8 +1,13 @@
+package com.ldal.pigeonapp.back;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
+import javafx.scene.*;
+import javafx.scene.paint.Color;
+import javafx.stage.*;
 
 public class Client implements Serializable {
     private boolean rememberMe;
@@ -19,7 +24,7 @@ public class Client implements Serializable {
     private ArrayList<String> spamblacklist = new ArrayList<>();
     private ArrayList<String> Recepients = new ArrayList<>();
 
-    Client(){
+    public Client(){
         if (!loadSettings()) {
             //aq default settingebi
             setRememberMe(false);
@@ -37,7 +42,6 @@ public class Client implements Serializable {
 
             File[] files = {sent, draft, inbox, spam ,settings};
 
-
             for (File file : files) {
                 if (!file.exists()) {
                     FileWriter fileWriter = new FileWriter(file);
@@ -48,6 +52,7 @@ public class Client implements Serializable {
             throw new RuntimeException(e);
         }
         sqlServer = new SQLServer();
+
     }
 
     public boolean loadSettings(){
@@ -59,6 +64,7 @@ public class Client implements Serializable {
             if(rememberMe) {
                 this.user = loadedClient.user;
                 System.out.println("User loaded, username : " + user.getLogin());
+
                 this.Recepients = loadedClient.Recepients;
 
             }
@@ -169,7 +175,7 @@ public class Client implements Serializable {
                 System.out.println("You are banned!");
                 pages(8);
             }
-            else pages(3);
+            //else pages(3);
         }
 
         //Sign up page
@@ -324,6 +330,7 @@ public class Client implements Serializable {
 
                 else if(decision == 1){
                     for (String recEmail : everyreceiver) {
+                        System.out.println("Sending email to: " + recEmail);
                         EmailSender(new Email(this.user, sqlServer.userFromEmail(recEmail), text, subject));
                     }
                 }
@@ -397,6 +404,7 @@ public class Client implements Serializable {
             pages(0);
         }
 
+        //Admin dashboard
         else if(pID == 9){
             System.out.println("*****Admin Dashboard*****");
             System.out.println("1.Get user info");
@@ -418,18 +426,21 @@ public class Client implements Serializable {
                     int userID = scanner.nextInt();
 
                     System.out.println(sqlServer.userFromID(userID).toString());
+                    pages(9);
                 }
                 else if(dec2 == 2){
-                    System.out.println("Enter user Email : ");
-                    String userEmail = scanner.nextLine();
+                    System.out.print("Enter user Email : ");
+                    String userEmail = scanner.next();
 
                     System.out.println(sqlServer.userFromEmail(userEmail));
+                    pages(9);
                 }
                 else if(dec2 == 3) {
                     System.out.println("Enter user login : ");
-                    String userLogin = scanner.nextLine();
+                    String userLogin = scanner.next();
 
                     System.out.println(sqlServer.userFromLogin(userLogin));
+                    pages(9);
                 }
                 else{
                     pages(9);
@@ -825,4 +836,7 @@ public class Client implements Serializable {
         return Users;
     }
 
+    public User getUser() {
+        return user;
+    }
 }

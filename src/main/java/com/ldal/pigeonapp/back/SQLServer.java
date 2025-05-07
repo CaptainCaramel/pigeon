@@ -1,3 +1,5 @@
+package com.ldal.pigeonapp.back;
+
 import java.sql.*;
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -102,7 +104,8 @@ public class SQLServer {
             getUserFromEmail.setString(1, email);
             ResultSet user = getUserFromEmail.executeQuery();
             user.next();
-            return new User(user.getInt("id"), user.getString("login"), user.getString("email"));
+            if(!user.getBoolean("isAdmin"))return new User(user.getInt("id"), user.getString("login"), user.getString("email"));
+            else return new Admin(user.getInt("id"), user.getString("login"), user.getString("email"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -113,7 +116,8 @@ public class SQLServer {
             getUserFromID.setInt(1, id);
             ResultSet user = getUserFromID.executeQuery();
             user.next();
-            return new User(user.getInt("id"), user.getString("login"), user.getString("email"));
+            if(!user.getBoolean("isAdmin"))return new User(user.getInt("id"), user.getString("login"), user.getString("email"));
+            else return new Admin(user.getInt("id"), user.getString("login"), user.getString("email"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -124,7 +128,8 @@ public class SQLServer {
             getUserFromLogin.setString(1, login);
             ResultSet user = getUserFromLogin.executeQuery();
             user.next();
-            return new User(user.getInt("id"), user.getString("login"), user.getString("email"));
+            if(!user.getBoolean("isAdmin"))return new User(user.getInt("id"), user.getString("login"), user.getString("email"));
+            else return new Admin(user.getInt("id"), user.getString("login"), user.getString("email"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -158,7 +163,8 @@ public class SQLServer {
             user.next();
             int id = user.getInt("id");
             String email = user.getString("email");
-            return new User(id, login, email);
+            if(!user.getBoolean("isAdmin")) return new User(id, login, email);
+            else return new Admin(id, login, email);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

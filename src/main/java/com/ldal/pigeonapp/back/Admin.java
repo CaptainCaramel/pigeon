@@ -1,3 +1,5 @@
+package com.ldal.pigeonapp.back;
+
 public class Admin extends User
 {
     Admin(int id, String login, String email) {

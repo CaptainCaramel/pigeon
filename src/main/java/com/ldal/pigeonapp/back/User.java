@@ -1,3 +1,5 @@
+package com.ldal.pigeonapp.back;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,10 +19,14 @@ public class User implements Serializable {
         setId(id);
         setLogin(login);
         setEmail(email);
+        setBanned(false);
     }
 
-    public static User login(String login, String password) {
-        return null;
+    User(int id, String login, String email, boolean isBanned){
+        setId(id);
+        setLogin(login);
+        setEmail(email);
+        setBanned(isBanned);
     }
 
 
@@ -103,9 +109,11 @@ public class User implements Serializable {
         return false;
     }
 
+
+
     @Override
     public String toString() {
-        return "User " + login + " :" +
+        return "-----" + login + "-----" +
                 "\nUser ID : " + id +
                 "\nEmail : " + email +
                 "\nIsBanned : " + isBanned;

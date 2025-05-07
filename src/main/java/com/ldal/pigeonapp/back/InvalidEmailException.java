@@ -1,3 +1,5 @@
+package com.ldal.pigeonapp.back;
+
 public class InvalidEmailException extends RuntimeException
 {
     public InvalidEmailException(String message) {
