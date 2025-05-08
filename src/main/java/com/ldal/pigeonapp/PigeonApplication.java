@@ -18,6 +18,7 @@ public class PigeonApplication extends Application {
     public void start(Stage stage) throws IOException {
 
         client = new Client();
+        
 
         Group root = new Group();
         Scene scene = new Scene(root, 1280, 720);
