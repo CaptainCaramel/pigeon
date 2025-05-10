@@ -1,14 +1,9 @@
-package com.ldal.pigeonapp.back;
+package com.ldal.pigeonapp;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-
-import com.ldal.pigeonapp.LoginScene;
-import javafx.scene.*;
-import javafx.scene.paint.Color;
-import javafx.stage.*;
 
 public class Client implements Serializable {
     private boolean rememberMe;
@@ -93,7 +88,6 @@ public class Client implements Serializable {
         }
     }
 
-
     public void pages(int pID){
         Scanner scanner = new Scanner(System.in);
         //Select Login or Sign up page
@@ -118,9 +112,10 @@ public class Client implements Serializable {
             }
         }
 
+
+
         //Login Page
         else if(pID == 1){
-            System.out.println("**********Log In**********\n");
 
             String login;
 
@@ -842,5 +837,9 @@ public class Client implements Serializable {
 
     public User getUser() {
         return user;
+    }
+
+    public SQLServer getSqlServer() {
+        return sqlServer;
     }
 }

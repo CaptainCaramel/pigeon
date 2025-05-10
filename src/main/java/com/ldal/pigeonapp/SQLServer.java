@@ -1,8 +1,6 @@
-package com.ldal.pigeonapp.back;
+package com.ldal.pigeonapp;
 
 import java.sql.*;
-import java.time.DateTimeException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -76,6 +74,17 @@ public class SQLServer {
             ResultSet dbResult = checkPassword.executeQuery();
             dbResult.next();
             return c_hashedPass.matches(dbResult.getString("hashedPass"));
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean checkDuplicateLogin(String login){
+        try{
+            getUserFromLogin.setString(1, login);
+            ResultSet dbResult = getUserFromLogin.executeQuery();
+            return dbResult.isBeforeFirst();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
