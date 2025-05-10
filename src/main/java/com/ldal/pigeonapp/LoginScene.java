@@ -1,10 +1,7 @@
 package com.ldal.pigeonapp;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 public class LoginScene
 {
@@ -16,7 +13,7 @@ public class LoginScene
     @FXML
     public TextField username;
     @FXML
-    public TextField password;
+    public PasswordField password;
     @FXML
     public CheckBox rememberMe;
     @FXML
