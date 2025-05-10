@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
+import com.ldal.pigeonapp.LoginScene;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
@@ -24,8 +25,10 @@ public class Client implements Serializable {
     private ArrayList<String> spamblacklist = new ArrayList<>();
     private ArrayList<String> Recepients = new ArrayList<>();
 
-    public Client(){
-        if (!loadSettings()) {
+    public Client()
+    {
+        if (!loadSettings())
+        {
             //aq default settingebi
             setRememberMe(false);
 
@@ -125,7 +128,8 @@ public class Client implements Serializable {
             while(true) {
                 System.out.print("Enter Login : ");
                 login = scanner.nextLine();
-                if(!User.validateLogin(login)) {
+                if(!User.validateLogin(login))
+                {
                     System.out.println("Invalid Login! Login can only contain : a-z, A-Z, 0-9, _ and be 4-25 characters long");
                     continue loginLoop;
                 }

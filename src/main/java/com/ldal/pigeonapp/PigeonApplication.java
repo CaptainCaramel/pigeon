@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.ImageCursor;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,7 +28,7 @@ public class PigeonApplication extends Application
     public void start(Stage stage) throws IOException
     {
         client = new Client();
-        Group root = new Group();
+        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
