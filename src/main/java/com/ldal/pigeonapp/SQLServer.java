@@ -80,17 +80,6 @@ public class SQLServer {
         }
     }
 
-    public boolean checkDuplicateLogin(String login){
-        try{
-            getUserFromLogin.setString(1, login);
-            ResultSet dbResult = getUserFromLogin.executeQuery();
-            return dbResult.isBeforeFirst();
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public void sendEmail(int sender, int receiver, String text, String subject) {
         try {
             sendEmailNoAttachment.setInt(1, sender);

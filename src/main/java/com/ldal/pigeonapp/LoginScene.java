@@ -22,7 +22,8 @@ public class LoginScene
     @FXML
     public Label warning;
 
-    public LoginScene() {
+    public LoginScene()
+    {
         sqlServer = new SQLServer();
         passHasher = new PassHasher();
     }
@@ -35,22 +36,22 @@ public class LoginScene
 
     public void checkinfo()
     {
-            String username1 = username.getText();
-            String password1 = password.getText();
+        String username1 = username.getText();
+        String password1 = password.getText();
 
-            if (username1.isEmpty() || password1.isEmpty())
-            {
-                warning.setText("*Please input your data");
+        if (username1.isEmpty() || password1.isEmpty())
+        {
+            warning.setText("*Please input your data");
+        }
+        else
+        {
+            if(!sqlServer.validateLogin(username1) || !sqlServer.validatePassword(username1, passHasher.hasher(password1))){
+                warning.setText("*Invalid username or password!");
+                return;
             }
-            else
-            {
-                if(!sqlServer.validateLogin(username1) || !sqlServer.validatePassword(username1, passHasher.hasher(password1))){
-                    warning.setText("*Invalid username or password!");
-                    return;
-                }
-                else{
-                    warning.setText("*Login successful!");
-                }
+            else{
+                warning.setText("*Login successful!");
             }
+        }
     }
 }

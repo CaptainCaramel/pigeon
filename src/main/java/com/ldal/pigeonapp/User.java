@@ -26,8 +26,6 @@ public class User implements Serializable {
         setBanned(isBanned);
     }
 
-
-
     public static boolean validateLogin(String login) {
         String regex1 = "[^a-zA-Z0-9_-]";
         boolean valid = true;

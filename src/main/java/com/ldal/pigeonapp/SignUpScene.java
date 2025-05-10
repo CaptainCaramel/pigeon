@@ -1,13 +1,13 @@
-package com.ldal.pigeonapp.back;
+package com.ldal.pigeonapp;
 
 import javafx.fxml.FXML;
 
 import java.awt.*;
 
-public class SignUpScene
-{
+public class SignUpScene {
     private SQLServer sqlServer;
     private PassHasher passHasher;
+    private User user;
     @FXML
     public Button SignUpbutton;
     @FXML
@@ -19,32 +19,28 @@ public class SignUpScene
     @FXML
     public Label warning;
 
-    public SignUpScene()
-    {
-
+    public SignUpScene() {
+        sqlServer = new SQLServer();
+        passHasher = new PassHasher();
     }
 
-    private void SignUpButton()
-    {
+    private void SignUpButton() {
         checkinfo();
     }
 
-    public boolean checkinfo()
+    public void checkinfo()
     {
-        while(true)
-        {
-            String username1 = username.getText();
-            String password1 = password.getText();
-            String email1 = email.getText();
+        String username1 = username.getText();
+        String password1 = password.getText();
+        String email1 = email.getText();
 
-            if (username1.length() == 0 || password1.length() == 0 || email1.length() == 0)
-            {
-                warning.setText("*Please input your data");
-                continue;
-            }
-            else
-            {
-
+        if (username1.length() == 0 || password1.length() == 0 || email1.length() == 0) {
+            warning.setText("*Please input your data");
+        } else {
+            if (User.validateEmail(email1) && User.validateLogin(username1) && User.validatePassword(password1) && !sqlServer.checkDuplicateLogin(username1)) {
+                sqlServer.SignUp(username1, email1 + "@pigeon.com", passHasher.hasher(password1), passHasher.backuppassword());
+            } else {
+                warning.setText("Invalid information");
             }
         }
     }
