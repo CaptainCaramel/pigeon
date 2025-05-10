@@ -7,7 +7,6 @@ public class PassHasher
 {
     public String hasher(String password)
     {
-        //პაროლის hashing
         StringBuilder stringBuilder = new StringBuilder(password);
         String hashedpassword = AsciiMult(stringBuilder.toString(), Asciier(stringBuilder.toString()));
         return hashedpassword;
@@ -15,7 +14,6 @@ public class PassHasher
 
     private int Asciier(String password)
     {
-        //მოცემულ მეთოდში password-ს ვაქცევთ ციფრად რომელიც არის მისი ყველა ასოს ასკი მნიშვნელობა გამრავლებული შემდეგ i-მნიშვნელობასთან, დაჯამებული.
         ArrayList<Character> passwordindchars = new ArrayList<>();
         for(char c : password.toCharArray())
         {
@@ -32,7 +30,6 @@ public class PassHasher
 
     private String AsciiMult(String password, long ascivalue)
     {
-        //მოცემულ მეთოდში, ზემოთხსენებულ ინტს ვამრავლებთ თავის თავზე password-ის სიგრძემდე
         for(int i = 0; i < password.length(); i++)
         {
             ascivalue = ascivalue + (ascivalue + Integer.valueOf(password.charAt(i)));
@@ -45,7 +42,6 @@ public class PassHasher
 
     public String backuppassword()
     {
-        //მოცემულ მეთოდში, წარმოვქნით შემთხვევით მეთოდის მიხედვით backup password-ს
         String result = "";
         char[] greenlitchars = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890_!@#$%&*\";:<>-+=()".toCharArray();
         for(int i = 0; i < 12; i++)

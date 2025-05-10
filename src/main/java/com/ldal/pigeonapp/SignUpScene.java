@@ -1,4 +1,4 @@
-package com.ldal.pigeonapp;
+package com.ldal.pigeonapp.back;
 
 import javafx.fxml.FXML;
 
@@ -19,7 +19,10 @@ public class SignUpScene
     @FXML
     public Label warning;
 
-    public SignUpScene() {}
+    public SignUpScene()
+    {
+
+    }
 
     private void SignUpButton()
     {
@@ -41,7 +44,7 @@ public class SignUpScene
             }
             else
             {
-               //sheni magic
+
             }
         }
     }
