@@ -17,12 +17,12 @@
             <Image url="@loginBackgroud.png" />
          </image>
       </ImageView>
-      <Label layoutX="555.0" layoutY="168.0" prefHeight="101.0" prefWidth="171.0" text="LogIn" textAlignment="CENTER" textOverrun="CLIP">
+      <Label layoutX="547.0" layoutY="168.0" prefHeight="101.0" prefWidth="203.0" text="LogIn" textAlignment="CENTER" textOverrun="CLIP">
          <font>
-            <Font size="69.0" />
+            <Font name="Roboto Bold" size="69.0" />
          </font>
       </Label>
-      <TextField layoutX="486.0" layoutY="300.0" opacity="0.47" prefHeight="52.0" prefWidth="310.0" promptText="Username">
+      <TextField fx:id="username" layoutX="486.0" layoutY="300.0" opacity="0.47" prefHeight="52.0" prefWidth="310.0" promptText="Username">
          <font>
             <Font name="Roboto Bold" size="26.0" />
          </font>
@@ -30,15 +30,21 @@
             <Cursor fx:constant="TEXT" />
          </cursor>
       </TextField>
-      <CheckBox layoutX="486.0" layoutY="447.0" mnemonicParsing="false" prefWidth="110.0" text="Remmember me">
+      <CheckBox fx:id="remmemberme" layoutX="486.0" layoutY="447.0" mnemonicParsing="false" prefWidth="110.0" text="Remember me">
          <cursor>
             <Cursor fx:constant="HAND" />
-         </cursor></CheckBox>
-      <Button layoutX="576.0" layoutY="485.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="129.0" text="Button">
+         </cursor>
+         <font>
+            <Font name="Roboto Bold" size="12.0" />
+         </font></CheckBox>
+      <Button fx:id="loginbutton" layoutX="562.0" layoutY="487.0" mnemonicParsing="false" onAction="#LoginButton" opacity="0.82" prefHeight="42.0" prefWidth="159.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" text="Login">
          <cursor>
             <Cursor fx:constant="HAND" />
-         </cursor></Button>
-      <TextField layoutX="486.0" layoutY="379.0" opacity="0.47" prefHeight="52.0" prefWidth="310.0" promptText="Password">
+         </cursor>
+         <font>
+            <Font name="Roboto Bold" size="20.0" />
+         </font></Button>
+      <TextField fx:id="password" layoutX="486.0" layoutY="379.0" opacity="0.47" prefHeight="52.0" prefWidth="310.0" promptText="Password">
          <font>
             <Font name="Roboto Bold" size="26.0" />
          </font>
@@ -46,5 +52,6 @@
             <Cursor fx:constant="TEXT" />
          </cursor>
       </TextField>
+      <Label fx:id="warning" layoutX="486.0" layoutY="283.0" textFill="#f53535" />
    </children>
 </AnchorPane>
