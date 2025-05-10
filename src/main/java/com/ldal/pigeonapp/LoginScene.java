@@ -3,6 +3,8 @@ package com.ldal.pigeonapp;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.awt.event.ActionEvent;
+
 public class LoginScene
 {
     private final SQLServer sqlServer;
@@ -26,7 +28,7 @@ public class LoginScene
     }
 
     @FXML
-    private void LoginButton()
+    private void LoginButton(ActionEvent event)
     {
         checkinfo();
     }

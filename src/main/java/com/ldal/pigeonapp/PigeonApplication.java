@@ -15,7 +15,7 @@ public class PigeonApplication extends Application
     @Override
     public void start(Stage stage) throws IOException
     {
-        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
+        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
         Scene scene = new Scene(root);
         stage.setTitle("Pigeon");
         Image icon = new Image(PigeonApplication.class.getResource("/icon.png").toString());

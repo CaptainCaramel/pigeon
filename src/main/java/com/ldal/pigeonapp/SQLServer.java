@@ -20,7 +20,7 @@ public class SQLServer {
     private final PreparedStatement getUserFromID;
     private final Statement statement;
 
-    SQLServer(){
+    public SQLServer(){
         try {
             connection = DriverManager.getConnection(url, userName, password);
             statement = connection.createStatement();

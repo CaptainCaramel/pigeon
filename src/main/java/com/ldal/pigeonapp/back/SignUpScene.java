@@ -1,10 +1,15 @@
-package com.ldal.pigeonapp;
+package com.ldal.pigeonapp.back;
 
+import com.ldal.pigeonapp.PassHasher;
+import com.ldal.pigeonapp.SQLServer;
+import com.ldal.pigeonapp.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import java.awt.*;
 
-public class SignUpScene {
+public class SignUpScene
+{
     private SQLServer sqlServer;
     private PassHasher passHasher;
     private User user;
@@ -19,7 +24,8 @@ public class SignUpScene {
     @FXML
     public Label warning;
 
-    public SignUpScene() {
+    public SignUpScene()
+    {
         sqlServer = new SQLServer();
         passHasher = new PassHasher();
     }
