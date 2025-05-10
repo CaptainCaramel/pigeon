@@ -27,27 +27,8 @@ public class PigeonApplication extends Application
     public void start(Stage stage) throws IOException
     {
         client = new Client();
-
         Group root = new Group();
-
-        Label label = new Label("");
-        TextField textfield = new TextField();
-        Button button = new Button("Login");
-        HBox row1 = new HBox(10);
-        row1.getChildren().addAll(label, textfield, button);
-        root.getChildren().add(row1);
-
-        Image loginBG = new Image("C:\\Users\\User\\Downloads\\loginBackgroud.png");
-        BackgroundImage backgroundimage = new BackgroundImage(loginBG,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT);
-        Background background = new Background(backgroundimage);
-
-        Scene scene = new Scene(root, 1280, 720);
-
-        stage.setTitle("Pigeon Mail, User : " + client.getUser().getLogin());
+        Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
