@@ -1,10 +1,7 @@
-package com.ldal.pigeonapp.back;
+package com.ldal.pigeonapp;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.stream.Stream;
-
-import static java.lang.Math.random;
 
 public class PassHasher
 {

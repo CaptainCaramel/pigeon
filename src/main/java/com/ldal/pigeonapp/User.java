@@ -1,10 +1,7 @@
-package com.ldal.pigeonapp.back;
+package com.ldal.pigeonapp;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class User implements Serializable {
     private int id;

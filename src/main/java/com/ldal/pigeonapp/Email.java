@@ -1,10 +1,7 @@
-package com.ldal.pigeonapp.back;
+package com.ldal.pigeonapp;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.*;
 
 public class Email implements Serializable
 {

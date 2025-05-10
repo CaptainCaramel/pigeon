@@ -1,4 +1,4 @@
-package com.ldal.pigeonapp.back;
+package com.ldal.pigeonapp;
 
 public class Admin extends User
 {

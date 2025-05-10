@@ -1,15 +1,16 @@
 package com.ldal.pigeonapp;
 
-import com.ldal.pigeonapp.back.PassHasher;
-import com.ldal.pigeonapp.back.SQLServer;
 import javafx.fxml.FXML;
-
-import java.awt.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 public class LoginScene
 {
-    private SQLServer sqlServer;
+    private final SQLServer sqlServer;
     private PassHasher passHasher;
+
     @FXML
     public Button loginbutton;
     @FXML
@@ -17,37 +18,39 @@ public class LoginScene
     @FXML
     public TextField password;
     @FXML
-    public Checkbox remmemberme;
+    public CheckBox rememberMe;
     @FXML
     public Label warning;
 
-    public LoginScene() {}
+    public LoginScene() {
+        sqlServer = new SQLServer();
+        passHasher = new PassHasher();
+    }
 
+    @FXML
     private void LoginButton()
     {
         checkinfo();
     }
 
-    public boolean checkinfo()
+    public void checkinfo()
     {
-        while(true)
-        {
             String username1 = username.getText();
             String password1 = password.getText();
 
-            if (username1.length() == 0 || password1.length() == 0)
+            if (username1.isEmpty() || password1.isEmpty())
             {
                 warning.setText("*Please input your data");
-                continue;
             }
             else
             {
-                boolean usernamevalidation = sqlServer.validateLogin(username1);
-                String hased = passHasher.hasher(password1);
-                boolean passwordvalidation = sqlServer.validatePassword(password1, hased);
-                if (usernamevalidation == true && passwordvalidation == true) return true;
-                else continue;
+                if(!sqlServer.validateLogin(username1) || !sqlServer.validatePassword(username1, passHasher.hasher(password1))){
+                    warning.setText("*Invalid username or password!");
+                    return;
+                }
+                else{
+                    warning.setText("*Login successful!");
+                }
             }
-        }
     }
 }

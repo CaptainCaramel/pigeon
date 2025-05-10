@@ -1,5 +1,5 @@
-import com.ldal.pigeonapp.back.PassHasher;
-import com.ldal.pigeonapp.back.SQLServer;
+package com.ldal.pigeonapp;
+
 import javafx.fxml.FXML;
 
 import java.awt.*;
