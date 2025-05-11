@@ -1,5 +1,4 @@
-package com.ldal.pigeonapp.back;
-
+package com.ldal.pigeonapp;
 import javafx.fxml.FXML;
 
 import java.awt.*;

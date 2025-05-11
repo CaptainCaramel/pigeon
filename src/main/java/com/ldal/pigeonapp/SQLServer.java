@@ -120,18 +120,6 @@ public class SQLServer {
         }
     }
 
-    public boolean checkDuplicateLogin(String login)
-    {
-        try
-        {
-            getUserFromLogin.setString(1, login);
-            ResultSet dbResult = getUserFromLogin.executeQuery();
-            return dbResult.isBeforeFirst();
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public User userFromID(int id){
         try {
