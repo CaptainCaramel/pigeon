@@ -1,17 +1,14 @@
-package com.ldal.pigeonapp.back;
+package com.ldal.pigeonapp;
 
-import com.ldal.pigeonapp.PassHasher;
-import com.ldal.pigeonapp.SQLServer;
-import com.ldal.pigeonapp.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
-import java.awt.*;
-
-public class SignUpScene
-{
-    private SQLServer sqlServer;
-    private PassHasher passHasher;
+public class SignUpScene {
+    private final SQLServer sqlServer;
+    private final PassHasher passHasher;
     private User user;
     @FXML
     public Button SignUpbutton;
@@ -24,28 +21,35 @@ public class SignUpScene
     @FXML
     public Label warning;
 
-    public SignUpScene()
-    {
+    public SignUpScene() {
         sqlServer = new SQLServer();
         passHasher = new PassHasher();
     }
 
-    private void SignUpButton() {
-        checkinfo();
+    @FXML
+    private void SignUpAction(ActionEvent event)
+    {
+        checkInfo();
     }
 
-    public void checkinfo()
+    public void checkInfo()
     {
         String username1 = username.getText();
         String password1 = password.getText();
         String email1 = email.getText();
 
-        if (username1.length() == 0 || password1.length() == 0 || email1.length() == 0) {
+        if (username1.isEmpty() || password1.isEmpty() || email1.isEmpty())
+        {
             warning.setText("*Please input your data");
-        } else {
-            if (User.validateEmail(email1) && User.validateLogin(username1) && User.validatePassword(password1) && !sqlServer.checkDuplicateLogin(username1)) {
+        }
+        else
+        {
+            if (User.validateEmail(email1) && User.validateLogin(username1) && User.validatePassword(password1) && !sqlServer.checkDuplicateLogin(username1))
+            {
                 sqlServer.SignUp(username1, email1 + "@pigeon.com", passHasher.hasher(password1), passHasher.backuppassword());
-            } else {
+            }
+            else
+            {
                 warning.setText("Invalid information");
             }
         }

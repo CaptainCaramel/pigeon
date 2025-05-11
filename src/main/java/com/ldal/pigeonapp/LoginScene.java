@@ -1,9 +1,8 @@
 package com.ldal.pigeonapp;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
-import java.awt.event.ActionEvent;
 
 public class LoginScene
 {
