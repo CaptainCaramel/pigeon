@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.io.IOException;
+
 public class LoginScene
 {
     private final SQLServer sqlServer;
@@ -19,6 +21,8 @@ public class LoginScene
     public CheckBox rememberMe;
     @FXML
     public Label warning;
+    @FXML
+    public Button button;
 
     public LoginScene()
     {
@@ -31,6 +35,9 @@ public class LoginScene
     {
         checkinfo();
     }
+
+    @FXML
+    private void Backtomenu(ActionEvent event) throws IOException { PigeonApplication.sceneSwitcher("WelcomeScene"); }
 
     public void checkinfo()
     {

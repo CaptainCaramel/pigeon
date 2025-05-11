@@ -6,7 +6,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class SignUpScene {
+import java.io.IOException;
+
+public class SignUpScene
+{
     private final SQLServer sqlServer;
     private final PassHasher passHasher;
     private User user;
@@ -20,6 +23,8 @@ public class SignUpScene {
     public TextField email;
     @FXML
     public Label warning;
+    @FXML
+    public Button back;
 
     public SignUpScene() {
         sqlServer = new SQLServer();
@@ -31,6 +36,9 @@ public class SignUpScene {
     {
         checkInfo();
     }
+
+    @FXML
+    private void Backtomenu(ActionEvent event) throws IOException { PigeonApplication.sceneSwitcher("WelcomeScene"); }
 
     public void checkInfo()
     {
