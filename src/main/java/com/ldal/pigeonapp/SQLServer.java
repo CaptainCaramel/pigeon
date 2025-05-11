@@ -20,7 +20,7 @@ public class SQLServer {
     private final PreparedStatement getUserFromID;
     private final Statement statement;
 
-    SQLServer(){
+    public SQLServer(){
         try {
             connection = DriverManager.getConnection(url, userName, password);
             statement = connection.createStatement();
@@ -74,17 +74,6 @@ public class SQLServer {
             ResultSet dbResult = checkPassword.executeQuery();
             dbResult.next();
             return c_hashedPass.matches(dbResult.getString("hashedPass"));
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public boolean checkDuplicateLogin(String login){
-        try{
-            getUserFromLogin.setString(1, login);
-            ResultSet dbResult = getUserFromLogin.executeQuery();
-            return dbResult.isBeforeFirst();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

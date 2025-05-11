@@ -3,6 +3,8 @@ package com.ldal.pigeonapp;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.awt.event.ActionEvent;
+
 public class LoginScene
 {
     private final SQLServer sqlServer;
@@ -19,35 +21,36 @@ public class LoginScene
     @FXML
     public Label warning;
 
-    public LoginScene() {
+    public LoginScene()
+    {
         sqlServer = new SQLServer();
         passHasher = new PassHasher();
     }
 
     @FXML
-    private void LoginButton()
+    private void LoginButton(ActionEvent event)
     {
         checkinfo();
     }
 
     public void checkinfo()
     {
-            String username1 = username.getText();
-            String password1 = password.getText();
+        String username1 = username.getText();
+        String password1 = password.getText();
 
-            if (username1.isEmpty() || password1.isEmpty())
-            {
-                warning.setText("*Please input your data");
+        if (username1.isEmpty() || password1.isEmpty())
+        {
+            warning.setText("*Please input your data");
+        }
+        else
+        {
+            if(!sqlServer.validateLogin(username1) || !sqlServer.validatePassword(username1, passHasher.hasher(password1))){
+                warning.setText("*Invalid username or password!");
+                return;
             }
-            else
-            {
-                if(!sqlServer.validateLogin(username1) || !sqlServer.validatePassword(username1, passHasher.hasher(password1))){
-                    warning.setText("*Invalid username or password!");
-                    return;
-                }
-                else{
-                    warning.setText("*Login successful!");
-                }
+            else{
+                warning.setText("*Login successful!");
             }
+        }
     }
 }
