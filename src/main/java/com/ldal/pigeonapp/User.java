@@ -3,7 +3,8 @@ package com.ldal.pigeonapp;
 import java.io.Serial;
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User implements Serializable
+{
     private int id;
     private String login;
     private String email;
@@ -19,27 +20,50 @@ public class User implements Serializable {
         setBanned(false);
     }
 
-    User(int id, String login, String email, boolean isBanned){
+    User(int id, String login, String email, boolean isBanned)
+    {
         setId(id);
         setLogin(login);
         setEmail(email);
         setBanned(isBanned);
     }
 
-    public static boolean validateLogin(String login) {
+    public static boolean validateLogin(String login)
+    {
         String regex1 = "[^a-zA-Z0-9_-]";
+        final String regex = "niggas|bitch|nigga|nigger|niggers|megreli|dick|cock|pussy|cunt|genital|fuck|shit|piss|faggot|retard|andria|ass|titties|boobs|boob|tit|slut|whore|slave|cum|job|sucker";
+        final String string = "niggaasas";
+        String[] nonowords = {"niggas","bitch","nigga","nigger","niggers","megreli","dick","cock","pussy","cunt","genital",
+                "fuck","shit","piss","faggot","retard","andria","ass","titties","boobs","boob","tit","slut","whore","slave",
+                "cum","job","sucker","sperm","vagina"};
         boolean valid = true;
 
-
         validateLoop:
-        for (int i = 0; i < login.length(); i++) {
-            if((login.charAt(i) + "").matches(regex1)) {valid = false; break validateLoop;}
+        for (int i = 0; i < login.length(); i++)
+        {
+            if ((login.charAt(i) + "").matches(regex1))
+            {
+                valid = false;
+                break validateLoop;
+            }
         }
+
+        validateLoop1:
+        for (int i = 0; i < nonowords.length; i++)
+        {
+            if (login.toLowerCase().contains(nonowords[i]))
+            {
+                valid = false;
+                break validateLoop1;
+            }
+        }
+
         if(valid) return login.length() >= 4 && login.length() <= 20;
         else return false;
     }
 
-    public static boolean validateEmail(String email) {
+    public static boolean validateEmail(String email)
+    {
         String regex1 = "[^a-zA-Z0-9_-]";
         boolean valid = true;
 
