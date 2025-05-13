@@ -4,7 +4,8 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class SQLServer {
+public class SQLServer
+{
     String url = "jdbc:mysql://localhost:3306/pigeondb";
     String userName = "root";
     String password = "Iamme113";

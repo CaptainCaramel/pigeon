@@ -26,13 +26,19 @@ public class WelcomeScene
     @FXML
     public void LoginButtonEvent(ActionEvent event) throws IOException
     {
-        PigeonApplication.sceneSwitcher("LoginScene");
+        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
     }
 
     @FXML
     public void SignUpButton(ActionEvent event) throws IOException
     {
-        PigeonApplication.sceneSwitcher("SignUpScene");
+        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/SignUpScene.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
     }
 
 }
