@@ -31,7 +31,7 @@
             <Cursor fx:constant="TEXT" />
          </cursor>
       </TextField>
-      <CheckBox fx:id="rememberMe" layoutX="486.0" layoutY="447.0" mnemonicParsing="false" prefWidth="110.0" text="Remember me">
+      <CheckBox fx:id="rememberMe" layoutX="486.0" layoutY="447.0" mnemonicParsing="false" onAction="#rememberAction" prefWidth="110.0" text="Remember me">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

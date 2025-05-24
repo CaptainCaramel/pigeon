@@ -6,19 +6,23 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class Client implements Serializable {
-    private boolean rememberMe;
+    public static boolean rememberMe;
+    private boolean savedRememberMe;
+
 
     @Serial
     private static final long serialVersionUID = 2309L;
 
     private final String filePath = new File("").getAbsolutePath();
 
-    private final transient SQLServer sqlServer;
+    private static transient SQLServer sqlServer = null;
 
-    private User user;
+    public static User user;
+    private User savedUser;
 
-    private ArrayList<String> spamblacklist = new ArrayList<>();
-    private ArrayList<String> Recepients = new ArrayList<>();
+
+    private static ArrayList<String> spamblacklist = new ArrayList<>();
+    private static ArrayList<String> Recepients = new ArrayList<>();
 
     public Client()
     {
@@ -57,13 +61,14 @@ public class Client implements Serializable {
         try{
             ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filePath + "\\settings.txt")));
             Client loadedClient = (Client)objectInputStream.readObject();
+            System.out.println("SRM : " + savedRememberMe);
+            rememberMe = loadedClient.savedRememberMe;
 
-            this.rememberMe = loadedClient.rememberMe;
             if(rememberMe) {
-                this.user = loadedClient.user;
+                user = loadedClient.savedUser;
                 System.out.println("User loaded, username : " + user.getLogin());
 
-                this.Recepients = loadedClient.Recepients;
+                Recepients = loadedClient.Recepients;
 
             }
 
@@ -72,6 +77,7 @@ public class Client implements Serializable {
 
         }catch (IOException | ClassNotFoundException | NullPointerException e){
             System.out.println("Error while importing settings! Resetting to defaults...");
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -79,6 +85,10 @@ public class Client implements Serializable {
 
     public void saveSettings(){
         try{
+            savedRememberMe = rememberMe;
+            if(rememberMe)savedUser = user;
+            System.out.println("SU : " + savedUser.getLogin());
+
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filePath + "\\settings.txt")));
             objectOutputStream.writeObject(this);
             objectOutputStream.close();
@@ -88,155 +98,17 @@ public class Client implements Serializable {
         }
     }
 
+    public static void login(String username){
+        user = sqlServer.logIn(username);
+    }
+
     public void pages(int pID){
         Scanner scanner = new Scanner(System.in);
-        //Select Login or Sign up page
-        if(pID == 0){
-
-            if(user != null){
-                pages(3);
-                return;
-            }
-
-            System.out.println("**********Welcome to Pigeon Mail**********\n" +
-                    "     1.Log In     \n" +
-                    "     2.Sign Up     \n" );
 
 
-            int ans1 = scanner.nextInt();
-
-            if(ans1 == 1 || ans1 == 2)pages(ans1);
-            else {
-                System.out.println("Invalid Input!");
-                pages(0);
-            }
-        }
-
-
-
-        //Login Page
-        else if(pID == 1){
-
-            String login;
-
-            loginLoop:
-            while(true) {
-                System.out.print("Enter Login : ");
-                login = scanner.nextLine();
-                if(!User.validateLogin(login))
-                {
-                    System.out.println("Invalid Login! Login can only contain : a-z, A-Z, 0-9, _ and be 4-25 characters long");
-                    continue loginLoop;
-                }
-
-                if(sqlServer.validateLogin(login)) break;
-                else System.out.println("User with this login not found!");
-            }
-
-            passwordLoop:
-            while(true) {
-                System.out.println();
-                System.out.print("Enter Password : ");
-                String password = scanner.nextLine();
-                PassHasher passHasher = new PassHasher();
-                String c_hashedPass = passHasher.hasher(password);
-                if(sqlServer.validatePassword(login, c_hashedPass)){
-                    System.out.println("Login successful!");
-                    break passwordLoop;
-                }
-                else System.out.println("Wrong Password!");
-            }
-
-            System.out.println();
-            System.out.println("Remember me? (Currently : " + this.rememberMe + ")");
-
-            rememberMeLoop:
-            while(true){
-                String remMe = scanner.nextLine();
-                if(remMe.equalsIgnoreCase("true")){
-                    setRememberMe(true);
-                    saveSettings();
-                    break rememberMeLoop;
-                }
-                else if(remMe.equalsIgnoreCase("false")){
-                    setRememberMe(false);
-                    saveSettings();
-                    break rememberMeLoop;
-                }
-                else System.out.println("Invalid input! Use \"True\" or \"False\"!");
-            }
-            System.out.println("**************************");
-
-            user = sqlServer.logIn(login);
-            if(rememberMe) saveSettings();
-
-            if(user.isBanned()){
-                System.out.println("You are banned!");
-                pages(8);
-            }
-            //else pages(3);
-        }
-
-        //Sign up page
-        else if (pID == 2){
-            System.out.println("**********Sign Up**********\n");
-
-            String login;
-            loginLoop:
-            while(true) {
-                System.out.print("Enter Login : ");
-                login = scanner.nextLine();
-                if(!User.validateLogin(login)) {
-                    System.out.println("Invalid Login! Login can only contain : a-z, A-Z, 0-9, _, - and be 4-25 characters long");
-                    continue loginLoop;
-                }
-
-                if(sqlServer.validateLogin(login)) {
-                    System.out.println("Login already taken!");
-                    continue loginLoop;
-                }
-                break loginLoop;
-            }
-
-            String password;
-            passwordLoop:
-            while(true) {
-                System.out.println();
-                System.out.print("Enter Password : ");
-                password = scanner.nextLine();
-                if(!User.validatePassword(password)){
-                    System.out.println("Invalid Password! Password can only contain the alphabet, numbers and special characters(Except for \\ and \") and be 8-25 characters long");
-                    continue passwordLoop;
-                }
-                break passwordLoop;
-
-            }
-
-            PassHasher passHasher = new PassHasher();
-            String hashedPass = passHasher.hasher(password);
-            String recoveryPass = passHasher.backuppassword();
-
-
-            String email;
-            emailLoop:
-            while(true) {
-                System.out.println();
-                System.out.print("Enter Email (@pigeon.com will be auto-added) : ");
-                email = scanner.nextLine();
-                if(!User.validateEmail(email)) {
-                    System.out.println("Invalid Email! Email can only contain : a-z, A-Z, 0-9, _, - and be 4-20 characters long");
-                    continue emailLoop;
-                }
-                email += "@pigeon.com";
-                break emailLoop;
-            }
-
-            user = sqlServer.SignUp(login, email, hashedPass, recoveryPass);
-            pages(3);
-        }
-
+        //user = sqlServer.SignUp(login, email, hashedPass, recoveryPass);
         //Email Hub
-        else if (pID == 3){
+        if (pID == 3){
 
             System.out.println("********Welcome, " + user.getLogin() +  " ********");
             System.out.println();
@@ -741,28 +613,12 @@ public class Client implements Serializable {
         }
         else if(decision == 4)
         {
-            Scanner scanner = new Scanner(System.in);
-            ArrayList<Email> emails = sqlServer.getInbox(this.user.getId());
 
-            inboxLoop:
-            while(true) {
-                for (int i = 0; i < emails.size(); i++) {
-                    Email email = emails.get(i);
-                    System.out.println(i + 1 + ". " + email.getSubject() + " | From : " + email.getSender().getEmail());
-                }
-
-                System.out.print("Choose email (hub : -1) : ");
-                int emailChoice = scanner.nextInt();
-                if(emailChoice == -1) break inboxLoop;
-                else if (emailChoice > 0 && emailChoice <= emails.size()) {
-                    System.out.println("\n*******************************");
-                    System.out.println("\n" + emails.get(emailChoice - 1).toString() + "\n");
-                    System.out.println("*******************************");
-                }
-                else System.out.println("Invalid choice!");
-            }
         }
         pages(3);
+    }
+    public static ArrayList<Email> getInbox() {
+            return sqlServer.getInbox(user.getId());
     }
 
     private ArrayList<Email> getDrafts() {

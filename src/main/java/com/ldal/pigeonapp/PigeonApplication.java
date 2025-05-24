@@ -19,22 +19,25 @@ public class PigeonApplication extends Application
     @Override
     public void start(Stage stage) throws IOException
     {
-        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
-        Scene scene = new Scene(root);
+        Scene scene;
+        Parent root;
+        new Client();
+        if(Client.user != null && Client.rememberMe){
+            root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
+        }
+        else {
+            root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
+        }
+
+
+        scene = new Scene(root);
+        stage.setScene(scene);
         stage.setTitle("Pigeon");
         Image icon = new Image(PigeonApplication.class.getResource("/icon.png").toString());
         stage.getIcons().add(icon);
-        stage.setScene(scene);
         stage.show();
     }
 
-    public static void sceneSwitcher(ActionEvent event) throws IOException
-    {
-        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-    }
 
     public static void main(String[] args)
     {
