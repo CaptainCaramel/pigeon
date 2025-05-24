@@ -21,8 +21,13 @@ public class Client implements Serializable {
     private User savedUser;
 
 
-    private static ArrayList<String> spamblacklist = new ArrayList<>();
+    private final static ArrayList<String> spamblacklist = new ArrayList<>();
     private static ArrayList<String> Recepients = new ArrayList<>();
+
+    public static ArrayList<String> getSpamblacklist()
+    {
+        return spamblacklist;
+    }
 
     public Client()
     {

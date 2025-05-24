@@ -35,11 +35,14 @@ public class EmailSelector implements Initializable {
 
 
     @FXML
-    private void viewEmail(ActionEvent actionEvent) throws IOException {
+    private void viewEmail(ActionEvent actionEvent) throws IOException
+    {
         Button clickedButton = (Button) actionEvent.getSource();
 
-        for (int i = 0; i < eButtons.size(); i++) {
-            if(clickedButton.equals(eButtons.get(i))){
+        for (int i = 0; i < eButtons.size(); i++)
+        {
+            if(clickedButton.equals(eButtons.get(i)))
+            {
                 EmailReader.email = inbox.get(i);
                 break;
             }
@@ -53,9 +56,16 @@ public class EmailSelector implements Initializable {
     }
 
 
-    private void displayFolder(ArrayList<Email> folder){
-        for (int i = 0; i < folder.size(); i++) {
+    private void displayFolder(ArrayList<Email> folder)
+    {
+        for (int i = 0; i < folder.size(); i++)
+        {
             Email email = folder.get(i);
+
+            if(folder == inbox)
+            {
+                if (Client.getSpamblacklist().contains(email.getSender().getEmail())) continue;
+            }
 
             Group bGroup = new Group();
 
