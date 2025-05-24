@@ -21,6 +21,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -84,7 +86,7 @@ public class EmailSelector implements Initializable {
             subject.setFont(Font.font("roboto", FontWeight.NORMAL, FontPosture.REGULAR, 17));
             subject.setTextFill(Color.web("0x383838"));
 
-            Label date = new Label(email.getDateTime());
+            Label date = new Label(getRelativeTime(email));
             date.setAlignment(Pos.CENTER_RIGHT);
             date.setPrefWidth(412);
             date.setPrefHeight(35);
@@ -117,5 +119,36 @@ public class EmailSelector implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         displayFolder(inbox);
+    }
+
+    public String getRelativeTime(Email email)
+    {
+        String dt = email.getDateTime();
+
+        int year = Integer.parseInt(dt.substring(0, 4));
+        int month = Integer.parseInt(dt.substring(5, 7));
+        int day = Integer.parseInt(dt.substring(8, 10));
+        int hour = Integer.parseInt(dt.substring(11, 13));
+        int minute = Integer.parseInt(dt.substring(14, 16));
+
+        LocalDateTime sentTime = LocalDateTime.of(year, month, day, hour, minute);
+        LocalDateTime now = LocalDateTime.now();
+
+        long minutesago = ChronoUnit.MINUTES.between(sentTime, now);
+        long hoursago = ChronoUnit.HOURS.between(sentTime, now);
+        long daysago = ChronoUnit.DAYS.between(sentTime, now);
+        long months = ChronoUnit.MONTHS.between(sentTime, now);
+        long years = ChronoUnit.YEARS.between(sentTime, now);
+
+        if(hoursago < 1) return minutesago + " minuts ago";
+        if(daysago == 0 && hoursago < 12) return hoursago + " hours ago";
+        if(daysago == 00 && hoursago >= 12) return "today";
+        if(daysago == 1) return "yesterday";
+        if(daysago >= 2 && daysago <= 6) return "few days ago";
+        if(daysago >= 7 && daysago <= 13) return "last week";
+        if(daysago >= 14 && daysago <= 30) return "few weeks ago";
+        if(months == 1) return "last month";
+
+        return sentTime.toString();
     }
 }
