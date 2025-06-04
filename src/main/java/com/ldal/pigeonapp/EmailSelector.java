@@ -1,6 +1,7 @@
 package com.ldal.pigeonapp;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -41,10 +42,16 @@ public class EmailSelector implements Initializable {
     private Button composerButton;
     @FXML
     private Button drafterButton;
+    ToolBarController toolBarController = new ToolBarController();
 
     @FXML
     private VBox sideBarVbox;
 
+    @FXML
+    private void profilebutton()
+    {
+        toolBarController.ConMenu(new ActionEvent());
+    }
 
     public static int folderID = 0;
 
