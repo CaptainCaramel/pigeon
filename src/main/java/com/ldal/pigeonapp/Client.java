@@ -6,22 +6,22 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class Client implements Serializable {
-    public static boolean rememberMe;
+    private static boolean rememberMe;
     private boolean savedRememberMe;
 
 
     @Serial
     private static final long serialVersionUID = 2309L;
 
-    private final String filePath = new File("").getAbsolutePath();
+    private static final String filePath = new File("").getAbsolutePath();
 
-    private static transient SQLServer sqlServer = null;
+    private static SQLServer sqlServer = null;
 
-    public static User user;
+    private static User user;
     private User savedUser;
 
 
-    private static ArrayList<String> spamblacklist = new ArrayList<>();
+    private static final ArrayList<String> spamblacklist = new ArrayList<>();
     private static ArrayList<String> Recepients = new ArrayList<>();
 
     public Client()
@@ -29,7 +29,7 @@ public class Client implements Serializable {
         if (!loadSettings())
         {
             //aq default settingebi
-            setRememberMe(false);
+            rememberMe = false;
 
 
             saveSettings();
@@ -38,11 +38,10 @@ public class Client implements Serializable {
         try {
             File sent = new File(filePath + "\\Sent.txt");
             File draft = new File(filePath + "\\Draft.txt");
-            File inbox = new File(filePath + "\\Inbox.txt");
             File spam = new File(filePath + "\\Spam.txt");
             File settings = new File(filePath + "\\settings.txt");
 
-            File[] files = {sent, draft, inbox, spam ,settings};
+            File[] files = {sent, draft, spam ,settings};
 
             for (File file : files) {
                 if (!file.exists()) {
@@ -110,39 +109,6 @@ public class Client implements Serializable {
         //Email Hub
         if (pID == 3){
 
-            System.out.println("********Welcome, " + user.getLogin() +  " ********");
-            System.out.println();
-            System.out.println("1.Compose E-mail");
-            System.out.println("2.Inbox");
-            System.out.println("3.Folders");
-            System.out.println("4.Settings");
-            if(user.isAdmin())System.out.println("\n5.Admin Dashboard");
-
-            int decision = scanner.nextInt();
-
-            if(decision == 1) {
-                pages(4);
-                return;
-            }
-            if(decision == 2){
-                pages(5);
-                return;
-            }
-            if(decision == 3) {
-                FolderAccess();
-                return;
-            }
-            if(decision == 4){
-                pages(6);
-                return;
-            }
-
-            if(decision == 5){
-                pages(9);
-                return;
-            }
-
-            System.out.println("*******************************");
         }
 
         //Email composer
@@ -241,30 +207,6 @@ public class Client implements Serializable {
 
             if(decision1 == 1) pages(7);
             else if(decision1 == 2) pages(8);
-        }
-
-        //Settings/RememberMe
-        else if(pID == 7){
-            System.out.println("*****Remember Me*****");
-            System.out.println("Currently set to : " + rememberMe);
-            rememberMeLoop:
-            while(true){
-                String remMe = scanner.nextLine();
-                if(remMe.equalsIgnoreCase("true")){
-                    setRememberMe(true);
-                    saveSettings();
-                    break rememberMeLoop;
-                }
-                else if(remMe.equalsIgnoreCase("false")){
-                    setRememberMe(false);
-                    saveSettings();
-                    break rememberMeLoop;
-                }
-                else System.out.println("Invalid input! Use \"True\" or \"False\"!");
-            }
-            System.out.println("**************************");
-            pages(6);
-
         }
 
         //Settings/LogOut
@@ -611,17 +553,13 @@ public class Client implements Serializable {
                 throw new RuntimeException(e);
             }
         }
-        else if(decision == 4)
-        {
-
-        }
         pages(3);
     }
     public static ArrayList<Email> getInbox() {
             return sqlServer.getInbox(user.getId());
     }
 
-    private ArrayList<Email> getDrafts() {
+    public static ArrayList<Email> getDrafts() {
         ArrayList<Email> draftEmails = new ArrayList<>();
         try
         {
@@ -644,12 +582,27 @@ public class Client implements Serializable {
         return draftEmails;
     }
 
-    public boolean isRememberMe() {
-        return rememberMe;
-    }
+    public static ArrayList<Email> getSent() {
+        ArrayList<Email> draftEmails = new ArrayList<>();
+        try
+        {
+            ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filePath + "\\Sent.txt")));
 
-    public void setRememberMe(boolean rememberMe) {
-        this.rememberMe = rememberMe;
+            Email cEmail = (Email) objectInputStream.readObject();
+            while(cEmail != null){
+                draftEmails.add(cEmail);
+                cEmail = (Email) objectInputStream.readObject();
+            }
+
+        }
+        catch (EOFException eof){
+            System.out.println("Sents read!");
+        }
+        catch (IOException | ClassNotFoundException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return draftEmails;
     }
 
     public ArrayList<String> Mostcommonrecepeints(ArrayList<String> recepients)
@@ -688,18 +641,26 @@ public class Client implements Serializable {
                 currentUser.append(c);
             }
         }
-        if(currentUser.length() > 0)
+        if(!currentUser.isEmpty())
         {
             Users.add(currentUser.toString());
         }
         return Users;
     }
 
-    public User getUser() {
+    public static User getUser() {
         return user;
     }
 
-    public SQLServer getSqlServer() {
+    public static SQLServer getSQLServer() {
         return sqlServer;
+    }
+
+    public static boolean isRememberMe() {
+        return rememberMe;
+    }
+
+    public static void setRememberMe(boolean rememberMe) {
+        Client.rememberMe = rememberMe;
     }
 }

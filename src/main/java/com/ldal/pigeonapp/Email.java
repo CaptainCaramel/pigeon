@@ -9,7 +9,6 @@ public class Email implements Serializable
     private String subject, text;
     private Media attachment;
     private String dateTime;
-    
 
     @Serial
     private static final long serialVersionUID = 2009L;
@@ -29,9 +28,13 @@ public class Email implements Serializable
         String day = "" + localDateTime.getDayOfMonth();
         if(localDateTime.getMonthValue() < 10) day = "0" + day;
 
+        String minute = "" + localDateTime.getMinute();
+        if(localDateTime.getMinute() < 10) minute = "0" + minute;
 
-        return localDateTime.getYear() + "-" + month + "-" + day + " " + localDateTime.getHour() + ":" + localDateTime.getMinute() + ":" + localDateTime.getSecond();
+
+        return localDateTime.getYear() + "-" + month + "-" + day + " " + localDateTime.getHour() + ":" + minute;
     }
+
 
     public User getSender() {
         return sender;

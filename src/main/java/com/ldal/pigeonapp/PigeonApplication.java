@@ -22,7 +22,7 @@ public class PigeonApplication extends Application
         Scene scene;
         Parent root;
         new Client();
-        if(Client.user != null && Client.rememberMe){
+        if(Client.getUser() != null && Client.isRememberMe()){
             root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
         }
         else {

@@ -1,0 +1,34 @@
+package com.ldal.pigeonapp;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
+public class SideBarController {
+    public static Button inboxButton;
+    public static Button draftsButton;
+    public static Button sentButton;
+    public static Button spamButton;
+
+    public static void goToSelector(Button clickedButton) throws IOException {
+        if(clickedButton.equals(inboxButton)) EmailSelector.folderID = 0;
+        else if(clickedButton.equals(draftsButton)) EmailSelector.folderID = 1;
+        else if(clickedButton.equals(sentButton)) EmailSelector.folderID = 2;
+        else if(clickedButton.equals(spamButton)) EmailSelector.folderID = 3;
+
+        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) (inboxButton.getScene().getWindow());
+        stage.setScene(scene);
+
+    }
+
+
+
+}

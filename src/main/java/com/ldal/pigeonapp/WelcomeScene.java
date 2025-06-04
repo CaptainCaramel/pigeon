@@ -17,13 +17,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class WelcomeScene implements Initializable
+public class WelcomeScene
 {
-
-    @FXML
-    private Button loginButton;
-    @FXML
-    private Button signUpButton;
 
 
     @FXML
@@ -45,10 +40,4 @@ public class WelcomeScene implements Initializable
     }
 
 
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
-    }
 }

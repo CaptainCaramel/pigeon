@@ -16,9 +16,8 @@ import java.util.ResourceBundle;
 
 public class LoginScene implements Initializable
 {
-    private SQLServer sqlServer;
     private PassHasher passHasher;
-
+    private SQLServer sqlServer;
     @FXML
     public Button loginbutton;
     @FXML
@@ -26,7 +25,7 @@ public class LoginScene implements Initializable
     @FXML
     public PasswordField password;
     @FXML
-    public  CheckBox rememberMe;
+    public CheckBox rememberMe;
     @FXML
     public Label warning;
     @FXML
@@ -53,7 +52,7 @@ public class LoginScene implements Initializable
 
                 Client.login(username1);
                 client.saveSettings();
-                System.out.println(Client.user.getLogin());
+                System.out.println(Client.getUser().getLogin());
 
                 Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
                 Scene scene = new Scene(root);
@@ -67,7 +66,7 @@ public class LoginScene implements Initializable
     @FXML
     public void rememberAction(ActionEvent event){
 
-        Client.rememberMe = rememberMe.isSelected();
+        Client.setRememberMe(rememberMe.isSelected());
         client.saveSettings();
     }
 
@@ -82,8 +81,7 @@ public class LoginScene implements Initializable
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        sqlServer = new SQLServer();
         passHasher = new PassHasher();
-        new Client();
+        sqlServer = Client.getSQLServer();
     }
 }

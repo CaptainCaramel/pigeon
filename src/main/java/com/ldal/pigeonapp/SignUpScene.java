@@ -3,6 +3,7 @@ package com.ldal.pigeonapp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,11 +13,14 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class SignUpScene
+public class SignUpScene implements Initializable
 {
-    private final SQLServer sqlServer;
-    private final PassHasher passHasher;
+    private PassHasher passHasher;
+    private SQLServer sqlServer;
+
     private User user;
     @FXML
     public Button SignUpbutton;
@@ -30,11 +34,6 @@ public class SignUpScene
     public Label warning;
     @FXML
     public Button back;
-
-    public SignUpScene() {
-        sqlServer = new SQLServer();
-        passHasher = new PassHasher();
-    }
 
     @FXML
     private void SignUpAction(ActionEvent event)
@@ -72,5 +71,11 @@ public class SignUpScene
                 warning.setText("Invalid information");
             }
         }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        passHasher = new PassHasher();
+        sqlServer = Client.getSQLServer();
     }
 }
