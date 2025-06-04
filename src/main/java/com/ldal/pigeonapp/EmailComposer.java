@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -17,11 +18,11 @@ import java.util.ResourceBundle;
 
 public class EmailComposer implements Initializable {
     @FXML
-    private Label emailText;
+    private TextField emailText;
     @FXML
-    private Label receiverText;
+    private TextField receiverText;
     @FXML
-    private Label subjText;
+    private TextField subjText;
 
     @FXML
     private Button inboxButton;
@@ -50,5 +51,7 @@ public class EmailComposer implements Initializable {
         SideBarController.draftsButton = draftsButton;
         SideBarController.sentButton = sentButton;
         SideBarController.spamButton = spamButton;
+
+        SideBarController.initSideBar();
     }
 }

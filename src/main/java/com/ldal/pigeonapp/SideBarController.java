@@ -3,6 +3,7 @@ package com.ldal.pigeonapp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -27,18 +28,24 @@ public class SideBarController {
 
         Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) (inboxButton.getScene().getWindow());
+        Stage stage = (Stage) (clickedButton.getScene().getWindow());
         stage.setScene(scene);
 
+    }
+
+    public static void goToComposer(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailComposer.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) (((Node)(actionEvent.getSource())).getScene().getWindow());
+        stage.setScene(scene);
     }
 
     public static void initSideBar(){
         Button[] buttons = {inboxButton, draftsButton, sentButton, spamButton, composerButton, drafterButton};
         //ystem.out.println(Arrays.toString(buttons));
         for(Button b : buttons){
-            System.out.println(b);
             b.setStyle("-fx-text-fill: #000000; -fx-background-color: TRANSPARENT");
-            b.setOnMouseEntered(event -> b.setStyle("-fx-text-fill: #FFFFFF; -fx-background-color: TRANSPARENT"));
+            b.setOnMouseEntered(event -> b.setStyle("-fx-text-fill: #e17c65; -fx-background-color: TRANSPARENT"));
             b.setOnMouseExited(event -> b.setStyle("-fx-text-fill: #000000; -fx-background-color: TRANSPARENT"));
 
         }

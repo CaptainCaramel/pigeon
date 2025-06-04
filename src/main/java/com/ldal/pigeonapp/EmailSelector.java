@@ -77,6 +77,11 @@ public class EmailSelector implements Initializable {
     }
 
     @FXML
+    private void goToComposer(ActionEvent actionEvent) throws IOException {
+        SideBarController.goToComposer(actionEvent);
+    }
+
+    @FXML
     private void switchFolder(ActionEvent actionEvent){
         eButtons.clear();
 
@@ -172,9 +177,7 @@ public class EmailSelector implements Initializable {
     private void displayFolder(ArrayList<Email> folder){
         emailListBox.getChildren().clear();
 
-        for (int i = 0; i < folder.size(); i++) {
-            Email email = folder.get(i);
-
+        for (Email email : folder) {
             Group bGroup = new Group();
 
             Button button = new Button();

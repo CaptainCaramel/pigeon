@@ -71,7 +71,7 @@
                   <Insets left="4.0" top="10.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#goToSelector" style="-fx-background-color: transparent;" text="Spam">
+            <Button fx:id="spamButton" mnemonicParsing="false" onAction="#goToSelector" style="-fx-background-color: transparent;" text="Spam">
                <font>
                   <Font name="Roboto Medium" size="21.0" />
                </font>
