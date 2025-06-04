@@ -99,7 +99,7 @@
                   </DropShadow>
                </effect>
             </ImageView>
-          <Button fx:id="profilebutton" mnemonicParsing="false" text="Profile" translateX="1090.0" />
+          <Button mnemonicParsing="false" onAction="#profilebutton" text="Profile" translateX="1090.0" />
             <Button mnemonicParsing="false" text="Button" translateX="960.0" />
         </items>
          <effect>

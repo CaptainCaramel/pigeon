@@ -21,7 +21,6 @@ public class ToolBarController
     public boolean isAlreadyCreated = false;
     ContextMenu contextMenu = new ContextMenu();
 
-    @FXML
     public void ConMenu(ActionEvent event)
     {
         if(!isAlreadyCreated)

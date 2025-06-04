@@ -48,9 +48,9 @@ public class EmailSelector implements Initializable {
     private VBox sideBarVbox;
 
     @FXML
-    private void profilebutton()
+    private void profilebutton(ActionEvent event)
     {
-        toolBarController.ConMenu(new ActionEvent());
+        toolBarController.ConMenu(event);
     }
 
     public static int folderID = 0;
