@@ -37,6 +37,10 @@ public class EmailSelector implements Initializable {
     private Button sentButton;
     @FXML
     private Button spamButton;
+    @FXML
+    private Button composerButton;
+    @FXML
+    private Button drafterButton;
 
     @FXML
     private VBox sideBarVbox;
@@ -166,7 +170,6 @@ public class EmailSelector implements Initializable {
 
 
     private void displayFolder(ArrayList<Email> folder){
-        System.out.println("switching folder!");
         emailListBox.getChildren().clear();
 
         for (int i = 0; i < folder.size(); i++) {
@@ -235,13 +238,21 @@ public class EmailSelector implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        SideBarController.inboxButton = inboxButton;
+        SideBarController.draftsButton = draftsButton;
+        SideBarController.spamButton = spamButton;
+        SideBarController.sentButton = sentButton;
+        SideBarController.composerButton = composerButton;
+        SideBarController.drafterButton = drafterButton;
+
+        SideBarController.initSideBar();
+
         displayFolder(folderID);
     }
 
     public String getRelativeTime(Email email)
     {
         String dt = email.getDateTime();
-
         int year = Integer.parseInt(dt.substring(0, 4));
         int month = Integer.parseInt(dt.substring(5, 7));
         int day = Integer.parseInt(dt.substring(8, 10));
@@ -257,14 +268,12 @@ public class EmailSelector implements Initializable {
         long months = ChronoUnit.MONTHS.between(sentTime, now);
         long years = ChronoUnit.YEARS.between(sentTime, now);
 
-        if(hoursago < 1) return minutesago + " minuts ago";
-        if(daysago == 0 && hoursago < 12) return hoursago + " hours ago";
-        if(daysago == 00 && hoursago >= 12) return "today";
-        if(daysago == 1) return "yesterday";
-        if(daysago >= 2 && daysago <= 6) return "few days ago";
-        if(daysago >= 7 && daysago <= 13) return "last week";
-        if(daysago >= 14 && daysago <= 30) return "few weeks ago";
-        if(months == 1) return "last month";
+        if(daysago == 0) return dt.substring(0, 11);
+        if(daysago == 1) return "Yesterday";
+        if(daysago >= 2 && daysago <= 6) return "A few days ago";
+        if(daysago >= 7 && daysago <= 13) return "Last week";
+        if(daysago >= 14 && daysago <= 30) return "A few weeks ago";
+        if(months == 1) return "Last month";
 
         return sentTime.toString();
     }

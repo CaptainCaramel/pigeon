@@ -31,7 +31,10 @@ public class Email implements Serializable
         String minute = "" + localDateTime.getMinute();
         if(localDateTime.getMinute() < 10) minute = "0" + minute;
 
-        return localDateTime.getYear() + "-" + month + "-" + day + " " + localDateTime.getHour() + ":" + localDateTime.getMinute();
+        String hour = "" + localDateTime.getHour();
+        if(localDateTime.getHour() < 10) hour = "0" + hour;
+
+        return localDateTime.getYear() + "-" + month + "-" + day + " " + hour + ":" + minute;
     }
 
 

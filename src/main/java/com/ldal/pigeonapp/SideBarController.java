@@ -9,12 +9,15 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class SideBarController {
     public static Button inboxButton;
     public static Button draftsButton;
     public static Button sentButton;
     public static Button spamButton;
+    public static Button composerButton;
+    public static Button drafterButton;
 
     public static void goToSelector(Button clickedButton) throws IOException {
         if(clickedButton.equals(inboxButton)) EmailSelector.folderID = 0;
@@ -27,6 +30,18 @@ public class SideBarController {
         Stage stage = (Stage) (inboxButton.getScene().getWindow());
         stage.setScene(scene);
 
+    }
+
+    public static void initSideBar(){
+        Button[] buttons = {inboxButton, draftsButton, sentButton, spamButton, composerButton, drafterButton};
+        //ystem.out.println(Arrays.toString(buttons));
+        for(Button b : buttons){
+            System.out.println(b);
+            b.setStyle("-fx-text-fill: #000000; -fx-background-color: TRANSPARENT");
+            b.setOnMouseEntered(event -> b.setStyle("-fx-text-fill: #FFFFFF; -fx-background-color: TRANSPARENT"));
+            b.setOnMouseExited(event -> b.setStyle("-fx-text-fill: #000000; -fx-background-color: TRANSPARENT"));
+
+        }
     }
 
 

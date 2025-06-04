@@ -31,7 +31,7 @@
             </DropShadow>
          </effect>
          <children>
-            <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="83.0" style="-fx-background-color: transparent;" text="Email">
+            <Button fx:id="composerButton" mnemonicParsing="false" prefHeight="41.0" prefWidth="83.0" style="-fx-background-color: transparent;" text="Email">
                <VBox.margin>
                   <Insets left="5.0" top="80.0" />
                </VBox.margin>
@@ -39,7 +39,7 @@
                   <Font name="Roboto Medium" size="21.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" text="Draft">
+            <Button fx:id="drafterButton" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Draft">
                <VBox.margin>
                   <Insets left="5.0" top="4.0" />
                </VBox.margin>

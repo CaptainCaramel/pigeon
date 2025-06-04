@@ -37,6 +37,10 @@ public class EmailReader implements Initializable {
     private Button sentButton;
     @FXML
     private Button spamButton;
+    @FXML
+    private Button composerButton;
+    @FXML
+    private Button drafterButton;
 
     @FXML
     private VBox sideBarVbox;
@@ -49,15 +53,22 @@ public class EmailReader implements Initializable {
         else if(clickedButton.equals(sentButton)) EmailSelector.folderID = 2;
         else if(clickedButton.equals(spamButton)) EmailSelector.folderID = 3;
 
-        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) (inboxButton.getScene().getWindow());
-        stage.setScene(scene);
+        SideBarController.goToSelector(clickedButton);
 
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        SideBarController.inboxButton = inboxButton;
+        SideBarController.draftsButton = draftsButton;
+        SideBarController.spamButton = spamButton;
+        SideBarController.sentButton = sentButton;
+        SideBarController.composerButton = composerButton;
+        SideBarController.drafterButton = drafterButton;
+
+        SideBarController.initSideBar();
+
+
         String dateTime = email.getDateTime();
         senderText.setText(email.getSender().getEmail());
         emailText.setText(email.getText());

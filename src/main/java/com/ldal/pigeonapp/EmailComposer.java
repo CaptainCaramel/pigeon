@@ -31,6 +31,10 @@ public class EmailComposer implements Initializable {
     private Button sentButton;
     @FXML
     private Button spamButton;
+    @FXML
+    private Button composerButton;
+    @FXML
+    private Button drafterButton;
 
     @FXML
     private VBox sideBarVbox;
