@@ -214,7 +214,7 @@ public class EmailSelector implements Initializable {
             subject.setFont(Font.font("roboto", FontWeight.NORMAL, FontPosture.REGULAR, 17));
             subject.setTextFill(Color.web("0x383838"));
 
-            Label date = new Label(email.getDateTime());
+            Label date = new Label(getRelativeTime(email));
             date.setAlignment(Pos.CENTER_RIGHT);
             date.setPrefWidth(412);
             date.setPrefHeight(35);
@@ -278,7 +278,7 @@ public class EmailSelector implements Initializable {
         long months = ChronoUnit.MONTHS.between(sentTime, now);
         long years = ChronoUnit.YEARS.between(sentTime, now);
 
-        if(daysago == 0) return dt.substring(0, 11);
+        if(daysago == 0) return dt.substring(11);
         if(daysago == 1) return "Yesterday";
         if(daysago >= 2 && daysago <= 6) return "A few days ago";
         if(daysago >= 7 && daysago <= 13) return "Last week";
