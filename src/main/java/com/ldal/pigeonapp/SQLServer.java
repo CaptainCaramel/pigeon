@@ -39,7 +39,7 @@ public class SQLServer
 
             sendEmailNoAttachment = connection.prepareStatement("Insert into mails(senderID, receiverID, emailText, sendTime, subject) " +
                     "values(?, ?, ?, ?, ?)");
-            getEmailFromID = connection.prepareStatement("Select * from mails where receiverID = ?");
+            getEmailFromID = connection.prepareStatement("select * from mails where receiverID = ? order by id desc");
 
 
         } catch (SQLException e) {

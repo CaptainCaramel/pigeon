@@ -3,6 +3,7 @@ package com.ldal.pigeonapp;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Client implements Serializable {
@@ -189,38 +190,6 @@ public class Client implements Serializable {
             }
         }
 
-        //Inbox
-        else if(pID == 5){
-            System.out.println("Inbox action: ");
-            System.out.println("1.View inbox");
-            System.out.println("2.Delete all in inbox ");
-
-            int decision1 = scanner.nextInt();
-
-            if(decision1 == 1) Folderviewer(4);
-            else if(decision1 == 2) FolderDeleter(4);
-        }
-
-        //Settings
-        else if(pID == 6){
-            System.out.println("*****Settings*****");
-            System.out.println();
-            System.out.println("1.Remember Me");
-            System.out.println("2.Log Out");
-
-            int decision1 = scanner.nextInt();
-
-            if(decision1 == 1) pages(7);
-            else if(decision1 == 2) pages(8);
-        }
-
-        //Settings/LogOut
-        else if(pID == 8){
-            rememberMe = false;
-            user = null;
-            saveSettings();
-            pages(0);
-        }
 
         //Admin dashboard
         else if(pID == 9){
@@ -306,27 +275,27 @@ public class Client implements Serializable {
         System.out.println("Drafts saved!");
     }
 
-    public void EmailSender(Email email)
+    public static void EmailSender(Email email)
     {
             try
             {
-                User sender = this.user;
+                User sender = user;
                 User receiver = sqlServer.userFromEmail(email.getReceiver().getEmail());
 
                 sqlServer.sendEmail(sender.getId(), receiver.getId(), email.getText(), email.getSubject());
 
                 //Sentebshi shenaxva
-                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\Sent.txt", true));
-                bufferedWriter.append(email.toString());
-                bufferedWriter.write("\n---EMAIL-END---\n");
-                bufferedWriter.close();
+                email.setDateTime(Email.dateTimeToString(LocalDateTime.now()));
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filePath + "\\Sent.txt", true)));
+                objectOutputStream.writeObject(email);
+                objectOutputStream.close();
             }
             catch (IOException e)
             {
                 throw new RuntimeException(e);
             }
 
-        pages(3);
+        //pages(3);
     }
 
     public void FolderAccess()

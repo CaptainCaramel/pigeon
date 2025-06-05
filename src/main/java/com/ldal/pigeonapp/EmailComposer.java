@@ -8,20 +8,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 public class EmailComposer implements Initializable {
     @FXML
-    private Label emailText;
+    private TextArea emailText;
     @FXML
-    private Label receiverText;
+    private TextField receiverText;
     @FXML
-    private Label subjText;
+    private TextField subjText;
 
     @FXML
     private Button inboxButton;
@@ -35,6 +38,11 @@ public class EmailComposer implements Initializable {
     private Button composerButton;
     @FXML
     private Button drafterButton;
+    @FXML
+    private Button sendButton;
+
+    @FXML
+    private Label errorText;
 
     @FXML
     private VBox sideBarVbox;
@@ -44,11 +52,49 @@ public class EmailComposer implements Initializable {
         SideBarController.goToSelector((Button)actionEvent.getSource());
     }
 
+    @FXML
+    private void sendEmail(ActionEvent actionEvent){
+        SQLServer sqlServer = new SQLServer();
+
+        String rec = receiverText.getText();
+        String subj = subjText.getText();
+        String eText = emailText.getText();
+
+        if(!sqlServer.validateUser(rec)){
+            errorText.setText("*User not found!");
+            return;
+        }
+        if(subj.length() > 75){
+            errorText.setText("*Subject max length(75) exceeded!");
+            return;
+        }
+        if(eText.length() > 75000){
+            errorText.setText("*Text max length(75k) exceeded!");
+            return;
+        }
+        Email email = new Email(Client.getUser(), sqlServer.userFromEmail(rec), eText, subj);
+
+
+        Client.EmailSender(email);
+        errorText.setText("*Email sent!");
+        receiverText.setText("");
+        subjText.setText("");
+        emailText.setText("");
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         SideBarController.inboxButton = inboxButton;
         SideBarController.draftsButton = draftsButton;
         SideBarController.sentButton = sentButton;
         SideBarController.spamButton = spamButton;
+        SideBarController.composerButton = composerButton;
+        SideBarController.drafterButton = drafterButton;
+
+        sendButton.setStyle("-fx-background-color : #c83f44; -fx-background-radius : 15");
+        sendButton.setOnMouseExited(e -> sendButton.setStyle("-fx-background-color : #c83f44; -fx-background-radius : 15"));
+        sendButton.setOnMouseEntered(e -> sendButton.setStyle("-fx-background-color : #da4348; -fx-background-radius : 15"));
+
+        SideBarController.initSideBar();
     }
 }
