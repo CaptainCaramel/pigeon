@@ -19,6 +19,7 @@ public class SQLServer
     private final PreparedStatement sendEmailNoAttachment;
     private final PreparedStatement getEmailFromID;
     private final PreparedStatement getUserFromID;
+    private final PreparedStatement updatePassword;
     private final Statement statement;
 
     public SQLServer(){
@@ -34,6 +35,7 @@ public class SQLServer
             getUserFromLogin = connection.prepareStatement("Select * from user where login = ?");
             getUserFromEmail = connection.prepareStatement("Select * from user where email = ?");
             getUserFromID = connection.prepareStatement("Select * from user where id = ?");
+            updatePassword = connection.prepareStatement("update user set hashedPass = ? where login = ?;");
 
             sendEmailNoAttachment = connection.prepareStatement("Insert into mails(senderID, receiverID, emailText, sendTime, subject) " +
                     "values(?, ?, ?, ?, ?)");
@@ -67,6 +69,18 @@ public class SQLServer
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void changePassword(String login, String c_hashedPass)
+    {
+        try
+        {
+            updatePassword.setString(1, c_hashedPass);
+            updatePassword.setString(2, login);
+            updatePassword.executeUpdate();
+
+        }
+        catch (SQLException e) {throw new RuntimeException(e);}
     }
 
     public boolean validatePassword(String login, String c_hashedPass){

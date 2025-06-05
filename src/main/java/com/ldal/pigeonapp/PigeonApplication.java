@@ -24,11 +24,15 @@ public class PigeonApplication extends Application
         new Client();
         if(Client.getUser() != null && Client.isRememberMe())
         {
-            root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
+            root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
+            //root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
+            //root = FXMLLoader.load(PigeonApplication.class.getResource("/ConMenu.fxml"));
         }
         else
         {
-            root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
+            root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
+            //root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
+            //root = FXMLLoader.load(PigeonApplication.class.getResource("/ConMenu.fxml"));
         }
 
         scene = new Scene(root);
