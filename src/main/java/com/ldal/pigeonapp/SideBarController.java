@@ -34,6 +34,15 @@ public class SideBarController {
     }
 
     public static void goToComposer(ActionEvent actionEvent) throws IOException {
+        EmailComposer.draft = null;
+
+        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailComposer.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) (((Node)(actionEvent.getSource())).getScene().getWindow());
+        stage.setScene(scene);
+    }
+
+    public static void editDraft(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailComposer.fxml"));
         Scene scene = new Scene(root);
         Stage stage = (Stage) (((Node)(actionEvent.getSource())).getScene().getWindow());

@@ -68,11 +68,17 @@ public class EmailSelector implements Initializable {
     {
         Button clickedButton = (Button) actionEvent.getSource();
 
+        ArrayList<Email> folder = new ArrayList<>();
+        if(folderID == 0) folder = inbox;
+        else if (folderID == 1) folder = drafts;
+        else if (folderID == 2) folder = sent;
+        //else if (folderID == 3) folder = drafts;
+
         for (int i = 0; i < eButtons.size(); i++)
         {
             if(clickedButton.equals(eButtons.get(i)))
             {
-                EmailReader.email = inbox.get(i);
+                EmailReader.email = folder.get(i);
                 break;
             }
         }
@@ -85,9 +91,29 @@ public class EmailSelector implements Initializable {
     }
 
     @FXML
+    private void viewDraft(ActionEvent actionEvent) throws IOException {
+        Button clickedButton = (Button) actionEvent.getSource();
+
+        for (int i = 0; i < eButtons.size(); i++)
+        {
+            if(clickedButton.equals(eButtons.get(i)))
+            {
+                EmailComposer.draft = inbox.get(i);
+                break;
+            }
+        }
+
+        SideBarController.editDraft(actionEvent);
+
+    }
+
+
+    @FXML
     private void goToComposer(ActionEvent actionEvent) throws IOException {
         SideBarController.goToComposer(actionEvent);
     }
+
+
 
     @FXML
     private void switchFolder(ActionEvent actionEvent){
@@ -95,18 +121,21 @@ public class EmailSelector implements Initializable {
 
         Button clickedButton = (Button) actionEvent.getSource();
         if (clickedButton.equals(inboxButton)) {
+            folderID = 0;
             displayFolder(inbox);
         }
         if (clickedButton.equals(draftsButton)) {
+            folderID = 1;
             displayFolder(drafts);
         }
         if (clickedButton.equals(sentButton)) {
+            folderID = 2;
             displayFolder(sent);
         }
     }
 
     private void displayFolder(int id){
-        System.out.println("switching folder!");
+        System.out.println(folderID);
         emailListBox.getChildren().clear();
         ArrayList<Email> folder = new ArrayList<>();
         if(id == 0) folder = inbox;
@@ -151,7 +180,9 @@ public class EmailSelector implements Initializable {
             subject.setFont(Font.font("roboto", FontWeight.NORMAL, FontPosture.REGULAR, 17));
             subject.setTextFill(Color.web("0x383838"));
 
-            Label date = new Label(getRelativeTime(email));
+
+            Label date = new Label();
+            if(email.getDateTime() != null) date.setText(getRelativeTime(email));
             date.setAlignment(Pos.CENTER_RIGHT);
             date.setPrefWidth(412);
             date.setPrefHeight(35);
@@ -167,13 +198,24 @@ public class EmailSelector implements Initializable {
             bGroup.getChildren().add(button);
             bGroup.getChildren().add(textsHbox);
 
-            button.setOnAction(e -> {
-                try {
-                    viewEmail(e);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            });
+            if(folderID != 1) {
+                button.setOnAction(e -> {
+                    try {
+                        viewEmail(e);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
+            }
+            else{
+                button.setOnAction(e -> {
+                    try {
+                        viewDraft(e);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
+            }
 
             emailListBox.getChildren().add(bGroup);
 
@@ -184,6 +226,7 @@ public class EmailSelector implements Initializable {
 
     private void displayFolder(ArrayList<Email> folder){
         emailListBox.getChildren().clear();
+        System.out.println(folderID);
 
         for (Email email : folder) {
             Group bGroup = new Group();
@@ -215,7 +258,8 @@ public class EmailSelector implements Initializable {
             subject.setFont(Font.font("roboto", FontWeight.NORMAL, FontPosture.REGULAR, 17));
             subject.setTextFill(Color.web("0x383838"));
 
-            Label date = new Label(getRelativeTime(email));
+            Label date = new Label();
+            if(email.getDateTime() != null) date.setText(getRelativeTime(email));
             date.setAlignment(Pos.CENTER_RIGHT);
             date.setPrefWidth(412);
             date.setPrefHeight(35);
@@ -231,13 +275,25 @@ public class EmailSelector implements Initializable {
             bGroup.getChildren().add(button);
             bGroup.getChildren().add(textsHbox);
 
-            button.setOnAction(e -> {
-                try {
-                    viewEmail(e);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            });
+            if(folderID != 1) {
+                button.setOnAction(e -> {
+                    try {
+                        viewEmail(e);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
+            }
+            else{
+                button.setOnAction(e -> {
+                    try {
+                        viewDraft(e);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
+            }
+
 
             emailListBox.getChildren().add(bGroup);
 

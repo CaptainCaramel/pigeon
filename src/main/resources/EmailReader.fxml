@@ -83,7 +83,7 @@
       </VBox>
       <ScrollPane hbarPolicy="NEVER" layoutX="157.0" layoutY="132.0" prefHeight="588.0" prefWidth="1122.0" style="-fx-background: transparent; -fx-background-color: transparent;">
          <content>
-            <Label fx:id="emailText" alignment="TOP_LEFT" prefHeight="1990.0" prefWidth="1089.0" text="lorem ipsum" textFill="#1b1a1a" translateX="14.0" translateY="9.0">
+            <Label fx:id="emailText" alignment="TOP_LEFT" prefHeight="1990.0" prefWidth="1089.0" textFill="#1b1a1a" translateX="14.0" translateY="9.0">
                <font>
                   <Font size="18.0" />
                </font>
@@ -95,22 +95,22 @@
             <Font name="Roboto Light" size="20.0" />
          </font>
       </Label>
-      <Label fx:id="senderText" layoutX="234.0" layoutY="52.0" prefHeight="34.0" prefWidth="315.0" text="senderEmail">
+      <Label fx:id="senderText" layoutX="234.0" layoutY="52.0" prefHeight="34.0" prefWidth="315.0">
          <font>
             <Font name="Roboto Medium" size="20.0" />
          </font>
       </Label>
-      <Label fx:id="subjText" layoutX="172.0" layoutY="83.0" prefHeight="34.0" prefWidth="400.0" text="SubjectLine">
+      <Label fx:id="subjText" layoutX="172.0" layoutY="83.0" prefHeight="34.0" prefWidth="400.0">
          <font>
             <Font name="Roboto Light Italic" size="20.0" />
          </font>
       </Label>
-      <Label fx:id="dateText" alignment="CENTER_RIGHT" layoutX="1000.0" layoutY="52.0" prefHeight="34.0" prefWidth="242.0" text="date" textFill="#00000072">
+      <Label fx:id="dateText" alignment="CENTER_RIGHT" layoutX="1000.0" layoutY="52.0" prefHeight="34.0" prefWidth="242.0" textFill="#00000072">
          <font>
             <Font name="Roboto Light Italic" size="20.0" />
          </font>
       </Label>
-      <Label fx:id="timeText" alignment="CENTER_RIGHT" layoutX="1180.0" layoutY="83.0" prefHeight="34.0" prefWidth="62.0" text="time" textFill="#00000072">
+      <Label fx:id="timeText" alignment="CENTER_RIGHT" layoutX="1180.0" layoutY="83.0" prefHeight="34.0" prefWidth="62.0" textFill="#00000072">
          <font>
             <Font name="Roboto Light Italic" size="20.0" />
          </font>

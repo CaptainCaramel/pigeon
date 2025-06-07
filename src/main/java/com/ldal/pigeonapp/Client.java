@@ -92,7 +92,6 @@ public class Client implements Serializable {
         try{
             savedRememberMe = rememberMe;
             if(rememberMe)savedUser = user;
-            System.out.println("SU : " + savedUser.getLogin());
 
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filePath + "\\settings.txt")));
             objectOutputStream.writeObject(this);
@@ -180,7 +179,7 @@ public class Client implements Serializable {
 
                 else {
                     for (String recEmail : everyreceiver) {
-                        EmailDrafter(new Email(this.user, sqlServer.userFromEmail(recEmail), text, subject));
+                        emailDrafter(new Email(this.user, sqlServer.userFromEmail(recEmail), text, subject));
                     }
                 }
             }
@@ -244,10 +243,15 @@ public class Client implements Serializable {
         }
     }
 
-    public void EmailDrafter(Email email){
+    public static void emailDrafter(Email email){
         try
         {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filePath + "\\Draft.txt", true)));
+            ArrayList<Email> drafts = getDrafts();
+
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filePath + "\\Draft.txt")));
+            for(Email e : drafts) {
+                objectOutputStream.writeObject(e);
+            }
             objectOutputStream.writeObject(email);
             objectOutputStream.close();
         }
@@ -258,7 +262,7 @@ public class Client implements Serializable {
         System.out.println("E-mail Uploaded to Draft");
     }
 
-    public void EmailDrafter(ArrayList<Email> emails){
+    public void emailDrafter(ArrayList<Email> emails){
         try
         {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filePath + "\\Draft.txt")));
@@ -286,7 +290,13 @@ public class Client implements Serializable {
 
                 //Sentebshi shenaxva
                 email.setDateTime(Email.dateTimeToString(LocalDateTime.now()));
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filePath + "\\Sent.txt", true)));
+
+                ArrayList<Email> sents = getSent();
+
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filePath + "\\Sent.txt")));
+                for(Email e : sents) {
+                    objectOutputStream.writeObject(e);
+                }
                 objectOutputStream.writeObject(email);
                 objectOutputStream.close();
             }
