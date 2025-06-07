@@ -529,7 +529,9 @@ public class Client implements Serializable {
         }
         pages(3);
     }
-    public static ArrayList<Email> getInbox() {
+
+    public static ArrayList<Email> getInbox()
+    {
             return sqlServer.getInbox(user.getId());
     }
 

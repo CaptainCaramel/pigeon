@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -43,15 +44,15 @@ public class EmailSelector implements Initializable {
     @FXML
     private Button drafterButton;
     ToolBarController toolBarController = new ToolBarController();
-
+    @FXML
+    private AnchorPane anchorPane;
     @FXML
     private VBox sideBarVbox;
-
-    //@FXML
-    //private void profilebutton(ActionEvent event)
-    //{
-     //   toolBarController.ConMenu(event);
-    //}
+    @FXML
+    private void profilebutton(ActionEvent event)
+    {
+        toolBarController.ConMenu(event, anchorPane);
+    }
 
     public static int folderID = 0;
 

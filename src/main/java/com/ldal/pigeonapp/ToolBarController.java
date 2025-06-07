@@ -16,28 +16,32 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 
 public class ToolBarController
 {
     public boolean isAlreadyCreated = false;
-    ContextMenu contextMenu = new ContextMenu();
+    private VBox mainhbox;
 
     public void ConMenu(ActionEvent event, AnchorPane anchorPane)
     {
-        if (contextMenu.isShowing())
+        if (!isAlreadyCreated)
         {
-            contextMenu.hide();
-            isAlreadyCreated = false;
-        }
-        else
-        {
-            contextMenu.getItems().clear();
             creatingWindow(event, anchorPane);
             isAlreadyCreated = true;
         }
+        else
+        {
+            if (mainhbox != null)
+            {
+                anchorPane.getChildren().remove(mainhbox);
+                isAlreadyCreated = false;
+            }
+        }
     }
-
+    
     public void creatingWindow(ActionEvent event, AnchorPane anchorPane)
     {
         Circle profileCircle = new Circle(60, Color.CRIMSON);
@@ -89,10 +93,12 @@ public class ToolBarController
         CustomMenuItem buttons = new CustomMenuItem(hbox1);
         profileItem.setStyle(String.valueOf(Color.BEIGE));
 
-        VBox mainhbox = new VBox(30);
+        mainhbox = new VBox(30);
         mainhbox.getChildren().addAll(hbox, vBox);
         mainhbox.setStyle("-fx-background-color: beige;");
         anchorPane.getChildren().add(mainhbox);
+        mainhbox.setTranslateX(1200);
+        mainhbox.setTranslateY(100);
 
         //contextMenu.getItems().addAll(profileItem, buttons);
         //for (MenuItem item : contextMenu.getItems())
