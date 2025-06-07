@@ -1,0 +1,10 @@
+      @font-face
+      {
+          font-family: 'FollowTheArrow';
+          src: url('fonts/FollowTheArrow.ttf');
+      }
+
+      .custom-font {
+          -fx-font-family: 'FollowTheArrow';
+          -fx-font-size: 18px;
+      }

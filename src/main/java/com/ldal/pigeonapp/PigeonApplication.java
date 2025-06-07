@@ -22,13 +22,18 @@ public class PigeonApplication extends Application
         Scene scene;
         Parent root;
         new Client();
-        if(Client.getUser() != null && Client.isRememberMe()){
-            root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
+        if(Client.getUser() != null && Client.isRememberMe())
+        {
+            root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
+            //root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
+            //root = FXMLLoader.load(PigeonApplication.class.getResource("/ConMenu.fxml"));
         }
-        else {
-            root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
+        else
+        {
+            root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
+            //root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
+            //root = FXMLLoader.load(PigeonApplication.class.getResource("/ConMenu.fxml"));
         }
-
 
         scene = new Scene(root);
         stage.setScene(scene);

@@ -47,11 +47,11 @@ public class EmailSelector implements Initializable {
     @FXML
     private VBox sideBarVbox;
 
-    @FXML
-    private void profilebutton()
-    {
-        toolBarController.ConMenu(new ActionEvent());
-    }
+    //@FXML
+    //private void profilebutton(ActionEvent event)
+    //{
+     //   toolBarController.ConMenu(event);
+    //}
 
     public static int folderID = 0;
 
