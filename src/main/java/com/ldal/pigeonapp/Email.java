@@ -20,6 +20,10 @@ public class Email implements Serializable
         setSubject(subject);
     }
 
+    Email(){
+
+    }
+
 
     public static String dateTimeToString(LocalDateTime localDateTime){
         String month = "" + localDateTime.getMonthValue();

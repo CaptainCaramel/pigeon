@@ -73,8 +73,8 @@ public class EmailReader implements Initializable {
         senderText.setText(email.getSender().getEmail());
         emailText.setText(email.getText());
         subjText.setText(email.getSubject());
-        dateText.setText(dateTime.substring(0,10));
-        timeText.setText(dateTime.substring(11));
+        if(dateTime != null)dateText.setText(dateTime.substring(0,10));
+        if(dateTime != null)timeText.setText(dateTime.substring(11));
     }
 
 }

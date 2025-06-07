@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ldal.pigeonapp.EmailComposer">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ldal.pigeonapp.EmailDrafter">
    <children>
       <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -117,7 +117,7 @@
                </font>
             </TextArea>
          </content></ScrollPane>
-      <Label layoutX="656.0" layoutY="52.0" text="COMPOSE">
+      <Label layoutX="656.0" layoutY="52.0" text="DRAFT">
          <font>
             <Font name="Roboto Medium" size="29.0" />
          </font>
@@ -164,7 +164,7 @@
             <Font name="Roboto Medium Italic" size="24.0" />
          </font>
       </Label>
-      <AnchorPane fx:id="carefulAnchorPane" disable="true" prefHeight="720.0" prefWidth="1280.0" visible="false">
+      <AnchorPane fx:id="carefulAnchorPane" prefHeight="720.0" prefWidth="1280.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000037" height="720.0" stroke="BLACK" strokeType="INSIDE" width="1280.0" />
             <ImageView fitHeight="350.0" fitWidth="695.0" layoutX="329.0" layoutY="239.0" pickOnBounds="true" preserveRatio="true">
@@ -172,29 +172,24 @@
                   <Image url="@careful.png" />
                </image>
             </ImageView>
-            <Label layoutX="571.0" layoutY="275.0" text="Careful!" textAlignment="CENTER">
+            <Label layoutX="596.0" layoutY="274.0" text="Draft" textAlignment="CENTER">
                <font>
                   <Font name="Roboto Medium" size="39.0" />
                </font>
             </Label>
-            <Label contentDisplay="CENTER" layoutX="503.0" layoutY="340.0" text="You've got an unfinished Email" textAlignment="CENTER" wrapText="true">
+            <Label contentDisplay="CENTER" layoutX="503.0" layoutY="340.0" text="You've got an unfinished draft!" textAlignment="CENTER" wrapText="true">
                <font>
                   <Font name="Roboto Medium" size="20.0" />
                </font>
             </Label>
-            <Button layoutX="434.0" layoutY="390.0" mnemonicParsing="false" onAction="#keepWriting" prefHeight="48.0" prefWidth="121.0" style="-fx-background-color: #c83f44; -fx-background-radius: 15;" text="Keep Writing" textFill="#363636">
+            <Button layoutX="486.0" layoutY="390.0" mnemonicParsing="false" onAction="#keepWriting" prefHeight="48.0" prefWidth="121.0" style="-fx-background-color: #c83f44; -fx-background-radius: 15;" text="Keep Writing" textFill="#363636">
                <font>
                   <Font name="Roboto Bold" size="16.0" />
                </font>
             </Button>
-            <Button layoutX="580.0" layoutY="390.0" mnemonicParsing="false" onAction="#goToSelector" prefHeight="48.0" prefWidth="121.0" style="-fx-background-color: #c83f44; -fx-background-radius: 15;" text="Discard" textFill="#363636">
+            <Button layoutX="667.0" layoutY="390.0" mnemonicParsing="false" onAction="#goToSelector" prefHeight="48.0" prefWidth="121.0" style="-fx-background-color: #c83f44; -fx-background-radius: 15;" text="Save &amp; Exit" textFill="#363636">
                <font>
                   <Font name="Roboto Bold" size="16.0" />
-               </font>
-            </Button>
-            <Button layoutX="728.0" layoutY="390.0" mnemonicParsing="false" onAction="#draftEmail" prefHeight="48.0" prefWidth="121.0" style="-fx-background-color: #c83f44; -fx-background-radius: 15;" text="Draft" textFill="#363636">
-               <font>
-                  <Font name="Roboto Bold" size="17.0" />
                </font>
             </Button>
          </children>
