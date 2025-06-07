@@ -31,7 +31,7 @@
             </DropShadow>
          </effect>
          <children>
-            <Button fx:id="composerButton" mnemonicParsing="false" prefHeight="41.0" prefWidth="83.0" style="-fx-background-color: transparent;" text="Email">
+            <Button fx:id="composerButton" mnemonicParsing="false" prefHeight="41.0" prefWidth="83.0" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Email">
                <VBox.margin>
                   <Insets left="5.0" top="80.0" />
                </VBox.margin>
@@ -39,7 +39,7 @@
                   <Font name="Roboto Medium" size="21.0" />
                </font>
             </Button>
-            <Button fx:id="drafterButton" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Draft">
+            <Button fx:id="drafterButton" mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Draft">
                <VBox.margin>
                   <Insets left="5.0" top="4.0" />
                </VBox.margin>
@@ -47,7 +47,7 @@
                   <Font name="Roboto Medium" size="21.0" />
                </font>
             </Button>
-            <Button fx:id="inboxButton" mnemonicParsing="false" onAction="#goToSelector" style="-fx-background-color: transparent;" text="Inbox">
+            <Button fx:id="inboxButton" mnemonicParsing="false" onAction="#goToSelector" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Inbox">
                <font>
                   <Font name="Roboto Medium" size="21.0" />
                </font>
@@ -55,7 +55,7 @@
                   <Insets left="4.0" top="30.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="draftsButton" mnemonicParsing="false" onAction="#goToSelector" style="-fx-background-color: transparent;" text="Drafts">
+            <Button fx:id="draftsButton" mnemonicParsing="false" onAction="#goToSelector" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Drafts">
                <font>
                   <Font name="Roboto Medium" size="21.0" />
                </font>
@@ -63,7 +63,7 @@
                   <Insets left="4.0" top="10.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="sentButton" mnemonicParsing="false" onAction="#goToSelector" style="-fx-background-color: transparent;" text="Sent">
+            <Button fx:id="sentButton" mnemonicParsing="false" onAction="#goToSelector" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Sent">
                <font>
                   <Font name="Roboto Medium" size="21.0" />
                </font>
@@ -71,7 +71,7 @@
                   <Insets left="4.0" top="10.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="spamButton" mnemonicParsing="false" onAction="#goToSelector" style="-fx-background-color: transparent;" text="Spam">
+            <Button fx:id="spamButton" mnemonicParsing="false" onAction="#goToSelector" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Spam">
                <font>
                   <Font name="Roboto Medium" size="21.0" />
                </font>
@@ -90,7 +90,7 @@
             </Label>
          </content>
       </ScrollPane>
-      <Label layoutX="172.0" layoutY="52.0" prefHeight="34.0" prefWidth="62.0" text="From : ">
+      <Label layoutX="172.0" layoutY="52.0" prefHeight="34.0" prefWidth="62.0" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="From : ">
          <font>
             <Font name="Roboto Light" size="20.0" />
          </font>

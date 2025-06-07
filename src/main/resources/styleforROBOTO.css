@@ -1,0 +1,29 @@
+      @font-face
+      {
+          font-family: 'Roboto';
+          src: url('fonts/Roboto-Bold.ttf');
+      }
+
+      .custom-font
+      {
+          -fx-font-family: 'Roboto';
+          -fx-font-size: 69px;
+      }
+
+     .custom-font-smaller
+     {
+         -fx-font-family: 'Roboto';
+         -fx-font-size: 26px;
+     }
+
+     .custom-font-even-smaller
+     {
+         -fx-font-family: 'Roboto';
+         -fx-font-size: 19px;
+     }
+
+      .custom-font-medium
+      {
+          -fx-font-family: 'Roboto';
+          -fx-font-size: 45px;
+      }

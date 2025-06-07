@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ldal.pigeonapp.SettingsScene">
    <children>
       <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
@@ -17,22 +16,22 @@
             <Image url="@settingsBG.png" />
          </image>
       </ImageView>
-      <Label layoutX="525.0" layoutY="197.0" text="Privacy">
+      <Label layoutX="525.0" layoutY="197.0" styleClass="custom-font" stylesheets="@styleforROBOTO.css" text="Privacy">
          <font>
             <Font name="Roboto Bold" size="69.0" />
          </font>
       </Label>
-      <TextField fx:id="currentpassword" layoutX="460.0" layoutY="321.0" opacity="0.47" prefHeight="63.0" prefWidth="360.0" promptText="Current password" style="-fx-background-radius: 12;">
+      <TextField fx:id="currentpassword" layoutX="460.0" layoutY="321.0" opacity="0.47" prefHeight="63.0" prefWidth="360.0" promptText="Current password" style="-fx-background-radius: 12;" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css">
          <font>
             <Font name="Roboto Bold" size="26.0" />
          </font>
       </TextField>
-      <Label layoutX="564.0" layoutY="280.0" text="Change password">
+      <Label layoutX="564.0" layoutY="280.0" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Change password">
          <font>
             <Font name="Roboto Bold" size="19.0" />
          </font>
       </Label>
-      <TextField fx:id="newpassword" layoutX="460.0" layoutY="404.0" opacity="0.47" prefHeight="63.0" prefWidth="360.0" promptText="New password" style="-fx-background-radius: 12;">
+      <TextField fx:id="newpassword" layoutX="460.0" layoutY="404.0" opacity="0.47" prefHeight="63.0" prefWidth="360.0" promptText="New password" style="-fx-background-radius: 12;" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css">
          <font>
             <Font name="Roboto Bold" size="26.0" />
          </font>
