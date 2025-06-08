@@ -59,7 +59,9 @@ public class EmailSelector implements Initializable
     @FXML
     private ChoiceBox<String> sorter;
     @FXML
-    private Label declareText;
+    public Label declareText;
+    @FXML
+    private TextField searchinput;
     @FXML
     private void profilebutton(ActionEvent event)
     {
@@ -69,7 +71,7 @@ public class EmailSelector implements Initializable
     public static int folderID = 0;
 
     private ArrayList<Button> eButtons = new ArrayList<>();
-    ArrayList<Email> inbox = Client.getInbox();
+    static ArrayList<Email> inbox = Client.getInbox();
     ArrayList<Email> drafts = Client.getDrafts();
     ArrayList<Email> sent = Client.getSent();
     ArrayList<Email> spam = spamitout(Client.getInbox());
@@ -108,6 +110,11 @@ public class EmailSelector implements Initializable
         {
             folder = sent;
             declareText.setText("SENT");
+        }
+        else if (folderID == 3)
+        {
+            folder = spam;
+            declareText.setText("SPAM");
         }
         //else if (folderID == 3) folder = drafts;
 
@@ -189,10 +196,11 @@ public class EmailSelector implements Initializable
         System.out.println(folderID);
         emailListBox.getChildren().clear();
         ArrayList<Email> folder = new ArrayList<>();
-        if(id == 0) folder = inbox;
-        if(id == 1) folder = drafts;
-        if(id == 2) folder = sent;
-        if(id == 3) folder = spam;
+        folder = inbox;
+        //if(id == 0) folder = inbox;
+        //if(id == 1) folder = drafts;
+        //if(id == 2) folder = sent;
+        //if(id == 3) folder = spam;
 
         for (int i = 0; i < folder.size(); i++)
         {
@@ -280,7 +288,9 @@ public class EmailSelector implements Initializable
     }
 
 
-    private void displayFolder(ArrayList<Email> folder){
+    private void displayFolder(ArrayList<Email> folder)
+    {
+
         emailListBox.getChildren().clear();
         folder = new ArrayList<>(folder.stream()
                 .sorted(new Comparator<Email>() {
@@ -385,6 +395,57 @@ public class EmailSelector implements Initializable
         sorter.setValue("Latest");
 
         inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()));
+        drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
+        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
+        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getLogin()));
+    }
+
+    @FXML
+    public void searchbutton(ActionEvent event)
+    {
+        String search = searchinput.getText();
+        ArrayList<Email> searchedmails = new ArrayList<>();
+        if(folderID == 0)
+        {
+            for(Email e : inbox)
+            {
+                if(e.getSender().getLogin().contains(search))
+                {
+                    searchedmails.add(e);
+                }
+            }
+        }
+        if(folderID == 1)
+        {
+            for(Email e : drafts)
+            {
+                if(e.getSender().getLogin().contains(search))
+                {
+                    searchedmails.add(e);
+                }
+            }
+        }
+        if(folderID == 2)
+        {
+            for(Email e : sent)
+            {
+                if(e.getSender().getLogin().contains(search))
+                {
+                    searchedmails.add(e);
+                }
+            }
+        }
+        if(folderID == 3)
+        {
+            for(Email e : spam)
+            {
+                if(e.getSender().getLogin().contains(search))
+                {
+                    searchedmails.add(e);
+                }
+            }
+        }
+        displayFolder(searchedmails);
     }
 
     public String getRelativeTime(Email email)

@@ -20,11 +20,28 @@ public class SideBarController {
     public static Button composerButton;
     public static Button drafterButton;
 
-    public static void goToSelector(Button clickedButton) throws IOException {
-        if(clickedButton.equals(inboxButton)) EmailSelector.folderID = 0;
-        else if(clickedButton.equals(draftsButton)) EmailSelector.folderID = 1;
-        else if(clickedButton.equals(sentButton)) EmailSelector.folderID = 2;
-        else if(clickedButton.equals(spamButton)) EmailSelector.folderID = 3;
+    public static void goToSelector(Button clickedButton) throws IOException
+    {
+        if(clickedButton.equals(inboxButton))
+        {
+            EmailSelector.folderID = 0;
+            //EmailSelector.declareText.setText("INBOX");
+        }
+        else if(clickedButton.equals(draftsButton))
+        {
+            EmailSelector.folderID = 1;
+            //EmailSelector.declareText.setText("DRAFT");
+        }
+        else if(clickedButton.equals(sentButton))
+        {
+            EmailSelector.folderID = 2;
+            //EmailSelector.declareText.setText("SENT");
+        }
+        else if(clickedButton.equals(spamButton))
+        {
+            EmailSelector.folderID = 3;
+            //EmailSelector.declareText.setText("SPAM");
+        }
 
         Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
         Scene scene = new Scene(root);
