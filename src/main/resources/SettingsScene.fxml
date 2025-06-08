@@ -26,7 +26,7 @@
             <Font name="Roboto Bold" size="19.0" />
          </font>
       </Label>
-      <Label fx:id="warner" layoutX="446.0" layoutY="350.0" prefHeight="21.0" prefWidth="62.0" textFill="#ff1414">
+      <Label fx:id="warner" layoutX="446.0" layoutY="350.0" prefHeight="21.0" prefWidth="340.0" textFill="#ff1414">
          <font>
             <Font size="15.0" />
          </font>
@@ -62,5 +62,11 @@
             <Font name="Roboto Bold" size="26.0" />
          </font>
       </PasswordField>
+      <Button layoutX="1015.0" layoutY="41.0" mnemonicParsing="false" style="-fx-background-color: #EDB388; -fx-background-radius: 8;" text="Privacy">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <Button fx:id="spamchanger" layoutX="1069.0" layoutY="41.0" mnemonicParsing="false" onAction="#spamchanger" style="-fx-background-color: #EDB388; -fx-background-radius: 8;" text="Spam" />
    </children>
 </AnchorPane>

@@ -24,6 +24,7 @@ public class ToolBarController
 {
     public boolean isAlreadyCreated = false;
     private VBox mainhbox;
+    Client client = new Client();
 
     public void ConMenu(ActionEvent event, AnchorPane anchorPane)
     {
@@ -87,10 +88,11 @@ public class ToolBarController
         {
             try
             {
+                Client.setRememberMe(false);
+                client.saveSettings();
                 Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
                 Scene scene = new Scene(root);
                 Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-                Client.setRememberMe(false);
                 stage.setScene(scene);
             }
             catch (IOException ex)
@@ -115,7 +117,7 @@ public class ToolBarController
         mainhbox.getChildren().addAll(hbox, vBox);
         mainhbox.setStyle("-fx-background-color: #ffcc9c;");
         anchorPane.getChildren().add(mainhbox);
-        mainhbox.setTranslateX(1000);
+        mainhbox.setTranslateX(975);
         mainhbox.setTranslateY(45);
 
         //contextMenu.getItems().addAll(profileItem, buttons);

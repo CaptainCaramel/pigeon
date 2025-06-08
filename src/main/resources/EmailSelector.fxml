@@ -10,6 +10,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.shape.Rectangle?>
@@ -39,7 +40,7 @@
                   <Font name="Roboto Medium" size="21.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css">
+            <Button fx:id="focusStealer" mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css">
                <VBox.margin>
                   <Insets left="5.0" top="4.0" />
                </VBox.margin>
@@ -79,6 +80,7 @@
                   <Insets left="4.0" top="10.0" />
                </VBox.margin>
             </Button>
+            <HBox prefHeight="100.0" prefWidth="200.0" />
          </children></VBox>
       <Label fx:id="warning" layoutX="486.0" layoutY="283.0" textFill="#89171c">
          <font>

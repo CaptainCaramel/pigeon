@@ -65,10 +65,19 @@ public class SignUpScene implements Initializable
             if (User.validateEmail(email1) && User.validateLogin(username1) && User.validatePassword(password1) && !sqlServer.checkDuplicateLogin(username1))
             {
                 sqlServer.SignUp(username1, email1 + "@pigeon.com", passHasher.hasher(password1), passHasher.backuppassword());
+                warning.setText("Successfully signed up");
             }
-            else
+            else if(!User.validateEmail(email1) || !User.validateLogin(username1))
             {
-                warning.setText("Invalid information");
+                warning.setText("Invalid Login or email");
+            }
+            else if(!User.validatePassword(password1))
+            {
+                warning.setText("Invalid password");
+            }
+            else if(sqlServer.checkDuplicateLogin(username1))
+            {
+                warning.setText("Duplicate login");
             }
         }
     }

@@ -11,6 +11,7 @@ public class Client implements Serializable {
     private boolean savedRememberMe;
 
 
+
     @Serial
     private static final long serialVersionUID = 2309L;
 
@@ -22,14 +23,21 @@ public class Client implements Serializable {
     private User savedUser;
 
 
-    private static final ArrayList<String> spamblacklist = new ArrayList<>();
+    private static ArrayList<String> spamblacklist = new ArrayList<>();
     public static ArrayList<String> Recepients = new ArrayList<>();
 
-    public static ArrayList<String> getSpamblacklist()
-    {
-        return spamblacklist;
-    }
+    public static ArrayList<String> getSpamblacklist() {return spamblacklist;}
+    public ArrayList<String> savedspamblacklist;
 
+
+    public static void setSpamblacklist(String user)
+    {
+        spamblacklist.add(user);
+    }
+    public static void removeSpamblacklist(String user)
+    {
+        spamblacklist.removeIf(s -> s.equals(user));
+    }
     public Client()
     {
         if (!loadSettings())
@@ -64,6 +72,7 @@ public class Client implements Serializable {
 
     public boolean loadSettings(){
         try{
+            loadSpamblacklist();
             ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filePath + "\\settings.txt")));
             Client loadedClient = (Client)objectInputStream.readObject();
             System.out.println("SRM : " + savedRememberMe);
@@ -74,7 +83,6 @@ public class Client implements Serializable {
                 System.out.println("User loaded, username : " + user.getLogin());
 
                 Recepients = loadedClient.Recepients;
-
             }
 
 
@@ -86,6 +94,38 @@ public class Client implements Serializable {
             return false;
         }
         return true;
+    }
+
+    public static void loadSpamblacklist()
+    {
+        try
+        {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath + "\\spamusers.txt"));
+            String line;
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                spamblacklist.add(line.trim());
+            }
+            bufferedReader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void saveSpamBlacklist()
+    {
+        try
+        {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\spamusers.txt"));
+            for(String user : spamblacklist)
+            {
+                bufferedWriter.write(user);
+                bufferedWriter.newLine();
+            }
+
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void saveSettings(){

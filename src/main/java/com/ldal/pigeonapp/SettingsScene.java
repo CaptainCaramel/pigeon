@@ -28,7 +28,7 @@ public class SettingsScene
     @FXML
     public void changepassword(ActionEvent event)
     {
-        if(sqlServer.validatePassword(Client.getUser().getLogin(), passHasher.hasher(currentpassword.getText())) && newpassword.getText().equals(newpasswordconf.getText()))
+        if(sqlServer.validatePassword(Client.getUser().getLogin(), passHasher.hasher(currentpassword.getText())) && newpassword.getText().equals(newpasswordconf.getText()) && User.validatePassword(newpassword.getText()))
         {
             sqlServer.changePassword(passHasher.hasher(newpassword.getText()));
             warner.setText("Password changed successfully");
@@ -36,11 +36,22 @@ public class SettingsScene
         }
         else
         {
-            warner.setText("Incorrect Information");
+            warner.setText("Invalid Information");
             Client.setRememberMe(Client.isRememberMe());
         }
     }
 
+    @FXML
+    public void spamchanger(ActionEvent event)
+    {
+        try
+        {
+            Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/SpamSettingsScene.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+        } catch (IOException e) {throw new RuntimeException(e);}
+    }
     public void Backtomenu(ActionEvent event)
     {
         try

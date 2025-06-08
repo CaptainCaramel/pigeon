@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -22,6 +23,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import java.awt.image.SinglePixelPackedSampleModel;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -66,8 +68,21 @@ public class EmailSelector implements Initializable
     ArrayList<Email> inbox = Client.getInbox();
     ArrayList<Email> drafts = Client.getDrafts();
     ArrayList<Email> sent = Client.getSent();
+    ArrayList<Email> spam = spamitout(Client.getInbox());
 
 
+    public ArrayList<Email> spamitout(ArrayList<Email> Inbox)
+    {
+        ArrayList<Email> spam = new ArrayList<>();
+        for(Email e : Inbox)
+        {
+            if(Client.getSpamblacklist().contains(e.getSender().getLogin()))
+            {
+                spam.add(e);
+            }
+        }
+        return spam;
+    }
 
     @FXML
     private void viewEmail(ActionEvent actionEvent) throws IOException
@@ -151,6 +166,11 @@ public class EmailSelector implements Initializable
             displayFolder(sent);
             declareText.setText("SENT");
         }
+        if (clickedButton.equals(spamButton)) {
+            folderID = 3;
+            displayFolder(spam);
+            declareText.setText("SPAM");
+        }
     }
 
     private void displayFolder(int id){
@@ -160,14 +180,19 @@ public class EmailSelector implements Initializable
         if(id == 0) folder = inbox;
         if(id == 1) folder = drafts;
         if(id == 2) folder = sent;
+        if(id == 3) folder = spam;
 
         for (int i = 0; i < folder.size(); i++)
         {
             Email email = folder.get(i);
 
-            if(folder == inbox)
+            if(folder == spam)
             {
-                if (Client.getSpamblacklist().contains(email.getSender().getEmail())) continue;
+                if (!Client.getSpamblacklist().contains(email.getSender().getLogin())) continue;
+            }
+            else if (folder == inbox)
+            {
+                if (Client.getSpamblacklist().contains(email.getSender().getLogin())) continue;
             }
 
             Group bGroup = new Group();
@@ -337,6 +362,8 @@ public class EmailSelector implements Initializable
 
         sorter.getItems().addAll("Oldest", "Latest");
         sorter.setValue("Latest");
+
+        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()));
     }
 
     public String getRelativeTime(Email email)
