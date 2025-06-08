@@ -29,7 +29,11 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class EmailSelector implements Initializable
 {
@@ -180,16 +184,20 @@ public class EmailSelector implements Initializable
         }
     }
 
-    private void displayFolder(int id)
-    {
+    @FXML
+    private void refreshFolder(){
+        if(folderID == 0) displayFolder(inbox);
+        else if(folderID == 1) displayFolder(drafts);
+        else if (folderID == 3) displayFolder(sent);
+        else if (folderID == 4) displayFolder(spam);
+    }
+
+    private void displayFolder(){
         System.out.println(folderID);
         emailListBox.getChildren().clear();
-        ArrayList<Email> folder = new ArrayList<>();
+        ArrayList<Email> folder;
         folder = inbox;
-        //if(id == 0) folder = inbox;
-        //if(id == 1) folder = drafts;
-        //if(id == 2) folder = sent;
-        //if(id == 3) folder = spam;
+
 
         for (int i = 0; i < folder.size(); i++)
         {
@@ -281,7 +289,16 @@ public class EmailSelector implements Initializable
     {
 
         emailListBox.getChildren().clear();
-        System.out.println(folderID);
+        folder = new ArrayList<>(folder.stream()
+                .sorted(new Comparator<Email>() {
+            @Override
+            public int compare(Email o1, Email o2) {
+                if(Objects.equals(sorter.getValue(), "Oldest"))return Long.compare(o2.minutesAgo(), o1.minutesAgo());
+                else return Long.compare(o1.minutesAgo(), o2.minutesAgo());
+            }
+        })
+                .collect(Collectors.toList()));
+
 
         for (Email email : folder) {
             Group bGroup = new Group();
@@ -358,27 +375,7 @@ public class EmailSelector implements Initializable
 
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        SideBarController.inboxButton = inboxButton;
-        SideBarController.draftsButton = draftsButton;
-        SideBarController.spamButton = spamButton;
-        SideBarController.sentButton = sentButton;
-        SideBarController.composerButton = composerButton;
-        SideBarController.drafterButton = drafterButton;
 
-        SideBarController.initSideBar();
-
-        displayFolder(folderID);
-
-        sorter.getItems().addAll("Oldest", "Latest");
-        sorter.setValue("Latest");
-
-        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()));
-        drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
-        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
-        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getLogin()));
-    }
 
     @FXML
     public void searchbutton(ActionEvent event)
@@ -428,5 +425,27 @@ public class EmailSelector implements Initializable
         if(months == 1) return "Last month";
 
         return sentTime.toString();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        SideBarController.inboxButton = inboxButton;
+        SideBarController.draftsButton = draftsButton;
+        SideBarController.spamButton = spamButton;
+        SideBarController.sentButton = sentButton;
+        SideBarController.composerButton = composerButton;
+        SideBarController.drafterButton = drafterButton;
+
+        SideBarController.initSideBar();
+
+        displayFolder();
+
+        sorter.getItems().addAll("Oldest", "Latest");
+        sorter.setValue("Latest");
+
+        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()));
+        drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
+        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
+        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getLogin()));
     }
 }
