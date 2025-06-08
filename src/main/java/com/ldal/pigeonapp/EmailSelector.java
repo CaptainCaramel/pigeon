@@ -29,7 +29,11 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class EmailSelector implements Initializable
 {
@@ -173,6 +177,14 @@ public class EmailSelector implements Initializable
         }
     }
 
+    @FXML
+    private void refreshFolder(){
+        if(folderID == 0) displayFolder(inbox);
+        else if(folderID == 1) displayFolder(drafts);
+        else if (folderID == 3) displayFolder(sent);
+        else if (folderID == 4) displayFolder(spam);
+    }
+
     private void displayFolder(int id){
         System.out.println(folderID);
         emailListBox.getChildren().clear();
@@ -270,7 +282,16 @@ public class EmailSelector implements Initializable
 
     private void displayFolder(ArrayList<Email> folder){
         emailListBox.getChildren().clear();
-        System.out.println(folderID);
+        folder = new ArrayList<>(folder.stream()
+                .sorted(new Comparator<Email>() {
+            @Override
+            public int compare(Email o1, Email o2) {
+                if(Objects.equals(sorter.getValue(), "Oldest"))return Long.compare(o2.minutesAgo(), o1.minutesAgo());
+                else return Long.compare(o1.minutesAgo(), o2.minutesAgo());
+            }
+        })
+                .collect(Collectors.toList()));
+
 
         for (Email email : folder) {
             Group bGroup = new Group();
