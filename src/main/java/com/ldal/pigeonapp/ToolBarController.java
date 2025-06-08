@@ -115,7 +115,7 @@ public class ToolBarController
 
         mainhbox = new VBox(30);
         mainhbox.getChildren().addAll(hbox, vBox);
-        mainhbox.setStyle("-fx-background-color: #ffcc9c;");
+        mainhbox.setStyle("-fx-background-color: #EDB388;");
         anchorPane.getChildren().add(mainhbox);
         mainhbox.setTranslateX(975);
         mainhbox.setTranslateY(45);

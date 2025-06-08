@@ -27,3 +27,14 @@
           -fx-font-family: 'Roboto';
           -fx-font-size: 45px;
       }
+
+      .custom-font-search
+      {
+          -fx-font-family : 'Roboto';
+          -fx-font-size: 20px;
+          -fx-background-color: "#e17c65";
+          -fx-border-radius: 8px;
+          -fx-opacity: 90;
+          -fx-prompt-text-fill: "#000000";
+          -fx-text-fill: "#000000";
+      }
