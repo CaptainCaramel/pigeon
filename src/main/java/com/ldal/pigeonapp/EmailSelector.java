@@ -192,15 +192,12 @@ public class EmailSelector implements Initializable
         else if (folderID == 4) displayFolder(spam);
     }
 
-    private void displayFolder(int id){
+    private void displayFolder(){
         System.out.println(folderID);
         emailListBox.getChildren().clear();
-        ArrayList<Email> folder = new ArrayList<>();
+        ArrayList<Email> folder;
         folder = inbox;
-        //if(id == 0) folder = inbox;
-        //if(id == 1) folder = drafts;
-        //if(id == 2) folder = sent;
-        //if(id == 3) folder = spam;
+
 
         for (int i = 0; i < folder.size(); i++)
         {
@@ -378,27 +375,7 @@ public class EmailSelector implements Initializable
 
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        SideBarController.inboxButton = inboxButton;
-        SideBarController.draftsButton = draftsButton;
-        SideBarController.spamButton = spamButton;
-        SideBarController.sentButton = sentButton;
-        SideBarController.composerButton = composerButton;
-        SideBarController.drafterButton = drafterButton;
 
-        SideBarController.initSideBar();
-
-        displayFolder(folderID);
-
-        sorter.getItems().addAll("Oldest", "Latest");
-        sorter.setValue("Latest");
-
-        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()));
-        drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
-        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
-        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getLogin()));
-    }
 
     @FXML
     public void searchbutton(ActionEvent event)
@@ -474,5 +451,27 @@ public class EmailSelector implements Initializable
         if(months == 1) return "Last month";
 
         return sentTime.toString();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        SideBarController.inboxButton = inboxButton;
+        SideBarController.draftsButton = draftsButton;
+        SideBarController.spamButton = spamButton;
+        SideBarController.sentButton = sentButton;
+        SideBarController.composerButton = composerButton;
+        SideBarController.drafterButton = drafterButton;
+
+        SideBarController.initSideBar();
+
+        displayFolder();
+
+        sorter.getItems().addAll("Oldest", "Latest");
+        sorter.setValue("Latest");
+
+        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()));
+        drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
+        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
+        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getLogin()));
     }
 }
