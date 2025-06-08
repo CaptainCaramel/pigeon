@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToolBar?>
@@ -30,7 +31,7 @@
             </DropShadow>
          </effect>
          <children>
-            <Button fx:id="composerButton" mnemonicParsing="false" onAction="#goToComposer" prefHeight="41.0" prefWidth="83.0" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Email">
+            <Button fx:id="composerButton" mnemonicParsing="false" onAction="#goToComposer" prefHeight="41.0" prefWidth="107.0" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Compose">
                <VBox.margin>
                   <Insets left="5.0" top="80.0" />
                </VBox.margin>
@@ -38,7 +39,7 @@
                   <Font name="Roboto Medium" size="21.0" />
                </font>
             </Button>
-            <Button fx:id="drafterButton" mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Draft">
+            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css">
                <VBox.margin>
                   <Insets left="5.0" top="4.0" />
                </VBox.margin>
@@ -99,8 +100,7 @@
                   </DropShadow>
                </effect>
             </ImageView>
-          <Button fx:id="profilebutton" mnemonicParsing="false" onAction="#profilebutton" text="Profile" translateX="1090.0" />
-            <Button mnemonicParsing="false" text="Button" translateX="960.0" />
+            <Button mnemonicParsing="false" onAction="#profilebutton" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Configure" translateX="1090.0" />
         </items>
          <effect>
             <DropShadow height="91.35" radius="22.3375" width="0.0">
@@ -115,12 +115,13 @@
             <VBox fx:id="emailListBox" prefWidth="1126.0" />
          </content>
       </ScrollPane>
-      <Label layoutX="676.0" layoutY="52.0" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css" text="INBOX">
+      <Label fx:id="declareText" layoutX="676.0" layoutY="52.0" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css" text="INBOX">
          <font>
             <Font name="Roboto Medium" size="29.0" />
          </font>
       </Label>
       <Rectangle arcHeight="5.0" fill="#e17c65" height="6.0" layoutX="-64.0" layoutY="199.0" smooth="false" stroke="TRANSPARENT" strokeType="INSIDE" width="216.0" />
       <Rectangle arcHeight="5.0" fill="#e07c6557" height="6.0" layoutX="-64.0" layoutY="419.0" smooth="false" stroke="TRANSPARENT" strokeType="INSIDE" width="219.0" />
+      <ChoiceBox fx:id="sorter" layoutX="163.0" layoutY="52.0" prefWidth="150.0" style="-fx-background-color: transparent; -fx-border-radius: 8;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" />
    </children>
 </AnchorPane>

@@ -23,7 +23,7 @@ public class Client implements Serializable {
 
 
     private static final ArrayList<String> spamblacklist = new ArrayList<>();
-    private static ArrayList<String> Recepients = new ArrayList<>();
+    public static ArrayList<String> Recepients = new ArrayList<>();
 
     public static ArrayList<String> getSpamblacklist()
     {

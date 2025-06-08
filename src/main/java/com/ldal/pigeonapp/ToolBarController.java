@@ -41,16 +41,14 @@ public class ToolBarController
             }
         }
     }
-    
+
     public void creatingWindow(ActionEvent event, AnchorPane anchorPane)
     {
         Circle profileCircle = new Circle(60, Color.CRIMSON);
 
-        //Label username = new Label(Client.getUser().getEmail());
-        Label username = new Label("Gugena");
+        Label username = new Label(Client.getUser().getEmail());
         username.setStyle("-fx-text-fill: crimson; -fx-font-weight: bold; -fx-font-size: 15");
-        //Label initialText = new Label(String.valueOf(Client.getUser().getLogin().charAt(0)) + String.valueOf(Client.getUser().getLogin().charAt(1)));
-        Label initialText = new Label("GU");
+        Label initialText = new Label(String.valueOf(Client.getUser().getLogin().charAt(0)) + String.valueOf(Client.getUser().getLogin().charAt(1)));
         initialText.setTextFill(Color.WHITE);
         initialText.setStyle("-fx-font-size: 25px; -fx-font-weight: bold;");
 
@@ -83,9 +81,29 @@ public class ToolBarController
                 throw new RuntimeException(ex);
             }
         });
-        Button logOut = new Button("LogOut");
 
+        Button logOut = new Button("LogOut");
+        logOut.setOnAction(e ->
+        {
+            try
+            {
+                Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
+                Scene scene = new Scene(root);
+                Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                Client.setRememberMe(false);
+                stage.setScene(scene);
+            }
+            catch (IOException ex)
+            {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        settingsbutton.getStylesheets().add("styleforROBOTO.css");
+        settingsbutton.getStyleClass().add("custom-font-even-smaller");
         settingsbutton.setStyle("-fx-background-color: #de7259; -fx-font-size: 20px; -fx-text-fill: black; -fx-radius-size: 6px; -fx-background-radius: 10; -fx-opacity: 0.82;");
+        logOut.getStylesheets().add("styleforROBOTO.css");
+        logOut.getStyleClass().add("custom-font-even-smaller");
         logOut.setStyle("-fx-background-color: #de7259; -fx-font-size: 20px; -fx-text-fill: black; -fx-radius-size: 6px; -fx-background-radius: 10; -fx-opacity: 0.82;");
         vBox.getChildren().addAll(settingsbutton, logOut);
 
@@ -95,10 +113,10 @@ public class ToolBarController
 
         mainhbox = new VBox(30);
         mainhbox.getChildren().addAll(hbox, vBox);
-        mainhbox.setStyle("-fx-background-color: beige;");
+        mainhbox.setStyle("-fx-background-color: #ffcc9c;");
         anchorPane.getChildren().add(mainhbox);
-        mainhbox.setTranslateX(1200);
-        mainhbox.setTranslateY(100);
+        mainhbox.setTranslateX(1000);
+        mainhbox.setTranslateY(45);
 
         //contextMenu.getItems().addAll(profileItem, buttons);
         //for (MenuItem item : contextMenu.getItems())

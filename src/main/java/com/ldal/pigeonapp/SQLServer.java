@@ -71,14 +71,13 @@ public class SQLServer
         }
     }
 
-    public void changePassword(String login, String c_hashedPass)
+    public void changePassword(String c_hashedPass)
     {
         try
         {
             updatePassword.setString(1, c_hashedPass);
-            updatePassword.setString(2, login);
+            updatePassword.setString(2, Client.getUser().getLogin());
             updatePassword.executeUpdate();
-
         }
         catch (SQLException e) {throw new RuntimeException(e);}
     }

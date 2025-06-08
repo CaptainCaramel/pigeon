@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -41,7 +42,9 @@ public class EmailReader implements Initializable {
     private Button composerButton;
     @FXML
     private Button drafterButton;
-
+    ToolBarController toolBarController = new ToolBarController();
+    @FXML
+    private AnchorPane anchorPane;
     @FXML
     private VBox sideBarVbox;
 
@@ -77,4 +80,9 @@ public class EmailReader implements Initializable {
         if(dateTime != null)timeText.setText(dateTime.substring(11));
     }
 
+    @FXML
+    private void profilebutton(ActionEvent event)
+    {
+        toolBarController.ConMenu(event, anchorPane);
+    }
 }

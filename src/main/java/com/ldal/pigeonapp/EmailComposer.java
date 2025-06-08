@@ -50,10 +50,14 @@ public class EmailComposer implements Initializable {
 
     @FXML
     private AnchorPane carefulAnchorPane;
+    @FXML
+    private AnchorPane anchorPane;
 
     private int goToFolder = 0;
 
     public static Email draft;
+
+    ToolBarController toolBarController = new ToolBarController();
 
     @FXML
     private void exitComposer(ActionEvent actionEvent) throws IOException {
@@ -75,6 +79,12 @@ public class EmailComposer implements Initializable {
         else {
             SideBarController.goToSelector((Button)actionEvent.getSource());
         }
+    }
+
+    @FXML
+    private void profilebutton(ActionEvent event)
+    {
+        toolBarController.ConMenu(event, anchorPane);
     }
 
     @FXML
@@ -115,6 +125,10 @@ public class EmailComposer implements Initializable {
         SQLServer sqlServer = new SQLServer();
 
         String rec = receiverText.getText();
+        if(receiverText.isHover())
+        {
+            RecommendedUsers.recommendedUsersTab(Client.Recepients, carefulAnchorPane);
+        }
         String subj = subjText.getText();
         String eText = emailText.getText();
 

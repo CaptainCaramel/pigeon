@@ -50,7 +50,7 @@ public class SideBarController {
     }
 
     public static void initSideBar(){
-        Button[] buttons = {inboxButton, draftsButton, sentButton, spamButton, composerButton, drafterButton};
+        Button[] buttons = {inboxButton, draftsButton, sentButton, spamButton, composerButton};
         //ystem.out.println(Arrays.toString(buttons));
         for(Button b : buttons){
             b.setStyle("-fx-text-fill: #000000; -fx-background-color: TRANSPARENT");

@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -28,7 +29,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class EmailSelector implements Initializable {
+public class EmailSelector implements Initializable
+{
     @FXML
     private VBox emailListBox;
     @FXML
@@ -48,6 +50,10 @@ public class EmailSelector implements Initializable {
     private AnchorPane anchorPane;
     @FXML
     private VBox sideBarVbox;
+    @FXML
+    private ChoiceBox<String> sorter;
+    @FXML
+    private Label declareText;
     @FXML
     private void profilebutton(ActionEvent event)
     {
@@ -69,9 +75,21 @@ public class EmailSelector implements Initializable {
         Button clickedButton = (Button) actionEvent.getSource();
 
         ArrayList<Email> folder = new ArrayList<>();
-        if(folderID == 0) folder = inbox;
-        else if (folderID == 1) folder = drafts;
-        else if (folderID == 2) folder = sent;
+        if(folderID == 0)
+        {
+            folder = inbox;
+            declareText.setText("INBOX");
+        }
+        else if (folderID == 1)
+        {
+            declareText.setText("DRAFT");
+            folder = drafts;
+        }
+        else if (folderID == 2)
+        {
+            folder = sent;
+            declareText.setText("SENT");
+        }
         //else if (folderID == 3) folder = drafts;
 
         for (int i = 0; i < eButtons.size(); i++)
@@ -102,9 +120,7 @@ public class EmailSelector implements Initializable {
                 break;
             }
         }
-
         SideBarController.editDraft(actionEvent);
-
     }
 
 
@@ -123,14 +139,17 @@ public class EmailSelector implements Initializable {
         if (clickedButton.equals(inboxButton)) {
             folderID = 0;
             displayFolder(inbox);
+            declareText.setText("INBOX");
         }
         if (clickedButton.equals(draftsButton)) {
             folderID = 1;
             displayFolder(drafts);
+            declareText.setText("DRAFTS");
         }
         if (clickedButton.equals(sentButton)) {
             folderID = 2;
             displayFolder(sent);
+            declareText.setText("SENT");
         }
     }
 
@@ -142,8 +161,8 @@ public class EmailSelector implements Initializable {
         if(id == 1) folder = drafts;
         if(id == 2) folder = sent;
 
-
-        for (int i = 0; i < folder.size(); i++) {
+        for (int i = 0; i < folder.size(); i++)
+        {
             Email email = folder.get(i);
 
             if(folder == inbox)
@@ -315,6 +334,9 @@ public class EmailSelector implements Initializable {
         SideBarController.initSideBar();
 
         displayFolder(folderID);
+
+        sorter.getItems().addAll("Oldest", "Latest");
+        sorter.setValue("Latest");
     }
 
     public String getRelativeTime(Email email)

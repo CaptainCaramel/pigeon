@@ -18,6 +18,8 @@ public class SettingsScene
     private TextField currentpassword;
     @FXML
     private TextField newpassword;
+    @FXML
+    private TextField newpasswordconf;
     PassHasher passHasher = new PassHasher();
     SQLServer sqlServer = new SQLServer();
     @FXML
@@ -26,22 +28,27 @@ public class SettingsScene
     @FXML
     public void changepassword(ActionEvent event)
     {
-        if(sqlServer.validatePassword(Client.getUser().getLogin(), passHasher.hasher(currentpassword.getText())))
+        if(sqlServer.validatePassword(Client.getUser().getLogin(), passHasher.hasher(currentpassword.getText())) && newpassword.getText().equals(newpasswordconf.getText()))
         {
-            sqlServer.changePassword(Client.getUser().getLogin(), passHasher.hasher(currentpassword.getText()));
+            sqlServer.changePassword(passHasher.hasher(newpassword.getText()));
+            warner.setText("Password changed successfully");
+            Client.setRememberMe(false);
         }
         else
         {
             warner.setText("Incorrect Information");
+            Client.setRememberMe(Client.isRememberMe());
         }
     }
 
-    @FXML
-    public void back(ActionEvent event) throws IOException
+    public void Backtomenu(ActionEvent event)
     {
-        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
+        try
+        {
+            Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+        } catch (IOException e) {throw new RuntimeException(e);}
     }
 }
