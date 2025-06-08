@@ -385,47 +385,21 @@ public class EmailSelector implements Initializable
     {
         String search = searchinput.getText();
         ArrayList<Email> searchedmails = new ArrayList<>();
-        if(folderID == 0)
+        ArrayList<Email> e = new ArrayList<>();
+        if(folderID == 0) e = inbox;
+        else if(folderID == 1) e = drafts;
+        else if(folderID == 2) e = sent;
+        else if(folderID == 3) e = spam;
+        for(Email i : e)
         {
-            for(Email e : inbox)
+            if((i.getSender().getLogin().toLowerCase()).contains(search.toLowerCase()) || (i.getSubject().toLowerCase()).contains(search.toLowerCase()) || (i.getText().toLowerCase()).contains(search.toLowerCase()))
             {
-                if(e.getSender().getLogin().contains(search))
-                {
-                    searchedmails.add(e);
-                }
+                searchedmails.add(i);
             }
         }
-        if(folderID == 1)
-        {
-            for(Email e : drafts)
-            {
-                if(e.getSender().getLogin().contains(search))
-                {
-                    searchedmails.add(e);
-                }
-            }
-        }
-        if(folderID == 2)
-        {
-            for(Email e : sent)
-            {
-                if(e.getSender().getLogin().contains(search))
-                {
-                    searchedmails.add(e);
-                }
-            }
-        }
-        if(folderID == 3)
-        {
-            for(Email e : spam)
-            {
-                if(e.getSender().getLogin().contains(search))
-                {
-                    searchedmails.add(e);
-                }
-            }
-        }
+        //an aq
         displayFolder(searchedmails);
+        //an display foldershi shignit
     }
 
     public String getRelativeTime(Email email)
