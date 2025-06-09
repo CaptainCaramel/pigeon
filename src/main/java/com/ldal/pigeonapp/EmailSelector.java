@@ -185,22 +185,7 @@ public class EmailSelector implements Initializable
     }
 
     @FXML
-<<<<<<< HEAD
-    private void refreshFolder()
-    {
-        inbox = Client.getInbox();
-        drafts = Client.getDrafts();
-        sent = Client.getSent();
-        spam = spamitout(Client.getInbox());
-
-        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()));
-        drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
-        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
-        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getLogin()));
-
-=======
     private void refreshFolder(){
->>>>>>> parent of 0f74b8e (read unread & everything falling apart)
         if(folderID == 0) displayFolder(inbox);
         else if(folderID == 1) displayFolder(drafts);
         else if (folderID == 3) displayFolder(sent);
