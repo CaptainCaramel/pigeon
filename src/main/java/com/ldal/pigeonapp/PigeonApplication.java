@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -27,7 +26,6 @@ public class PigeonApplication extends Application
         {
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
             root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
-            //stage.setFullScreen(true);
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/ConMenu.fxml"));
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
         }
@@ -35,7 +33,6 @@ public class PigeonApplication extends Application
         {
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
             root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
-            //stage.setFullScreen(true);
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/ConMenu.fxml"));
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
         }

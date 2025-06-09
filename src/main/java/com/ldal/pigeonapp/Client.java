@@ -121,6 +121,7 @@ public class Client implements Serializable {
                 bufferedWriter.write(user);
                 bufferedWriter.newLine();
             }
+
             bufferedWriter.close();
         } catch (IOException e) {
             throw new RuntimeException(e);

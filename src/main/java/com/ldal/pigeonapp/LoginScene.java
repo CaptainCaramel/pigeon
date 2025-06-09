@@ -45,11 +45,9 @@ public class LoginScene implements Initializable
             warning.setText("*Please input your data");
         } else {
             if (!sqlServer.validateLogin(username1) || !sqlServer.validatePassword(username1, passHasher.hasher(password1))) {
-                warning.setStyle("-fx-text-fill: red");
                 warning.setText("*Invalid username or password!");
                 return;
             } else {
-                warning.setStyle("-fx-text-fill: green");
                 warning.setText("*Login successful!");
 
                 Client.login(username1);
@@ -76,15 +74,6 @@ public class LoginScene implements Initializable
     private void Backtomenu(ActionEvent event) throws IOException
     {
         Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-    }
-
-    @FXML
-    private void Forgotter(ActionEvent event) throws IOException
-    {
-        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/ForgottenChanger.fxml"));
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         stage.setScene(scene);

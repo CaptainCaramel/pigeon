@@ -8,7 +8,7 @@ public class SQLServer
 {
     String url = "jdbc:mysql://localhost:3306/pigeonDB";
     String userName = "root";
-    String password = "ArminHange1!";
+    String password = "Iamme113";
 
     private Connection connection;
     private final PreparedStatement signUpStatement;
@@ -20,8 +20,6 @@ public class SQLServer
     private final PreparedStatement getEmailFromID;
     private final PreparedStatement getUserFromID;
     private final PreparedStatement updatePassword;
-    private final PreparedStatement checkBackupPassword;
-    private final PreparedStatement updateRecoveryPassword;
     private final Statement statement;
 
     public SQLServer(){
@@ -33,7 +31,6 @@ public class SQLServer
                     "values(?, ?, ?, ?)");
 
             checkLogin = connection.prepareStatement("Select id from user where login = ?");
-            checkBackupPassword = connection.prepareStatement("Select recoveryPass from user where login = ?");
             checkPassword = connection.prepareStatement("Select hashedPass from user where login = ?");
             getUserFromLogin = connection.prepareStatement("Select * from user where login = ?");
             getUserFromEmail = connection.prepareStatement("Select * from user where email = ?");
@@ -43,7 +40,7 @@ public class SQLServer
             sendEmailNoAttachment = connection.prepareStatement("Insert into mails(senderID, receiverID, emailText, sendTime, subject) " +
                     "values(?, ?, ?, ?, ?)");
             getEmailFromID = connection.prepareStatement("select * from mails where receiverID = ? order by id desc");
-            updateRecoveryPassword = connection.prepareStatement("update user set recoveryPass = ? where login = ?");
+
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -60,15 +57,7 @@ public class SQLServer
         }
     }
 
-    public void changeRecoverypass(String recoverypass, String login)
-    {
-        try
-        {
-            updateRecoveryPassword.setString(1, recoverypass);
-            updateRecoveryPassword.setString(2, login);
-            updateRecoveryPassword.executeUpdate();
-        } catch (SQLException e) {throw new RuntimeException(e);}
-    }
+
 
     public boolean validateLogin(String login){
         try{
@@ -82,25 +71,12 @@ public class SQLServer
         }
     }
 
-   public boolean validateRecoveryPass(String login, String recoveryPass)
-   {
-       try
-       {
-           checkBackupPassword.setString(1, login);
-           ResultSet dbResult = checkBackupPassword.executeQuery();
-           dbResult.next();
-           System.out.println("recoveryPass: " + recoveryPass);
-           System.out.println("recoveryPass from user: " + dbResult.getString("recoveryPass"));
-           return recoveryPass.matches(dbResult.getString("recoveryPass"));
-       } catch (SQLException e) {throw new RuntimeException(e);}
-   }
-
-    public void changePassword(String c_hashedPass, String login)
+    public void changePassword(String c_hashedPass)
     {
         try
         {
             updatePassword.setString(1, c_hashedPass);
-            updatePassword.setString(2, login);
+            updatePassword.setString(2, Client.getUser().getLogin());
             updatePassword.executeUpdate();
         }
         catch (SQLException e) {throw new RuntimeException(e);}
