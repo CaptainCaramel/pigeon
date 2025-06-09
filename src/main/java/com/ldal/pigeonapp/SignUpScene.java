@@ -58,26 +58,32 @@ public class SignUpScene implements Initializable
 
         if (username1.isEmpty() || password1.isEmpty() || email1.isEmpty())
         {
+            warning.setStyle("-fx-text-fill: red");
             warning.setText("*Please input your data");
         }
         else
         {
             if (User.validateEmail(email1) && User.validateLogin(username1) && User.validatePassword(password1) && !sqlServer.checkDuplicateLogin(username1))
             {
-                sqlServer.SignUp(username1, email1 + "@pigeon.com", passHasher.hasher(password1), passHasher.backuppassword());
-                warning.setText("Successfully signed up");
+                String recoverypass = passHasher.backuppassword();
+                sqlServer.SignUp(username1, email1 + "@pigeon.com", passHasher.hasher(password1), recoverypass);
+                warning.setText("Successfully signed up, recoverypass: " + recoverypass);
+                warning.setStyle("-fx-text-fill: green");
             }
             else if(!User.validateEmail(email1) || !User.validateLogin(username1))
             {
                 warning.setText("Invalid Login or email");
+                warning.setStyle("-fx-text-fill: red");
             }
             else if(!User.validatePassword(password1))
             {
                 warning.setText("Invalid password");
+                warning.setStyle("-fx-text-fill: red");
             }
             else if(sqlServer.checkDuplicateLogin(username1))
             {
                 warning.setText("Duplicate login");
+                warning.setStyle("-fx-text-fill: red");
             }
         }
     }

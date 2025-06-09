@@ -30,12 +30,14 @@ public class SettingsScene
     {
         if(sqlServer.validatePassword(Client.getUser().getLogin(), passHasher.hasher(currentpassword.getText())) && newpassword.getText().equals(newpasswordconf.getText()) && User.validatePassword(newpassword.getText()))
         {
-            sqlServer.changePassword(passHasher.hasher(newpassword.getText()));
+            sqlServer.changePassword(passHasher.hasher(newpassword.getText()), Client.getUser().getLogin());
+            warner.setStyle("-fx-text-fill: green");
             warner.setText("Password changed successfully");
             Client.setRememberMe(false);
         }
         else
         {
+            warner.setStyle("-fx-text-fill: red");
             warner.setText("Invalid Information");
             Client.setRememberMe(Client.isRememberMe());
         }
