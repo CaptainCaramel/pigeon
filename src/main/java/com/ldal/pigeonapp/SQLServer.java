@@ -8,7 +8,7 @@ public class SQLServer
 {
     String url = "jdbc:mysql://localhost:3306/pigeonDB";
     String userName = "root";
-    String password = "Iamme113";
+    String password = "ArminHange1!";
 
     private Connection connection;
     private final PreparedStatement signUpStatement;

@@ -2,7 +2,6 @@ package com.ldal.pigeonapp;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 public class Email implements Serializable
 {
@@ -42,19 +41,6 @@ public class Email implements Serializable
         return localDateTime.getYear() + "-" + month + "-" + day + " " + hour + ":" + minute;
     }
 
-    public long minutesAgo(){
-
-        int year = Integer.parseInt(dateTime.substring(0, 4));
-        int month = Integer.parseInt(dateTime.substring(5, 7));
-        int day = Integer.parseInt(dateTime.substring(8, 10));
-        int hour = Integer.parseInt(dateTime.substring(11, 13));
-        int minute = Integer.parseInt(dateTime.substring(14, 16));
-
-        LocalDateTime sentTime = LocalDateTime.of(year, month, day, hour, minute);
-
-        LocalDateTime localDateTime = LocalDateTime.now();
-        return ChronoUnit.MINUTES.between(sentTime, localDateTime);
-    }
 
 
     public User getSender() {
