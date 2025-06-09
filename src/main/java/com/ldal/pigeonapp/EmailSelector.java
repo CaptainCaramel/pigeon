@@ -185,6 +185,7 @@ public class EmailSelector implements Initializable
     }
 
     @FXML
+<<<<<<< HEAD
     private void refreshFolder()
     {
         inbox = Client.getInbox();
@@ -197,6 +198,9 @@ public class EmailSelector implements Initializable
         sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
         spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getLogin()));
 
+=======
+    private void refreshFolder(){
+>>>>>>> parent of 0f74b8e (read unread & everything falling apart)
         if(folderID == 0) displayFolder(inbox);
         else if(folderID == 1) displayFolder(drafts);
         else if (folderID == 3) displayFolder(sent);
@@ -439,10 +443,7 @@ public class EmailSelector implements Initializable
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle)
-    {
-        refreshFolder();
-
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         SideBarController.inboxButton = inboxButton;
         SideBarController.draftsButton = draftsButton;
         SideBarController.spamButton = spamButton;
@@ -456,5 +457,10 @@ public class EmailSelector implements Initializable
 
         sorter.getItems().addAll("Oldest", "Latest");
         sorter.setValue("Latest");
+
+        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()));
+        drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
+        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
+        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getLogin()));
     }
 }
