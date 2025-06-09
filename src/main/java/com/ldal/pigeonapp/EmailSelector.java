@@ -48,7 +48,13 @@ public class EmailSelector implements Initializable
     @FXML
     private Button spamButton;
     @FXML
+    private Button readButton;
+    @FXML
+    private Button unreadButton;
+    @FXML
     private Button composerButton;
+    @FXML
+    private Button configureButton;
     @FXML
     private Button drafterButton;
     ToolBarController toolBarController = new ToolBarController();
@@ -71,11 +77,12 @@ public class EmailSelector implements Initializable
     public static int folderID = 0;
 
     private ArrayList<Button> eButtons = new ArrayList<>();
-    static ArrayList<Email> inbox = Client.getInbox();
-    ArrayList<Email> drafts = Client.getDrafts();
-    ArrayList<Email> sent = Client.getSent();
-    ArrayList<Email> spam = spamitout(Client.getInbox());
-
+    ArrayList<Email> inbox;
+    ArrayList<Email> drafts;
+    ArrayList<Email> sent;
+    ArrayList<Email> spam;
+    ArrayList<Email> read = new ArrayList<>();
+    ArrayList<Email> unread;
 
     public ArrayList<Email> spamitout(ArrayList<Email> Inbox)
     {
@@ -123,6 +130,7 @@ public class EmailSelector implements Initializable
             if(clickedButton.equals(eButtons.get(i)))
             {
                 EmailReader.email = folder.get(i);
+                if(!read.contains(folder.get(i))) read.add(folder.get(i));
                 break;
             }
         }
@@ -182,14 +190,42 @@ public class EmailSelector implements Initializable
             displayFolder(spam);
             declareText.setText("SPAM");
         }
+        if (clickedButton.equals(readButton)) {
+            folderID = 4;
+            displayFolder(read);
+            declareText.setText("READ");
+        }
+        if (clickedButton.equals(unreadButton)) {
+            folderID = 5;
+            displayFolder(unread);
+            declareText.setText("UNREAD");
+        }
     }
 
     @FXML
-    private void refreshFolder(){
+    public void refreshFolder()
+    {
+        inbox = Client.getInbox();
+        drafts = Client.getDrafts();
+        sent = Client.getSent();
+        spam = spamitout(Client.getInbox());
+        unread = new ArrayList<>();
+        for(Email e : inbox)
+        {
+            if(!read.contains(e)) unread.add(e);
+        }
+
+        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()));
+        drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
+        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
+        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getLogin()));
+
         if(folderID == 0) displayFolder(inbox);
         else if(folderID == 1) displayFolder(drafts);
-        else if (folderID == 3) displayFolder(sent);
-        else if (folderID == 4) displayFolder(spam);
+        else if (folderID == 2) displayFolder(sent);
+        else if (folderID == 3) displayFolder(spam);
+        else if (folderID == 4) displayFolder(read);
+        else if (folderID == 5) displayFolder(unread);
     }
 
     private void displayFolder(){
@@ -202,15 +238,6 @@ public class EmailSelector implements Initializable
         for (int i = 0; i < folder.size(); i++)
         {
             Email email = folder.get(i);
-
-            if(folder == spam)
-            {
-                if (!Client.getSpamblacklist().contains(email.getSender().getLogin())) continue;
-            }
-            else if (folder == inbox)
-            {
-                if (Client.getSpamblacklist().contains(email.getSender().getLogin())) continue;
-            }
 
             Group bGroup = new Group();
 
@@ -250,7 +277,7 @@ public class EmailSelector implements Initializable
             date.setFont(Font.font("roboto", FontWeight.LIGHT, FontPosture.ITALIC, 17));
             date.setTextFill(Color.web("0x383838", 0.5));
 
-            date.setOpacity(25);
+            date.setOpacity(0.25f);
 
             Label[] labels = {sender, subject, date};
 
@@ -289,16 +316,18 @@ public class EmailSelector implements Initializable
     {
 
         emailListBox.getChildren().clear();
-        folder = new ArrayList<>(folder.stream()
-                .sorted(new Comparator<Email>() {
-            @Override
-            public int compare(Email o1, Email o2) {
-                if(Objects.equals(sorter.getValue(), "Oldest"))return Long.compare(o2.minutesAgo(), o1.minutesAgo());
-                else return Long.compare(o1.minutesAgo(), o2.minutesAgo());
-            }
-        })
-                .collect(Collectors.toList()));
-
+        if(folder != drafts)
+        {
+            folder = new ArrayList<>(folder.stream()
+                    .sorted(new Comparator<Email>() {
+                        @Override
+                        public int compare(Email o1, Email o2) {
+                            if (Objects.equals(sorter.getValue(), "Oldest"))
+                                return Long.compare(o2.minutesAgo(), o1.minutesAgo());
+                            else return Long.compare(o1.minutesAgo(), o2.minutesAgo());
+                        }
+                    }).collect(Collectors.toList()));
+        }
 
         for (Email email : folder) {
             Group bGroup = new Group();
@@ -366,16 +395,11 @@ public class EmailSelector implements Initializable
                 });
             }
 
-
             emailListBox.getChildren().add(bGroup);
 
             eButtons.add(button);
         }
     }
-
-
-
-
 
     @FXML
     public void searchbutton(ActionEvent event)
@@ -387,6 +411,7 @@ public class EmailSelector implements Initializable
         else if(folderID == 1) e = drafts;
         else if(folderID == 2) e = sent;
         else if(folderID == 3) e = spam;
+        else if(folderID == 4) e = read;
         for(Email i : e)
         {
             if((i.getSender().getLogin().toLowerCase()).contains(search.toLowerCase()) || (i.getSubject().toLowerCase()).contains(search.toLowerCase()) || (i.getText().toLowerCase()).contains(search.toLowerCase()))
@@ -428,13 +453,19 @@ public class EmailSelector implements Initializable
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
+        refreshFolder();
+
         SideBarController.inboxButton = inboxButton;
         SideBarController.draftsButton = draftsButton;
         SideBarController.spamButton = spamButton;
         SideBarController.sentButton = sentButton;
         SideBarController.composerButton = composerButton;
         SideBarController.drafterButton = drafterButton;
+        SideBarController.unreadButton = unreadButton;
+        SideBarController.readButton = readButton;
+        SideBarController.configureButton = configureButton;
 
         SideBarController.initSideBar();
 
@@ -442,10 +473,5 @@ public class EmailSelector implements Initializable
 
         sorter.getItems().addAll("Oldest", "Latest");
         sorter.setValue("Latest");
-
-        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()));
-        drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
-        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
-        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getLogin()));
     }
 }

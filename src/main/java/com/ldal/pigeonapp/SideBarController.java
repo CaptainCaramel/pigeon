@@ -19,6 +19,9 @@ public class SideBarController {
     public static Button spamButton;
     public static Button composerButton;
     public static Button drafterButton;
+    public static Button readButton;
+    public static Button unreadButton;
+    public static Button configureButton;
 
     public static void goToSelector(Button clickedButton) throws IOException
     {
@@ -40,6 +43,15 @@ public class SideBarController {
         else if(clickedButton.equals(spamButton))
         {
             EmailSelector.folderID = 3;
+            //EmailSelector.declareText.setText("SPAM");
+        }
+        else if(clickedButton.equals(readButton))
+        {
+            EmailSelector.folderID = 4;
+            //EmailSelector.declareText.setText("SPAM");
+        } else if(clickedButton.equals(unreadButton))
+        {
+            EmailSelector.folderID = 5;
             //EmailSelector.declareText.setText("SPAM");
         }
 
@@ -67,7 +79,7 @@ public class SideBarController {
     }
 
     public static void initSideBar(){
-        Button[] buttons = {inboxButton, draftsButton, sentButton, spamButton, composerButton};
+        Button[] buttons = {inboxButton, draftsButton, sentButton, spamButton, composerButton, unreadButton, readButton, configureButton};
         //ystem.out.println(Arrays.toString(buttons));
         for(Button b : buttons){
             b.setStyle("-fx-text-fill: #000000; -fx-background-color: TRANSPARENT");
