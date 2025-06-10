@@ -31,7 +31,7 @@ public class Email implements Serializable
         if(localDateTime.getMonthValue() < 10) month = "0" + month;
 
         String day = "" + localDateTime.getDayOfMonth();
-        if(localDateTime.getMonthValue() < 10) day = "0" + day;
+        if(localDateTime.getDayOfMonth() < 10) day = "0" + day;
 
         String minute = "" + localDateTime.getMinute();
         if(localDateTime.getMinute() < 10) minute = "0" + minute;
@@ -105,6 +105,7 @@ public class Email implements Serializable
 
     public long minutesAgo()
     {
+        System.out.println(dateTime);
         System.out.println("year: '" + dateTime.substring(0, 4));
         System.out.println("month: '" + dateTime.substring(5, 7));
         System.out.println("day: '" + dateTime.substring(8, 10));
