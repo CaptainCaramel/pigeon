@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class SQLServer
 {
     String url = "jdbc:mysql://localhost:3306/pigeonDB";
-    String userName = "root";
-    String password = "ArminHange1!";
+    static String userName;
+    static String password;
 
     private Connection connection;
     private final PreparedStatement signUpStatement;
@@ -25,8 +25,10 @@ public class SQLServer
     private final PreparedStatement updateRecoveryPassword;
     private final Statement statement;
 
-    public SQLServer(){
-        try {
+    public SQLServer()
+    {
+        try
+        {
             connection = DriverManager.getConnection(url, userName, password);
             statement = connection.createStatement();
 

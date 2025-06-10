@@ -126,6 +126,34 @@ public class Client implements Serializable {
             throw new RuntimeException(e);
         }
     }
+    public static boolean loadSQLInfo()
+    {
+        try
+        {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath + "\\SQLInfo.txt"));
+            SQLServer.userName = bufferedReader.readLine();
+            SQLServer.password = bufferedReader.readLine();
+            bufferedReader.close();
+            return true;
+        }
+        catch (IOException e)
+        {
+            return false;
+        }
+    }
+    public static void saveSQLInfo()
+    {
+        try
+        {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\SQLInfo.txt"));
+            bufferedWriter.write(SQLServer.userName);
+            bufferedWriter.newLine();
+            bufferedWriter.write(SQLServer.password);
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void saveSettings(){
         try{

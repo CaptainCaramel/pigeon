@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 
@@ -19,21 +20,47 @@ import java.util.ResourceBundle;
 
 public class WelcomeScene
 {
-
+    @FXML
+    private Label warner;
 
     @FXML
     public void LoginButtonEvent(ActionEvent event) throws IOException
     {
-        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
+        if(SQLServer.password != null && SQLServer.userName != null && !SQLServer.password.isEmpty() && !SQLServer.userName.isEmpty())
+        {
+            Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+        }
+        else
+        {
+            warner.setStyle("-fx-text-fill: red;");
+            warner.setText("Please set up the SQL Server first");
+        }
     }
 
     @FXML
     public void SignUpButton(ActionEvent event) throws IOException
     {
-        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/SignUpScene.fxml"));
+        if(SQLServer.password != null && SQLServer.userName != null && !SQLServer.password.isEmpty() && !SQLServer.userName.isEmpty())
+        {
+            Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/SignUpScene.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+        }
+         else
+        {
+            warner.setStyle("-fx-text-fill: red;");
+            warner.setText("Please set up the SQL Server first");
+        }
+    }
+
+    @FXML
+    public void sqlsetuper(ActionEvent event) throws IOException
+    {
+        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/SqlSetupScene.fxml"));
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         stage.setScene(scene);

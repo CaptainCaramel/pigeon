@@ -20,7 +20,7 @@
             <Font name="Roboto Bold" size="45.0" />
          </font>
       </Label>
-      <Button fx:id="loginButton" layoutX="582.0" layoutY="329.0" mnemonicParsing="false" onAction="#LoginButtonEvent" opacity="0.82" prefHeight="36.0" prefWidth="119.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Log In">
+      <Button fx:id="loginButton" layoutX="576.0" layoutY="341.0" mnemonicParsing="false" onAction="#LoginButtonEvent" opacity="0.82" prefHeight="47.0" prefWidth="132.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Log In">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -38,7 +38,7 @@
             <Font name="Roboto Bold" size="15.0" />
          </font>
       </Label>
-      <Button fx:id="signUpButton" layoutX="582.0" layoutY="445.0" mnemonicParsing="false" onAction="#SignUpButton" opacity="0.82" prefHeight="29.0" prefWidth="119.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Sign Up">
+      <Button fx:id="signUpButton" layoutX="573.0" layoutY="485.0" mnemonicParsing="false" onAction="#SignUpButton" opacity="0.82" prefHeight="47.0" prefWidth="138.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Sign Up">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -46,10 +46,12 @@
             <Font name="Roboto Bold" size="20.0" />
          </font>
       </Button>
-      <Label layoutX="562.0" layoutY="416.0" prefHeight="29.0" prefWidth="286.0" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="New around here?" textAlignment="CENTER" textOverrun="CLIP">
+      <Label layoutX="565.0" layoutY="443.0" prefHeight="29.0" prefWidth="286.0" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="New around here?" textAlignment="CENTER" textOverrun="CLIP">
          <font>
             <Font name="Roboto Bold" size="17.0" />
          </font>
       </Label>
+      <Button layoutX="588.0" layoutY="691.0" mnemonicParsing="false" onAction="#sqlsetuper" prefHeight="25.0" prefWidth="108.0" style="-fx-background-color: transparent;" text="Set up sql server" />
+      <Label fx:id="warner" layoutX="518.0" layoutY="273.0" prefHeight="17.0" prefWidth="470.0" />
    </children>
 </AnchorPane>

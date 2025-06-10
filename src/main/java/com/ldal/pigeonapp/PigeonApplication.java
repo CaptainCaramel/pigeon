@@ -22,7 +22,8 @@ public class PigeonApplication extends Application
     {
         Scene scene;
         Parent root;
-        new Client();
+        if(Client.loadSQLInfo()) Client.loadSQLInfo();
+        if(SQLServer.password != null && SQLServer.userName != null) new Client();
         if(Client.getUser() != null && Client.isRememberMe())
         {
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));

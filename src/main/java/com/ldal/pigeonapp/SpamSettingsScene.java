@@ -74,4 +74,7 @@ public class SpamSettingsScene
             warner.setText("Invalid user");
         }
     }
+
+    public static class SqlSetupScene {
+    }
 }
