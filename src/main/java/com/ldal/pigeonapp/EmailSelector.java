@@ -128,7 +128,7 @@ public class EmailSelector implements Initializable {
 
         for (int i = 0; i < eButtons.size(); i++) {
             if (clickedButton.equals(eButtons.get(i))) {
-                EmailComposer.draft = inbox.get(i);
+                EmailComposer.draft = drafts.get(i);
                 break;
             }
         }
