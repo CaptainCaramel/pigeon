@@ -23,7 +23,6 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-import java.awt.image.SinglePixelPackedSampleModel;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -35,8 +34,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class EmailSelector implements Initializable
-{
+public class EmailSelector implements Initializable {
     @FXML
     private VBox emailListBox;
     @FXML
@@ -64,9 +62,9 @@ public class EmailSelector implements Initializable
     public Label declareText;
     @FXML
     private TextField searchinput;
+
     @FXML
-    private void profilebutton(ActionEvent event)
-    {
+    private void profilebutton(ActionEvent event) {
         toolBarController.ConMenu(event, anchorPane);
     }
 
@@ -80,13 +78,10 @@ public class EmailSelector implements Initializable
     ArrayList<Email> read = new ArrayList<>();
     ArrayList<Email> unread;
 
-    public ArrayList<Email> spamitout(ArrayList<Email> Inbox)
-    {
+    public ArrayList<Email> spamitout(ArrayList<Email> Inbox) {
         ArrayList<Email> spam = new ArrayList<>();
-        for(Email e : Inbox)
-        {
-            if(Client.getSpamblacklist().contains(e.getSender().getLogin()))
-            {
+        for (Email e : Inbox) {
+            if (Client.getSpamblacklist().contains(e.getSender().getLogin())) {
                 spam.add(e);
             }
         }
@@ -94,39 +89,28 @@ public class EmailSelector implements Initializable
     }
 
     @FXML
-    private void viewEmail(ActionEvent actionEvent) throws IOException
-    {
+    private void viewEmail(ActionEvent actionEvent) throws IOException {
         Button clickedButton = (Button) actionEvent.getSource();
 
         ArrayList<Email> folder = new ArrayList<>();
-        if(folderID == 0)
-        {
+        if (folderID == 0) {
             folder = inbox;
             declareText.setText("INBOX");
-        }
-        else if (folderID == 1)
-        {
+        } else if (folderID == 1) {
             declareText.setText("DRAFT");
             folder = drafts;
-        }
-        else if (folderID == 2)
-        {
+        } else if (folderID == 2) {
             folder = sent;
             declareText.setText("SENT");
-        }
-        else if (folderID == 3)
-        {
+        } else if (folderID == 3) {
             folder = spam;
             declareText.setText("SPAM");
         }
-        //else if (folderID == 3) folder = drafts;
 
-        for (int i = 0; i < eButtons.size(); i++)
-        {
-            if(clickedButton.equals(eButtons.get(i)))
-            {
+        for (int i = 0; i < eButtons.size(); i++) {
+            if (clickedButton.equals(eButtons.get(i))) {
                 EmailReader.email = folder.get(i);
-                if(!read.contains(folder.get(i))) read.add(folder.get(i));
+                if (!read.contains(folder.get(i))) read.add(folder.get(i));
                 break;
             }
         }
@@ -142,10 +126,8 @@ public class EmailSelector implements Initializable
     private void viewDraft(ActionEvent actionEvent) throws IOException {
         Button clickedButton = (Button) actionEvent.getSource();
 
-        for (int i = 0; i < eButtons.size(); i++)
-        {
-            if(clickedButton.equals(eButtons.get(i)))
-            {
+        for (int i = 0; i < eButtons.size(); i++) {
+            if (clickedButton.equals(eButtons.get(i))) {
                 EmailComposer.draft = inbox.get(i);
                 break;
             }
@@ -160,9 +142,8 @@ public class EmailSelector implements Initializable
     }
 
 
-
     @FXML
-    private void switchFolder(ActionEvent actionEvent){
+    private void switchFolder(ActionEvent actionEvent) {
         eButtons.clear();
 
         Button clickedButton = (Button) actionEvent.getSource();
@@ -189,16 +170,14 @@ public class EmailSelector implements Initializable
     }
 
     @FXML
-    public void refreshFolder()
-    {
+    public void refreshFolder() {
         inbox = Client.getInbox();
         drafts = Client.getDrafts();
         sent = Client.getSent();
         spam = spamitout(Client.getInbox());
         unread = new ArrayList<>();
-        for(Email e : inbox)
-        {
-            if(!read.contains(e)) unread.add(e);
+        for (Email e : inbox) {
+            if (!read.contains(e)) unread.add(e);
         }
 
         inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()));
@@ -206,102 +185,24 @@ public class EmailSelector implements Initializable
         sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
         spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getLogin()));
 
-        if(folderID == 0) displayFolder(inbox);
-        else if(folderID == 1) displayFolder(drafts);
+        if (folderID == 0) displayFolder(inbox);
+        else if (folderID == 1) displayFolder(drafts);
         else if (folderID == 2) displayFolder(sent);
         else if (folderID == 3) displayFolder(spam);
     }
 
-    private void displayFolder(){
-        System.out.println(folderID);
-        emailListBox.getChildren().clear();
-        ArrayList<Email> folder;
-        folder = inbox;
-
-
-        for (int i = 0; i < folder.size(); i++)
-        {
-            Email email = folder.get(i);
-
-            Group bGroup = new Group();
-
-            Button button = new Button();
-            button.setPrefWidth(1126);
-            button.setPrefHeight(43);
-            button.setStyle("-fx-background-color: #ffc885; -fx-border-color: #9c754f;");
-            button.setOnMouseEntered(event -> button.setStyle("-fx-background-color: #ffd5a1; -fx-border-color: #9c754f;"));
-            button.setOnMouseExited(event -> button.setStyle("-fx-background-color: #ffc885; -fx-border-color: #9c754f;"));
-
-            HBox textsHbox = new HBox();
-
-            textsHbox.setMouseTransparent(true);
-            textsHbox.setPrefWidth(1126);
-            textsHbox.setPrefHeight(43);
-            textsHbox.setLayoutX(7);
-
-
-            Label sender = new Label(email.getSender().getEmail());
-            sender.setPrefWidth(285);
-            sender.setPrefHeight(35);
-            sender.setFont(Font.font("roboto", FontWeight.BOLD, FontPosture.REGULAR, 17));
-            sender.setTextFill(Color.web("0x383838"));
-
-            Label subject = new Label(email.getSubject());
-            subject.setPrefWidth(397);
-            subject.setPrefHeight(35);
-            subject.setFont(Font.font("roboto", FontWeight.NORMAL, FontPosture.REGULAR, 17));
-            subject.setTextFill(Color.web("0x383838"));
-
-
-            Label date = new Label();
-            if(email.getDateTime() != null) date.setText(getRelativeTime(email));
-            date.setAlignment(Pos.CENTER_RIGHT);
-            date.setPrefWidth(412);
-            date.setPrefHeight(35);
-            date.setFont(Font.font("roboto", FontWeight.LIGHT, FontPosture.ITALIC, 17));
-            date.setTextFill(Color.web("0x383838", 0.5));
-
-            date.setOpacity(0.25f);
-
-            Label[] labels = {sender, subject, date};
-
-            textsHbox.getChildren().addAll(labels);
-
-            bGroup.getChildren().add(button);
-            bGroup.getChildren().add(textsHbox);
-
-            if(folderID != 1) {
-                button.setOnAction(e -> {
-                    try {
-                        viewEmail(e);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                });
-            }
-            else{
-                button.setOnAction(e -> {
-                    try {
-                        viewDraft(e);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                });
-            }
-
-            emailListBox.getChildren().add(bGroup);
-
-            eButtons.add(button);
-        }
+    private void displayFolder() {
+        if (folderID == 0) displayFolder(inbox);
+        else if (folderID == 1) displayFolder(drafts);
+        else if (folderID == 2) displayFolder(sent);
+        else if (folderID == 3) displayFolder(spam);
     }
 
 
-    private void displayFolder(ArrayList<Email> folder)
-    {
-
+    private void displayFolder(ArrayList<Email> folder) {
+        eButtons.clear();
         emailListBox.getChildren().clear();
-        if(folder != drafts)
-        {
+        if (folder != drafts) {
             folder = new ArrayList<>(folder.stream()
                     .sorted(new Comparator<Email>() {
                         @Override
@@ -344,7 +245,7 @@ public class EmailSelector implements Initializable
             subject.setTextFill(Color.web("0x383838"));
 
             Label date = new Label();
-            if(email.getDateTime() != null) date.setText(getRelativeTime(email));
+            if (email.getDateTime() != null) date.setText(getRelativeTime(email));
             date.setAlignment(Pos.CENTER_RIGHT);
             date.setPrefWidth(412);
             date.setPrefHeight(35);
@@ -360,7 +261,7 @@ public class EmailSelector implements Initializable
             bGroup.getChildren().add(button);
             bGroup.getChildren().add(textsHbox);
 
-            if(folderID != 1) {
+            if (folderID != 1) {
                 button.setOnAction(e -> {
                     try {
                         viewEmail(e);
@@ -368,8 +269,7 @@ public class EmailSelector implements Initializable
                         throw new RuntimeException(ex);
                     }
                 });
-            }
-            else{
+            } else {
                 button.setOnAction(e -> {
                     try {
                         viewDraft(e);
@@ -386,19 +286,16 @@ public class EmailSelector implements Initializable
     }
 
     @FXML
-    public void searchbutton(ActionEvent event)
-    {
+    public void searchbutton(ActionEvent event) {
         String search = searchinput.getText();
         ArrayList<Email> searchedmails = new ArrayList<>();
         ArrayList<Email> e = new ArrayList<>();
-        if(folderID == 0) e = inbox;
-        else if(folderID == 1) e = drafts;
-        else if(folderID == 2) e = sent;
-        else if(folderID == 3) e = spam;
-        for(Email i : e)
-        {
-            if((i.getSender().getLogin().toLowerCase()).contains(search.toLowerCase()) || (i.getSender().getEmail().toLowerCase()).contains(search.toLowerCase()) ||  (i.getSubject().toLowerCase()).contains(search.toLowerCase()) || (i.getText().toLowerCase()).contains(search.toLowerCase()))
-            {
+        if (folderID == 0) e = inbox;
+        else if (folderID == 1) e = drafts;
+        else if (folderID == 2) e = sent;
+        else if (folderID == 3) e = spam;
+        for (Email i : e) {
+            if ((i.getSender().getLogin().toLowerCase()).contains(search.toLowerCase()) || (i.getSender().getEmail().toLowerCase()).contains(search.toLowerCase()) || (i.getSubject().toLowerCase()).contains(search.toLowerCase()) || (i.getText().toLowerCase()).contains(search.toLowerCase())) {
                 searchedmails.add(i);
             }
         }
@@ -407,8 +304,7 @@ public class EmailSelector implements Initializable
         //an display foldershi shignit
     }
 
-    public String getRelativeTime(Email email)
-    {
+    public String getRelativeTime(Email email) {
         String dt = email.getDateTime();
         int year = Integer.parseInt(dt.substring(0, 4));
         int month = Integer.parseInt(dt.substring(5, 7));
@@ -425,19 +321,18 @@ public class EmailSelector implements Initializable
         long months = ChronoUnit.MONTHS.between(sentTime, now);
         long years = ChronoUnit.YEARS.between(sentTime, now);
 
-        if(daysago == 0) return dt.substring(11);
-        if(daysago == 1) return "Yesterday";
-        if(daysago >= 2 && daysago <= 6) return "A few days ago";
-        if(daysago >= 7 && daysago <= 13) return "Last week";
-        if(daysago >= 14 && daysago <= 30) return "A few weeks ago";
-        if(months == 1) return "Last month";
+        if (daysago == 0) return dt.substring(11);
+        if (daysago == 1) return "Yesterday";
+        if (daysago >= 2 && daysago <= 6) return "A few days ago";
+        if (daysago >= 7 && daysago <= 13) return "Last week";
+        if (daysago >= 14 && daysago <= 30) return "A few weeks ago";
+        if (months == 1) return "Last month";
 
         return sentTime.toString();
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle)
-    {
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         refreshFolder();
 
         SideBarController.inboxButton = inboxButton;
