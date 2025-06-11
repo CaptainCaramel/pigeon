@@ -20,7 +20,7 @@
             <Font name="Roboto Bold" size="45.0" />
          </font>
       </Label>
-      <Button fx:id="loginButton" layoutX="576.0" layoutY="341.0" mnemonicParsing="false" onAction="#LoginButtonEvent" opacity="0.82" prefHeight="47.0" prefWidth="132.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Log In">
+      <Button fx:id="loginButton" layoutX="576.0" layoutY="329.0" mnemonicParsing="false" onAction="#LoginButtonEvent" opacity="0.82" prefHeight="47.0" prefWidth="132.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Log In">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -38,7 +38,7 @@
             <Font name="Roboto Bold" size="15.0" />
          </font>
       </Label>
-      <Button fx:id="signUpButton" layoutX="573.0" layoutY="485.0" mnemonicParsing="false" onAction="#SignUpButton" opacity="0.82" prefHeight="47.0" prefWidth="138.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Sign Up">
+      <Button fx:id="signUpButton" layoutX="573.0" layoutY="478.0" mnemonicParsing="false" onAction="#SignUpButton" opacity="0.82" prefHeight="47.0" prefWidth="138.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Sign Up">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
