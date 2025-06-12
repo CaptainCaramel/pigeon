@@ -44,7 +44,7 @@ public class SpamSettingsScene
     public void spamAdd(ActionEvent event)
     {
         String userinput1 = userinput.getText();
-        if(!userinput1.isEmpty() && Client.getSQLServer().validateLogin(userinput1) && !Client.getSpamblacklist().contains(userinput1))
+        if(!userinput1.isEmpty() && Client.getSQLServer().validateEmail(userinput1) && !Client.getSpamblacklist().contains(userinput1))
         {
             Client.setSpamblacklist(userinput1);
             warner.setText(userinput1 + " spamlisted");
@@ -63,7 +63,7 @@ public class SpamSettingsScene
     public void spamRemove(ActionEvent event)
     {
         String userinput1 = userinput.getText();
-        if(!userinput1.isEmpty() && Client.getSQLServer().validateLogin(userinput1) && Client.getSpamblacklist().contains(userinput1))
+        if(!userinput1.isEmpty() && Client.getSQLServer().validateEmail(userinput1) && Client.getSpamblacklist().contains(userinput1))
         {
             Client.removeSpamblacklist(userinput1);
             warner.setText(userinput1 + " removed from spamlist");
@@ -73,5 +73,8 @@ public class SpamSettingsScene
         {
             warner.setText("Invalid user");
         }
+    }
+
+    public static class SqlSetupScene {
     }
 }

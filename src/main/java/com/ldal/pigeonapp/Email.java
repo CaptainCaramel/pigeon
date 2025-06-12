@@ -105,13 +105,6 @@ public class Email implements Serializable
 
     public long minutesAgo()
     {
-        System.out.println(dateTime);
-        System.out.println("year: '" + dateTime.substring(0, 4));
-        System.out.println("month: '" + dateTime.substring(5, 7));
-        System.out.println("day: '" + dateTime.substring(8, 10));
-        System.out.println("hour: '" + dateTime.substring(11, 13));
-        System.out.println("minute: '" + dateTime.substring(14, 16));
-
         int year = Integer.parseInt(dateTime.substring(0, 4));
         int month = Integer.parseInt(dateTime.substring(5, 7));
         int day = Integer.parseInt(dateTime.substring(8, 10));

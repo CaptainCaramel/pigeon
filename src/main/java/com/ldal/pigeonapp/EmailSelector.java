@@ -75,8 +75,7 @@ public class EmailSelector implements Initializable {
     ArrayList<Email> drafts;
     ArrayList<Email> sent;
     ArrayList<Email> spam;
-    ArrayList<Email> read = new ArrayList<>();
-    ArrayList<Email> unread;
+    static ArrayList<Email> read = new ArrayList<>();
 
     public ArrayList<Email> spamitout(ArrayList<Email> Inbox) {
         ArrayList<Email> spam = new ArrayList<>();
@@ -110,7 +109,8 @@ public class EmailSelector implements Initializable {
         for (int i = 0; i < eButtons.size(); i++) {
             if (clickedButton.equals(eButtons.get(i))) {
                 EmailReader.email = folder.get(i);
-                if (!read.contains(folder.get(i))) read.add(folder.get(i));
+                //if (!read.contains(folder.get(i)))
+                //{read.add(folder.get(i));}
                 break;
             }
         }
@@ -128,7 +128,7 @@ public class EmailSelector implements Initializable {
 
         for (int i = 0; i < eButtons.size(); i++) {
             if (clickedButton.equals(eButtons.get(i))) {
-                EmailComposer.draft = inbox.get(i);
+                EmailComposer.draft = drafts.get(i);
                 break;
             }
         }
@@ -175,10 +175,6 @@ public class EmailSelector implements Initializable {
         drafts = Client.getDrafts();
         sent = Client.getSent();
         spam = spamitout(Client.getInbox());
-        unread = new ArrayList<>();
-        for (Email e : inbox) {
-            if (!read.contains(e)) unread.add(e);
-        }
 
         inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()));
         drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
@@ -220,9 +216,18 @@ public class EmailSelector implements Initializable {
             Button button = new Button();
             button.setPrefWidth(1126);
             button.setPrefHeight(43);
-            button.setStyle("-fx-background-color: #ffc885; -fx-border-color: #9c754f;");
-            button.setOnMouseEntered(event -> button.setStyle("-fx-background-color: #ffd5a1; -fx-border-color: #9c754f;"));
-            button.setOnMouseExited(event -> button.setStyle("-fx-background-color: #ffc885; -fx-border-color: #9c754f;"));
+            if(read.contains(email))
+            {
+                button.setStyle("-fx-background-color: #bfa97a; -fx-border-color: #9c754f;");
+                button.setOnMouseEntered(event -> button.setStyle("-fx-background-color: #c6b089; -fx-border-color: #9c754f;"));
+                button.setOnMouseExited(event -> button.setStyle("-fx-background-color: #bfa97a; -fx-border-color: #9c754f;"));
+            }
+            else
+            {
+                button.setStyle("-fx-background-color: #ffc885; -fx-border-color: #9c754f;");
+                button.setOnMouseEntered(event -> button.setStyle("-fx-background-color: #ffd5a1; -fx-border-color: #9c754f;"));
+                button.setOnMouseExited(event -> button.setStyle("-fx-background-color: #ffc885; -fx-border-color: #9c754f;"));
+            }
 
             HBox textsHbox = new HBox();
 
@@ -238,11 +243,23 @@ public class EmailSelector implements Initializable {
             sender.setFont(Font.font("roboto", FontWeight.BOLD, FontPosture.REGULAR, 17));
             sender.setTextFill(Color.web("0x383838"));
 
-            Label subject = new Label(email.getSubject());
-            subject.setPrefWidth(397);
-            subject.setPrefHeight(35);
-            subject.setFont(Font.font("roboto", FontWeight.NORMAL, FontPosture.REGULAR, 17));
-            subject.setTextFill(Color.web("0x383838"));
+            Label subject = new Label();
+            if(read.contains(email))
+            {
+                subject.setText(email.getSubject() + "- Read");
+                subject.setPrefWidth(397);
+                subject.setPrefHeight(35);
+                subject.setFont(Font.font("roboto", FontWeight.NORMAL, FontPosture.REGULAR, 17));
+                subject.setTextFill(Color.web("0x383838"));
+            }
+            else
+            {
+                subject.setText(email.getSubject());
+                subject.setPrefWidth(397);
+                subject.setPrefHeight(35);
+                subject.setFont(Font.font("roboto", FontWeight.NORMAL, FontPosture.REGULAR, 17));
+                subject.setTextFill(Color.web("0x383838"));
+            }
 
             Label date = new Label();
             if (email.getDateTime() != null) date.setText(getRelativeTime(email));
@@ -349,5 +366,10 @@ public class EmailSelector implements Initializable {
 
         sorter.getItems().addAll("Oldest", "Latest");
         sorter.setValue("Latest");
+
+        sorter.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) ->
+        {
+            displayFolder();
+        });
     }
 }

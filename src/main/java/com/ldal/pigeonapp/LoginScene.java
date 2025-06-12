@@ -42,15 +42,15 @@ public class LoginScene implements Initializable
         String password1 = password.getText();
 
         if (username1.isEmpty() || password1.isEmpty()) {
-            warning.setText("*Please input your data");
+            warning.setText("Please input your data");
         } else {
             if (!sqlServer.validateLogin(username1) || !sqlServer.validatePassword(username1, passHasher.hasher(password1))) {
                 warning.setStyle("-fx-text-fill: red");
-                warning.setText("*Invalid username or password!");
+                warning.setText("Invalid username or password!");
                 return;
             } else {
                 warning.setStyle("-fx-text-fill: green");
-                warning.setText("*Login successful!");
+                warning.setText("Login successful!");
 
                 Client.login(username1);
                 client.saveSettings();

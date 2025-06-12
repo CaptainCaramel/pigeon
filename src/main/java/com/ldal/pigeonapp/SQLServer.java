@@ -8,12 +8,13 @@ import java.util.ArrayList;
 public class SQLServer
 {
     String url = "jdbc:mysql://localhost:3306/pigeonDB";
-    String userName = "root";
-    String password = "Iamme113";
+    static String userName;
+    static String password;
 
     private Connection connection;
     private final PreparedStatement signUpStatement;
     private final PreparedStatement checkLogin;
+    private final PreparedStatement checkEmail;
     private final PreparedStatement checkPassword;
     private final PreparedStatement getUserFromLogin;
     private final PreparedStatement getUserFromEmail;
@@ -25,8 +26,10 @@ public class SQLServer
     private final PreparedStatement updateRecoveryPassword;
     private final Statement statement;
 
-    public SQLServer(){
-        try {
+    public SQLServer()
+    {
+        try
+        {
             connection = DriverManager.getConnection(url, userName, password);
             statement = connection.createStatement();
 
@@ -34,6 +37,7 @@ public class SQLServer
                     "values(?, ?, ?, ?)");
 
             checkLogin = connection.prepareStatement("Select id from user where login = ?");
+            checkEmail = connection.prepareStatement("Select id from user where email = ?");
             checkBackupPassword = connection.prepareStatement("Select recoveryPass from user where login = ?");
             checkPassword = connection.prepareStatement("Select hashedPass from user where login = ?");
             getUserFromLogin = connection.prepareStatement("Select * from user where login = ?");
@@ -75,6 +79,19 @@ public class SQLServer
         try{
             checkLogin.setString(1, login);
             ResultSet dbResult = checkLogin.executeQuery();
+
+            return dbResult.isBeforeFirst();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean validateEmail(String email)
+    {
+        try{
+            checkEmail.setString(1, email);
+            ResultSet dbResult = checkEmail.executeQuery();
 
             return dbResult.isBeforeFirst();
 
