@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class LoginScene implements Initializable
@@ -43,18 +45,24 @@ public class LoginScene implements Initializable
 
         if (username1.isEmpty() || password1.isEmpty()) {
             warning.setText("Please input your data");
-        } else {
-            if (!sqlServer.validateLogin(username1) || !sqlServer.validatePassword(username1, passHasher.hasher(password1))) {
+        } else
+        {
+            if (!sqlServer.validateLogin(username1) || !sqlServer.validatePassword(username1, passHasher.hasher(password1)))
+            {
                 warning.setStyle("-fx-text-fill: red");
                 warning.setText("Invalid username or password!");
                 return;
-            } else {
+            }
+            else
+            {
                 warning.setStyle("-fx-text-fill: green");
                 warning.setText("Login successful!");
 
                 Client.login(username1);
                 client.saveSettings();
                 System.out.println(Client.getUser().getLogin());
+
+                PigeonApplication.dateTimeSincer = LocalDateTimer.localDateTime();
 
                 Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
                 Scene scene = new Scene(root);

@@ -41,6 +41,8 @@ public class EmailReader implements Initializable {
     @FXML
     private Button composerButton;
     @FXML
+    private Label Declareridk;
+    @FXML
     private Button drafterButton;
     ToolBarController toolBarController = new ToolBarController();
     @FXML
@@ -73,7 +75,18 @@ public class EmailReader implements Initializable {
 
 
         String dateTime = email.getDateTime();
-        senderText.setText(email.getSender().getEmail());
+        if(EmailSelector.folderID != 2)
+        {
+            Declareridk.setText("From: ");
+            senderText.setText(email.getSender().getEmail());
+        }
+        else
+        {
+
+            Declareridk.setText("To: ");
+            senderText.setText(email.getReceiver().getEmail());
+        }
+
         emailText.setText(email.getText());
         subjText.setText(email.getSubject());
         if(dateTime != null)dateText.setText(dateTime.substring(0,10));

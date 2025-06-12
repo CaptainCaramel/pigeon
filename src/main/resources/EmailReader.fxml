@@ -90,7 +90,7 @@
             </Label>
          </content>
       </ScrollPane>
-      <Label layoutX="172.0" layoutY="52.0" prefHeight="34.0" prefWidth="62.0" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="From : ">
+      <Label fx:id="Declareridk" layoutX="172.0" layoutY="52.0" prefHeight="34.0" prefWidth="62.0" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="From : ">
          <font>
             <Font name="Roboto Light" size="20.0" />
          </font>

@@ -6,10 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -50,7 +47,7 @@ public class EmailSelector implements Initializable {
     @FXML
     private Button configureButton;
     @FXML
-    private Button drafterButton;
+    private Button searchButton;
     ToolBarController toolBarController = new ToolBarController();
     @FXML
     private AnchorPane anchorPane;
@@ -68,7 +65,7 @@ public class EmailSelector implements Initializable {
         toolBarController.ConMenu(event, anchorPane);
     }
 
-    public static int folderID = 0;
+    public static int folderID;
 
     private ArrayList<Button> eButtons = new ArrayList<>();
     ArrayList<Email> inbox;
@@ -187,7 +184,8 @@ public class EmailSelector implements Initializable {
         else if (folderID == 3) displayFolder(spam);
     }
 
-    private void displayFolder() {
+    private void displayFolder()
+    {
         if (folderID == 0) displayFolder(inbox);
         else if (folderID == 1) displayFolder(drafts);
         else if (folderID == 2) displayFolder(sent);
@@ -196,6 +194,7 @@ public class EmailSelector implements Initializable {
 
 
     private void displayFolder(ArrayList<Email> folder) {
+        sorter.setCursor(Cursor.HAND);
         eButtons.clear();
         emailListBox.getChildren().clear();
         if (folder != drafts) {
@@ -236,8 +235,15 @@ public class EmailSelector implements Initializable {
             textsHbox.setPrefHeight(43);
             textsHbox.setLayoutX(7);
 
-
-            Label sender = new Label(email.getSender().getEmail());
+            Label sender;
+            if(folderID != 2)
+            {
+                sender = new Label(email.getSender().getEmail());
+            }
+            else
+            {
+                sender = new Label(email.getReceiver().getEmail());
+            }
             sender.setPrefWidth(285);
             sender.setPrefHeight(35);
             sender.setFont(Font.font("roboto", FontWeight.BOLD, FontPosture.REGULAR, 17));
@@ -299,6 +305,11 @@ public class EmailSelector implements Initializable {
             emailListBox.getChildren().add(bGroup);
 
             eButtons.add(button);
+
+            for(Button b : eButtons)
+            {
+                b.setCursor(Cursor.HAND);
+            }
         }
     }
 
@@ -357,8 +368,16 @@ public class EmailSelector implements Initializable {
         SideBarController.spamButton = spamButton;
         SideBarController.sentButton = sentButton;
         SideBarController.composerButton = composerButton;
-        SideBarController.drafterButton = drafterButton;
         SideBarController.configureButton = configureButton;
+
+        SideBarController.inboxButton.setCursor(Cursor.HAND);
+        SideBarController.draftsButton.setCursor(Cursor.HAND);
+        SideBarController.spamButton.setCursor(Cursor.HAND);
+        SideBarController.sentButton.setCursor(Cursor.HAND);
+        SideBarController.composerButton.setCursor(Cursor.HAND);
+        SideBarController.configureButton.setCursor(Cursor.HAND);
+
+        searchButton.setCursor(Cursor.HAND);
 
         SideBarController.initSideBar();
 

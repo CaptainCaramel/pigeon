@@ -119,7 +119,7 @@
                               <Image url="@magnifying-glass-icon-26762.png" />
                            </image>
                         </ImageView>
-                        <Button mnemonicParsing="false" onAction="#searchbutton" prefHeight="26.0" prefWidth="36.0" style="-fx-background-color: transparent;" />
+                        <Button fx:id="searchButton" mnemonicParsing="false" onAction="#searchbutton" prefHeight="26.0" prefWidth="36.0" style="-fx-background-color: transparent;" />
                      </children>
                   </StackPane>
                </children>

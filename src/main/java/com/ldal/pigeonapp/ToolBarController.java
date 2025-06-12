@@ -5,10 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
@@ -46,6 +43,26 @@ public class ToolBarController
     public void creatingWindow(ActionEvent event, AnchorPane anchorPane)
     {
         Circle profileCircle = new Circle(60, Color.CRIMSON);
+        Button profileButton = new Button("");
+        profileButton.setPrefSize(120, 120);
+        profileButton.setStyle("-fx-background-color: transparent; -fx-border-radius: 8px;");
+        profileButton.setOnAction(e ->
+        {
+            try
+            {
+                Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/ProfileScene.fxml"));
+                Scene scene = new Scene(root);
+                Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+            }
+            catch (IOException ex)
+            {
+                throw new RuntimeException(ex);
+            }
+        });
+        profileButton.setOnMouseEntered(e -> profileCircle.setFill(Color.web("#B22234")));
+        profileButton.setOnMouseExited(e -> profileCircle.setFill(Color.CRIMSON));
+        profileButton.setCursor(Cursor.HAND);
 
         Label username = new Label(Client.getUser().getEmail());
         username.setStyle("-fx-text-fill: crimson; -fx-font-weight: bold; -fx-font-size: 15");
@@ -53,14 +70,13 @@ public class ToolBarController
         initialText.setTextFill(Color.WHITE);
         initialText.setStyle("-fx-font-size: 25px; -fx-font-weight: bold;");
 
-        StackPane circleWithText = new StackPane(profileCircle, initialText);
+        StackPane circleWithText = new StackPane(profileCircle, initialText, profileButton);
         circleWithText.setPrefSize(120, 120);
 
         HBox hbox = new HBox(10);
         hbox.setAlignment(Pos.CENTER_LEFT);
         hbox.getChildren().addAll(circleWithText, username);
 
-        hbox.setMouseTransparent(true);
         hbox.setFocusTraversable(false);
         hbox.setBackground(Background.EMPTY);
         hbox.setStyle("-fx-background-color: transparent;");
@@ -104,9 +120,11 @@ public class ToolBarController
         settingsbutton.getStylesheets().add("styleforROBOTO.css");
         settingsbutton.getStyleClass().add("custom-font-even-smaller");
         settingsbutton.setStyle("-fx-background-color: #de7259; -fx-font-size: 20px; -fx-text-fill: black; -fx-radius-size: 6px; -fx-background-radius: 10; -fx-opacity: 0.82;");
+        settingsbutton.setCursor(Cursor.HAND);
         logOut.getStylesheets().add("styleforROBOTO.css");
         logOut.getStyleClass().add("custom-font-even-smaller");
         logOut.setStyle("-fx-background-color: #de7259; -fx-font-size: 20px; -fx-text-fill: black; -fx-radius-size: 6px; -fx-background-radius: 10; -fx-opacity: 0.82;");
+        logOut.setCursor(Cursor.HAND);
         vBox.getChildren().addAll(settingsbutton, logOut);
 
         CustomMenuItem profileItem = new CustomMenuItem(hbox);

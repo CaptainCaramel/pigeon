@@ -24,6 +24,8 @@ public class SQLServer
     private final PreparedStatement updatePassword;
     private final PreparedStatement checkBackupPassword;
     private final PreparedStatement updateRecoveryPassword;
+    private final PreparedStatement removeAccount;
+    private final PreparedStatement getDateCreatedFromLogin;
     private final Statement statement;
 
     public SQLServer()
@@ -33,8 +35,8 @@ public class SQLServer
             connection = DriverManager.getConnection(url, userName, password);
             statement = connection.createStatement();
 
-            signUpStatement = connection.prepareStatement("Insert into user(login, email, hashedpass, recoverypass) " +
-                    "values(?, ?, ?, ?)");
+            signUpStatement = connection.prepareStatement("Insert into user(login, email, hashedpass, recoverypass, dateCreated) " +
+                    "values(?, ?, ?, ?, ?)");
 
             checkLogin = connection.prepareStatement("Select id from user where login = ?");
             checkEmail = connection.prepareStatement("Select id from user where email = ?");
@@ -44,7 +46,8 @@ public class SQLServer
             getUserFromEmail = connection.prepareStatement("Select * from user where email = ?");
             getUserFromID = connection.prepareStatement("Select * from user where id = ?");
             updatePassword = connection.prepareStatement("update user set hashedPass = ? where login = ?;");
-
+            removeAccount = connection.prepareStatement("delete from user where login = ?");
+            getDateCreatedFromLogin = connection.prepareStatement("Select dateCreated from user where login = ?");
             sendEmailNoAttachment = connection.prepareStatement("Insert into mails(senderID, receiverID, emailText, sendTime, subject) " +
                     "values(?, ?, ?, ?, ?)");
             getEmailFromID = connection.prepareStatement("select * from mails where receiverID = ? order by id desc");
@@ -165,10 +168,32 @@ public class SQLServer
         }
     }
 
-    public boolean checkDuplicateLogin(String login){
+    public boolean  checkDuplicateLogin(String login){
         try{
             getUserFromLogin.setString(1, login);
             ResultSet dbResult = getUserFromLogin.executeQuery();
+            return dbResult.isBeforeFirst();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteAccount(String login)
+    {
+        try
+        {
+            removeAccount.setString(1, login);
+            removeAccount.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean  checkDuplicateEmail(String email){
+        try{
+            getUserFromEmail.setString(1, email);
+            ResultSet dbResult = getUserFromEmail.executeQuery();
             return dbResult.isBeforeFirst();
 
         } catch (SQLException e) {
@@ -200,12 +225,26 @@ public class SQLServer
         }
     }
 
-    public User SignUp(String login, String email, String hashedPass, String recoveryPass){
+
+    public String getDateCreatedFromID(String login)
+    {
+        try
+        {
+            getDateCreatedFromLogin.setString(1, login);
+            ResultSet user = getDateCreatedFromLogin.executeQuery();
+            user.next();
+            return user.getString("dateCreated");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public User SignUp(String login, String email, String hashedPass, String recoveryPass, String dateCreated){
         try {
             signUpStatement.setString(1, login);
             signUpStatement.setString(2, email);
             signUpStatement.setString(3, hashedPass);
             signUpStatement.setString(4, recoveryPass);
+            signUpStatement.setString(5, dateCreated);
 
             signUpStatement.execute();
 

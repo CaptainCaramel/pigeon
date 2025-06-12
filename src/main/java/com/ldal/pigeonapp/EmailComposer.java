@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -38,7 +39,7 @@ public class EmailComposer implements Initializable {
     @FXML
     private Button composerButton;
     @FXML
-    private Button drafterButton;
+    private Button configureButton;
     @FXML
     private Button sendButton;
 
@@ -155,13 +156,22 @@ public class EmailComposer implements Initializable {
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
         SideBarController.inboxButton = inboxButton;
         SideBarController.draftsButton = draftsButton;
         SideBarController.sentButton = sentButton;
         SideBarController.spamButton = spamButton;
         SideBarController.composerButton = composerButton;
-        SideBarController.drafterButton = drafterButton;
+        SideBarController.configureButton = configureButton;
+
+        SideBarController.inboxButton.setCursor(Cursor.HAND);
+        SideBarController.draftsButton.setCursor(Cursor.HAND);
+        SideBarController.spamButton.setCursor(Cursor.HAND);
+        SideBarController.sentButton.setCursor(Cursor.HAND);
+        SideBarController.composerButton.setCursor(Cursor.HAND);
+        SideBarController.configureButton.setCursor(Cursor.HAND);
+        SideBarController.configureButton.setCursor(Cursor.HAND);
 
         sendButton.setStyle("-fx-background-color : #c83f44; -fx-background-radius : 15");
         sendButton.setOnMouseExited(e -> sendButton.setStyle("-fx-background-color : #c83f44; -fx-background-radius : 15"));
