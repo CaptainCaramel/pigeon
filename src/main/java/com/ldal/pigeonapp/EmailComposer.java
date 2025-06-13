@@ -11,12 +11,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -53,6 +55,7 @@ public class EmailComposer implements Initializable {
     private AnchorPane carefulAnchorPane;
     @FXML
     private AnchorPane anchorPane;
+    private RecommendedUsers recommendedUsers;
 
     private int goToFolder = 0;
 
@@ -61,7 +64,8 @@ public class EmailComposer implements Initializable {
     ToolBarController toolBarController = new ToolBarController();
 
     @FXML
-    private void exitComposer(ActionEvent actionEvent) throws IOException {
+    private void exitComposer(ActionEvent actionEvent) throws IOException
+    {
         Button clickedButton = (Button) actionEvent.getSource();
         if(clickedButton.equals(inboxButton)) goToFolder = 0;
         else if(clickedButton.equals(draftsButton)) goToFolder = 1;
@@ -126,30 +130,52 @@ public class EmailComposer implements Initializable {
         SQLServer sqlServer = new SQLServer();
 
         String rec = receiverText.getText();
-        if(receiverText.isHover())
-        {
-            RecommendedUsers.recommendedUsersTab(Client.Recepients, carefulAnchorPane);
-        }
         String subj = subjText.getText();
         String eText = emailText.getText();
 
-        if(!sqlServer.validateUser(rec)){
-            errorText.setText("*User not found!");
-            return;
-        }
-        if(subj.length() > 75){
-            errorText.setText("*Subject max length(75) exceeded!");
+        ArrayList<String> everyReceiver = Client.Indorgroupchecker(rec);
+
+        if(subj.length() > 75)
+        {
+            errorText.setText("Subject max length(75) exceeded!");
+            errorText.setStyle("-fx-text-fill: red");
             return;
         }
         if(eText.length() > 75000){
-            errorText.setText("*Text max length(75k) exceeded!");
+            errorText.setText("Text max length(75k) exceeded!");
+            errorText.setStyle("-fx-text-fill: red");
             return;
         }
-        Email email = new Email(Client.getUser(), sqlServer.userFromEmail(rec), eText, subj);
+        if(subj.isEmpty() && eText.isEmpty())
+        {
+            errorText.setText("Your email must contain at least a subject or message");
+            errorText.setStyle("-fx-text-fill: red");
+            return;
+        }
 
+        for (String s : everyReceiver)
+        {
+            if (!sqlServer.validateUser(s))
+            {
+                errorText.setText("User not found: " + s);
+                errorText.setStyle("-fx-text-fill: red");
+                return;
+            }
+        }
 
-        Client.EmailSender(email);
-        errorText.setText("*Email sent!");
+        for (String s : everyReceiver)
+        {
+            Email individualEmail = new Email(Client.getUser(), sqlServer.userFromEmail(s), eText, subj);
+            Client.EmailSender(individualEmail);
+
+            if (!Client.Recepients.contains(s))
+            {
+                Client.Recepients.add(s);
+            }
+        }
+        Client.saveReceipientsInfo();
+        errorText.setStyle("-fx-text-fill: green");
+        errorText.setText("Email sent!");
         receiverText.setText("");
         subjText.setText("");
         emailText.setText("");
@@ -179,10 +205,21 @@ public class EmailComposer implements Initializable {
 
         SideBarController.initSideBar();
 
-        if(draft != null){
+        if(draft != null)
+        {
             if(!draft.getText().isEmpty())emailText.setText(draft.getText());
             if(!draft.getSubject().isEmpty())subjText.setText(draft.getSubject());
         }
+
+        recommendedUsers = new RecommendedUsers();
+
+        receiverText.focusedProperty().addListener((obs, oldval, newval) ->
+        {
+            if(newval)
+            {
+                recommendedUsers.recommendedUsersTab(Client.Mostcommonrecepeints(Client.Recepients), anchorPane, receiverText);
+            }
+        });
 
     }
 }

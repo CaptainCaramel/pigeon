@@ -11,8 +11,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -64,6 +67,8 @@ public class EmailSelector implements Initializable {
     private void profilebutton(ActionEvent event) {
         toolBarController.ConMenu(event, anchorPane);
     }
+    @FXML
+    private Button folderClearer;
 
     public static int folderID;
 
@@ -71,8 +76,8 @@ public class EmailSelector implements Initializable {
     ArrayList<Email> inbox;
     ArrayList<Email> drafts;
     ArrayList<Email> sent;
-    ArrayList<Email> spam;
-    static ArrayList<Email> read = new ArrayList<>();
+    static ArrayList<Email> spam;
+    static ArrayList<Email> deleted = new ArrayList<>();
 
     public ArrayList<Email> spamitout(ArrayList<Email> Inbox) {
         ArrayList<Email> spam = new ArrayList<>();
@@ -123,8 +128,10 @@ public class EmailSelector implements Initializable {
     private void viewDraft(ActionEvent actionEvent) throws IOException {
         Button clickedButton = (Button) actionEvent.getSource();
 
-        for (int i = 0; i < eButtons.size(); i++) {
-            if (clickedButton.equals(eButtons.get(i))) {
+        for (int i = 0; i < eButtons.size(); i++)
+        {
+            if (clickedButton.equals(eButtons.get(i)))
+            {
                 EmailComposer.draft = drafts.get(i);
                 break;
             }
@@ -148,21 +155,34 @@ public class EmailSelector implements Initializable {
             folderID = 0;
             displayFolder(inbox);
             declareText.setText("INBOX");
+            folderClearer.setText("");
+            folderClearer.setDisable(true);
         }
         if (clickedButton.equals(draftsButton)) {
             folderID = 1;
             displayFolder(drafts);
             declareText.setText("DRAFTS");
+            folderClearer.setText("Clear DRAFT out");
+            folderClearer.setDisable(false);
+            folderClearer.setOnAction(e ->
+            {
+                Client.FolderDeleter(2);
+                refreshFolder();
+            });
         }
         if (clickedButton.equals(sentButton)) {
             folderID = 2;
             displayFolder(sent);
             declareText.setText("SENT");
+            folderClearer.setText("");
+            folderClearer.setDisable(true);
         }
         if (clickedButton.equals(spamButton)) {
             folderID = 3;
             displayFolder(spam);
             declareText.setText("SPAM");
+            folderClearer.setText("");
+            folderClearer.setDisable(true);
         }
     }
 
@@ -173,10 +193,10 @@ public class EmailSelector implements Initializable {
         sent = Client.getSent();
         spam = spamitout(Client.getInbox());
 
-        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()));
-        drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
-        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
-        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getLogin()));
+        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()) || deleted.contains(e));
+        drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()) || deleted.contains(e));
+        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()) || deleted.contains(e));
+        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getLogin()) || deleted.contains(e));
 
         if (folderID == 0) displayFolder(inbox);
         else if (folderID == 1) displayFolder(drafts);
@@ -215,18 +235,10 @@ public class EmailSelector implements Initializable {
             Button button = new Button();
             button.setPrefWidth(1126);
             button.setPrefHeight(43);
-            if(read.contains(email))
-            {
-                button.setStyle("-fx-background-color: #bfa97a; -fx-border-color: #9c754f;");
-                button.setOnMouseEntered(event -> button.setStyle("-fx-background-color: #c6b089; -fx-border-color: #9c754f;"));
-                button.setOnMouseExited(event -> button.setStyle("-fx-background-color: #bfa97a; -fx-border-color: #9c754f;"));
-            }
-            else
-            {
-                button.setStyle("-fx-background-color: #ffc885; -fx-border-color: #9c754f;");
-                button.setOnMouseEntered(event -> button.setStyle("-fx-background-color: #ffd5a1; -fx-border-color: #9c754f;"));
-                button.setOnMouseExited(event -> button.setStyle("-fx-background-color: #ffc885; -fx-border-color: #9c754f;"));
-            }
+
+            button.setStyle("-fx-background-color: #ffc885; -fx-border-color: #9c754f;");
+            button.setOnMouseEntered(event -> button.setStyle("-fx-background-color: #ffd5a1; -fx-border-color: #9c754f;"));
+            button.setOnMouseExited(event -> button.setStyle("-fx-background-color: #ffc885; -fx-border-color: #9c754f;"));
 
             HBox textsHbox = new HBox();
 
@@ -249,23 +261,25 @@ public class EmailSelector implements Initializable {
             sender.setFont(Font.font("roboto", FontWeight.BOLD, FontPosture.REGULAR, 17));
             sender.setTextFill(Color.web("0x383838"));
 
+            /*
+            StackPane stackPane = new StackPane();
+            Button deleter = new Button();
+            Image image = new Image("GarbagecanIcon.png");
+            ImageView imageView = new ImageView();
+            imageView.setImage(image);
+            imageView.setMouseTransparent(true);
+            imageView.setFitHeight(50);
+            imageView.setFitWidth(50);
+            stackPane.getChildren().addAll(deleter,imageView);
+             */
+
             Label subject = new Label();
-            if(read.contains(email))
-            {
-                subject.setText(email.getSubject() + "- Read");
-                subject.setPrefWidth(397);
-                subject.setPrefHeight(35);
-                subject.setFont(Font.font("roboto", FontWeight.NORMAL, FontPosture.REGULAR, 17));
-                subject.setTextFill(Color.web("0x383838"));
-            }
-            else
-            {
-                subject.setText(email.getSubject());
-                subject.setPrefWidth(397);
-                subject.setPrefHeight(35);
-                subject.setFont(Font.font("roboto", FontWeight.NORMAL, FontPosture.REGULAR, 17));
-                subject.setTextFill(Color.web("0x383838"));
-            }
+
+            subject.setText(email.getSubject());
+            subject.setPrefWidth(397);
+            subject.setPrefHeight(35);
+            subject.setFont(Font.font("roboto", FontWeight.NORMAL, FontPosture.REGULAR, 17));
+            subject.setTextFill(Color.web("0x383838"));
 
             Label date = new Label();
             if (email.getDateTime() != null) date.setText(getRelativeTime(email));
@@ -280,6 +294,7 @@ public class EmailSelector implements Initializable {
             Label[] labels = {sender, subject, date};
 
             textsHbox.getChildren().addAll(labels);
+            //textsHbox.getChildren().add(stackPane);
 
             bGroup.getChildren().add(button);
             bGroup.getChildren().add(textsHbox);
@@ -369,6 +384,7 @@ public class EmailSelector implements Initializable {
         SideBarController.sentButton = sentButton;
         SideBarController.composerButton = composerButton;
         SideBarController.configureButton = configureButton;
+        SideBarController.clearerButton = folderClearer;
 
         SideBarController.inboxButton.setCursor(Cursor.HAND);
         SideBarController.draftsButton.setCursor(Cursor.HAND);
@@ -376,6 +392,7 @@ public class EmailSelector implements Initializable {
         SideBarController.sentButton.setCursor(Cursor.HAND);
         SideBarController.composerButton.setCursor(Cursor.HAND);
         SideBarController.configureButton.setCursor(Cursor.HAND);
+        SideBarController.clearerButton.setCursor(Cursor.HAND);
 
         searchButton.setCursor(Cursor.HAND);
 

@@ -83,9 +83,8 @@ public class Client implements Serializable {
                 System.out.println("User loaded, username : " + user.getLogin());
 
                 Recepients = loadedClient.Recepients;
+                loadReceipientsInfo();
             }
-
-
             objectInputStream.close();
 
         }catch (IOException | ClassNotFoundException | NullPointerException e){
@@ -139,6 +138,50 @@ public class Client implements Serializable {
         catch (IOException e)
         {
             return false;
+        }
+    }
+    public void loadReceipientsInfo()
+    {
+        try
+        {
+            Recepients.clear();
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath + "\\Recipients.txt"));
+            String line;
+            ArrayList<String> lines = new ArrayList<>();
+            while((line = bufferedReader.readLine()) != null)
+            {
+                lines.add(line.trim());
+            }
+            if(lines.get(lines.size() - 1).equals(getUser().getLogin()));
+            {
+                for(String s : lines)
+                {
+                    Recepients.add(s);
+                }
+                Recepients.remove(Recepients.get(Recepients.size() - 1));
+            }
+            bufferedReader.close();
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void saveReceipientsInfo()
+    {
+        try
+        {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\Recipients.txt"));
+            for(String s : Recepients)
+            {
+                bufferedWriter.write(s);
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.write(getUser().getLogin());
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
     public static void saveSQLInfo()
@@ -444,7 +487,7 @@ public class Client implements Serializable {
         System.out.println("*******************************");
         pages(3);
     }
-    public void FolderDeleter(int decision)
+    public static void FolderDeleter(int decision)
     {
         if(decision == 1)
         {
@@ -502,7 +545,6 @@ public class Client implements Serializable {
                 throw new RuntimeException(e);
             }
         }
-        pages(3);
     }
     public void Folderviewer(int decision)
     {
@@ -658,7 +700,7 @@ public class Client implements Serializable {
         return draftEmails;
     }
 
-    public ArrayList<String> Mostcommonrecepeints(ArrayList<String> recepients)
+    public static ArrayList<String> Mostcommonrecepeints(ArrayList<String> recepients)
     {
         HashMap<String, Integer> frequencymap = new HashMap<>();
         for(String  str : recepients)
@@ -677,14 +719,14 @@ public class Client implements Serializable {
         return topapperances;
     }
 
-    public ArrayList<String> Indorgroupchecker (String string)
+    public static ArrayList<String> Indorgroupchecker (String string)
     {
         StringBuilder currentUser = new StringBuilder();
         ArrayList<String> Users = new ArrayList<>();
 
         for (Character c : string.toCharArray())
         {
-            if (c.equals(';'))
+            if (c.equals(','))
             {
                 Users.add(currentUser.toString().trim());
                 currentUser.setLength(0);
@@ -696,7 +738,7 @@ public class Client implements Serializable {
         }
         if(!currentUser.isEmpty())
         {
-            Users.add(currentUser.toString());
+            Users.add(currentUser.toString().trim());
         }
         return Users;
     }

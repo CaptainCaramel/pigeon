@@ -27,7 +27,7 @@ public class ToolBarController
     {
         if (!isAlreadyCreated)
         {
-            creatingWindow(event, anchorPane);
+            creatingWindow(anchorPane);
             isAlreadyCreated = true;
         }
         else
@@ -40,7 +40,7 @@ public class ToolBarController
         }
     }
 
-    public void creatingWindow(ActionEvent event, AnchorPane anchorPane)
+    public void creatingWindow(AnchorPane anchorPane)
     {
         Circle profileCircle = new Circle(60, Color.CRIMSON);
         Button profileButton = new Button("");

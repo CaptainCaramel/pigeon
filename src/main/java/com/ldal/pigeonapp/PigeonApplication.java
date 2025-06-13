@@ -30,7 +30,7 @@ public class PigeonApplication extends Application
         if(Client.getUser() != null && Client.isRememberMe())
         {
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
-            root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
+            root = FXMLLoader.load(PigeonApplication.class.getResource("/ProfileScene.fxml"));
 
             dateTimeSincer = LocalDateTimer.localDateTime();
 
