@@ -63,6 +63,11 @@ public class EmailReader implements Initializable {
 
     }
 
+    @FXML
+    private void goToComposer(ActionEvent actionEvent) throws IOException {
+        SideBarController.goToComposer(actionEvent);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         SideBarController.inboxButton = inboxButton;

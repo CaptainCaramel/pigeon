@@ -152,7 +152,7 @@ public class Client implements Serializable {
             {
                 lines.add(line.trim());
             }
-            if(lines.get(lines.size() - 1).equals(getUser().getLogin()));
+            if(lines.get(lines.size() - 1).equals(getUser().getLogin()))
             {
                 for(String s : lines)
                 {
@@ -715,6 +715,9 @@ public class Client implements Serializable {
         for(int i = 0; i < Math.min(3, sortedList.size()); i++)
         {
             topapperances.add(sortedList.get(i).getKey());
+        }
+        for(Map.Entry<String, Integer> entry : frequencymap.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
         }
         return topapperances;
     }

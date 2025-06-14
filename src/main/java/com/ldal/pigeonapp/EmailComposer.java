@@ -168,10 +168,7 @@ public class EmailComposer implements Initializable {
             Email individualEmail = new Email(Client.getUser(), sqlServer.userFromEmail(s), eText, subj);
             Client.EmailSender(individualEmail);
 
-            if (!Client.Recepients.contains(s))
-            {
-                Client.Recepients.add(s);
-            }
+            Client.Recepients.add(s);
         }
         Client.saveReceipientsInfo();
         errorText.setStyle("-fx-text-fill: green");
@@ -179,6 +176,7 @@ public class EmailComposer implements Initializable {
         receiverText.setText("");
         subjText.setText("");
         emailText.setText("");
+        recommendedUsers.recommendedUsersTab(Client.Mostcommonrecepeints(Client.Recepients), anchorPane, receiverText);
     }
 
     @Override
@@ -215,7 +213,7 @@ public class EmailComposer implements Initializable {
 
         receiverText.focusedProperty().addListener((obs, oldval, newval) ->
         {
-            if(newval)
+            if(newval && !Client.Recepients.isEmpty())
             {
                 recommendedUsers.recommendedUsersTab(Client.Mostcommonrecepeints(Client.Recepients), anchorPane, receiverText);
             }

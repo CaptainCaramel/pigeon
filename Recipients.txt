@@ -1,4 +1,2 @@
-hello@pigeon.nest
-Magda@pigeon.com
-Levani@pigeon.com
-gugena
+gugena@pigeon.com
+Magda

@@ -26,6 +26,7 @@ public class SQLServer
     private final PreparedStatement updateRecoveryPassword;
     private final PreparedStatement removeAccount;
     private final PreparedStatement getDateCreatedFromLogin;
+    private final PreparedStatement DeleteInboxFromID;
     private final Statement statement;
 
     public SQLServer()
@@ -51,6 +52,7 @@ public class SQLServer
             sendEmailNoAttachment = connection.prepareStatement("Insert into mails(senderID, receiverID, emailText, sendTime, subject) " +
                     "values(?, ?, ?, ?, ?)");
             getEmailFromID = connection.prepareStatement("select * from mails where receiverID = ? order by id desc");
+            DeleteInboxFromID = connection.prepareStatement("delete from mails where receiverID = ? and senderID = ?");
             updateRecoveryPassword = connection.prepareStatement("update user set recoveryPass = ? where login = ?");
 
         } catch (SQLException e) {
@@ -329,5 +331,17 @@ public class SQLServer
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    public void deleteInbox(int id, int id1)
+    {
+        try
+        {
+            DeleteInboxFromID.setInt(1, id);
+            DeleteInboxFromID.setInt(2, id1);
+            DeleteInboxFromID.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

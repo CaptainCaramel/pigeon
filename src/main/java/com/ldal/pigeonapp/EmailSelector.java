@@ -25,12 +25,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.KeyStore;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -78,11 +76,13 @@ public class EmailSelector implements Initializable {
     ArrayList<Email> sent;
     static ArrayList<Email> spam;
     static ArrayList<Email> deleted = new ArrayList<>();
+    ArrayList<Email> fullInbox;
 
     public ArrayList<Email> spamitout(ArrayList<Email> Inbox) {
         ArrayList<Email> spam = new ArrayList<>();
         for (Email e : Inbox) {
-            if (Client.getSpamblacklist().contains(e.getSender().getLogin())) {
+            if (Client.getSpamblacklist().contains(e.getSender().getEmail()))
+            {
                 spam.add(e);
             }
         }
@@ -155,8 +155,29 @@ public class EmailSelector implements Initializable {
             folderID = 0;
             displayFolder(inbox);
             declareText.setText("INBOX");
-            folderClearer.setText("");
-            folderClearer.setDisable(true);
+            folderClearer.setText("Clear INBOX out");
+            folderClearer.setDisable(false);
+            folderClearer.setOnAction(e ->
+            {
+                SQLServer sqlServer = new SQLServer();
+                for(int i = 0; i < fullInbox.size(); i++)
+                {
+                    for(int j = 0; j < spam.size(); j++)
+                    {
+                        boolean isInSpam = false;
+                        if(fullInbox.get(i).getSender().equals(spam.get(j).getSender()))
+                        {
+                            isInSpam = true;
+                            break;
+                        }
+                        if(!isInSpam)
+                        {
+                            sqlServer.deleteInbox(Client.getUser().getId(), inbox.get(i).getSender().getId());
+                        }
+                    }
+                }
+                refreshFolder();
+            });
         }
         if (clickedButton.equals(draftsButton)) {
             folderID = 1;
@@ -174,8 +195,13 @@ public class EmailSelector implements Initializable {
             folderID = 2;
             displayFolder(sent);
             declareText.setText("SENT");
-            folderClearer.setText("");
-            folderClearer.setDisable(true);
+            folderClearer.setText("Clear SENT out");
+            folderClearer.setDisable(false);
+            folderClearer.setOnAction(e ->
+            {
+                Client.FolderDeleter(3);
+                refreshFolder();
+            });
         }
         if (clickedButton.equals(spamButton)) {
             folderID = 3;
@@ -187,16 +213,19 @@ public class EmailSelector implements Initializable {
     }
 
     @FXML
-    public void refreshFolder() {
-        inbox = Client.getInbox();
+    public void refreshFolder()
+    {
+        fullInbox = Client.getInbox();
+        spam = spamitout(fullInbox);
+        inbox = new ArrayList<>(fullInbox);
+        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getEmail()));
+
         drafts = Client.getDrafts();
         sent = Client.getSent();
-        spam = spamitout(Client.getInbox());
 
-        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getLogin()) || deleted.contains(e));
-        drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()) || deleted.contains(e));
-        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()) || deleted.contains(e));
-        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getLogin()) || deleted.contains(e));
+        drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
+        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
+        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getEmail()));
 
         if (folderID == 0) displayFolder(inbox);
         else if (folderID == 1) displayFolder(drafts);
@@ -375,7 +404,8 @@ public class EmailSelector implements Initializable {
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
         refreshFolder();
 
         SideBarController.inboxButton = inboxButton;

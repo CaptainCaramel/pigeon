@@ -64,7 +64,7 @@ public class LoginScene implements Initializable
 
                 PigeonApplication.dateTimeSincer = LocalDateTimer.localDateTime();
 
-                Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
+                Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/ProfileScene.fxml"));
                 Scene scene = new Scene(root);
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(scene);

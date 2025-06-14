@@ -57,6 +57,7 @@ public class RecommendedUsers
         hbox.setStyle("-fx-background-color: #D8A982;");
         hbox.setLayoutX(215);
         hbox.setLayoutY(695);
+        System.out.println("Top recipients size: " + topRecepeints.size());
         for(String s : topRecepeints)
         {
             Button recepeint = new Button(s);
