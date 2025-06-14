@@ -163,6 +163,6 @@
       <Rectangle arcHeight="5.0" fill="#e17c65" height="6.0" layoutX="-64.0" layoutY="199.0" smooth="false" stroke="TRANSPARENT" strokeType="INSIDE" width="216.0" />
       <Rectangle arcHeight="5.0" fill="#e07c6557" height="6.0" layoutX="-64.0" layoutY="419.0" smooth="false" stroke="TRANSPARENT" strokeType="INSIDE" width="219.0" />
       <ChoiceBox fx:id="sorter" layoutX="163.0" layoutY="52.0" prefWidth="150.0" style="-fx-background-color: transparent; -fx-border-radius: 8;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" />
-      <Button fx:id="folderClearer" layoutX="1001.0" layoutY="53.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="274.0" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Clear INBOX out" />
+      <Button fx:id="folderClearer" layoutX="1001.0" layoutY="53.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="274.0" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" />
    </children>
 </AnchorPane>
