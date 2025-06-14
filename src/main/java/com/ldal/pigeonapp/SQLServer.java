@@ -34,6 +34,7 @@ public class SQLServer
         {
             connection = DriverManager.getConnection(url, userName, password);
             statement = connection.createStatement();
+            statement.execute("use pigeonDB");
 
             signUpStatement = connection.prepareStatement("Insert into user(login, email, hashedpass, recoverypass, dateCreated) " +
                     "values(?, ?, ?, ?, ?)");
@@ -355,5 +356,18 @@ public class SQLServer
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void deleteInbox(int id, int id1)
+    {
+        try
+        {
+            DeleteInboxFromID.setInt(1, id);
+            DeleteInboxFromID.setInt(2, id1);
+            DeleteInboxFromID.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

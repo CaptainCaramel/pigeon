@@ -130,7 +130,7 @@ public class EmailComposer implements Initializable {
         String subj = subjText.getText();
         String eText = emailText.getText();
 
-        ArrayList<String> everyReceiver = Client.Indorgroupchecker(rec);
+        ArrayList<String> everyReceiver = Client.indorGroupChecker(rec);
 
         if(subj.length() > 75)
         {
@@ -163,7 +163,7 @@ public class EmailComposer implements Initializable {
         for (String s : everyReceiver)
         {
             Email individualEmail = new Email(Client.getUser(), sqlServer.userFromEmail(s), eText, subj);
-            Client.EmailSender(individualEmail);
+            Client.emailSender(individualEmail);
 
             if (!Client.Recepients.contains(s))
             {
@@ -214,7 +214,7 @@ public class EmailComposer implements Initializable {
         {
             if(newval)
             {
-                recommendedUsers.recommendedUsersTab(Client.Mostcommonrecepeints(Client.Recepients), anchorPane, receiverText);
+                recommendedUsers.recommendedUsersTab(Client.mostCommonRecepeints(Client.Recepients), anchorPane, receiverText);
             }
         });
 

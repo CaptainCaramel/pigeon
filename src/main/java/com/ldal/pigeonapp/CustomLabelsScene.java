@@ -14,7 +14,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import javax.mail.MessagingException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;

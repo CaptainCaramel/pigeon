@@ -53,6 +53,20 @@ public class SettingsScene
             stage.setScene(scene);
         } catch (IOException e) {throw new RuntimeException(e);}
     }
+
+    @FXML
+    public void labels(ActionEvent event)
+    {
+        try
+        {
+            Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/CustomLabelsScene.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+        } catch (IOException e) {throw new RuntimeException(e);}
+    }
+
+    @FXML
     public void Backtomenu(ActionEvent event)
     {
         try

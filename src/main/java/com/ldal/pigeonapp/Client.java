@@ -324,7 +324,7 @@ public class Client implements Serializable {
         return draftEmails;
     }
 
-    public ArrayList<String> mostCommonRecepeints(ArrayList<String> recepients)
+    public static ArrayList<String> mostCommonRecepeints(ArrayList<String> recepients)
     {
         HashMap<String, Integer> frequencymap = new HashMap<>();
         for(String  str : recepients)
@@ -343,7 +343,7 @@ public class Client implements Serializable {
         return topapperances;
     }
 
-    public ArrayList<String> indorGroupChecker (String string)
+    public static ArrayList<String> indorGroupChecker(String string)
     {
         StringBuilder currentUser = new StringBuilder();
         ArrayList<String> Users = new ArrayList<>();
