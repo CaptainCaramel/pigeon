@@ -130,23 +130,21 @@ public class EmailComposer implements Initializable {
         String subj = subjText.getText();
         String eText = emailText.getText();
 
-        ArrayList<String> everyReceiver = Client.Indorgroupchecker(rec);
+        ArrayList<String> everyReceiver = Client.indorGroupChecker(rec);
 
         if(subj.length() > 75)
         {
-            errorText.setText("Subject max length(75) exceeded!");
-            errorText.setStyle("-fx-text-fill: red");
+            WarnerClass.WarnerError(errorText, "Subject max length(75) exceeded!", false);
             return;
         }
-        if(eText.length() > 75000){
-            errorText.setText("Text max length(75k) exceeded!");
-            errorText.setStyle("-fx-text-fill: red");
+        if(eText.length() > 75000)
+        {
+            WarnerClass.WarnerError(errorText, "Text max length(75k) exceeded!", false);
             return;
         }
         if(subj.isEmpty() && eText.isEmpty())
         {
-            errorText.setText("Your email must contain at least a subject or message");
-            errorText.setStyle("-fx-text-fill: red");
+            WarnerClass.WarnerError(errorText, "Your email must contain at least a subject or message", false);
             return;
         }
 
@@ -154,8 +152,7 @@ public class EmailComposer implements Initializable {
         {
             if (!sqlServer.validateUser(s))
             {
-                errorText.setText("User not found: " + s);
-                errorText.setStyle("-fx-text-fill: red");
+                WarnerClass.WarnerError(errorText, "User not found: " + s, false);
                 return;
             }
         }
@@ -163,17 +160,16 @@ public class EmailComposer implements Initializable {
         for (String s : everyReceiver)
         {
             Email individualEmail = new Email(Client.getUser(), sqlServer.userFromEmail(s), eText, subj);
-            Client.EmailSender(individualEmail);
+            Client.emailSender(individualEmail);
 
-            Client.Recepients.add(s);
+            Client.setRecepients(s);
         }
         Client.saveReceipientsInfo();
-        errorText.setStyle("-fx-text-fill: green");
-        errorText.setText("Email sent!");
+        WarnerClass.WarnerError(errorText, "Email sent", true);
         receiverText.setText("");
         subjText.setText("");
         emailText.setText("");
-        recommendedUsers.recommendedUsersTab(Client.Mostcommonrecepeints(Client.Recepients), anchorPane, receiverText);
+        recommendedUsers.recommendedUsersTab(Client.mostCommonRecepeints(Client.getRecepients()), anchorPane, receiverText);
     }
 
     @Override
@@ -210,9 +206,9 @@ public class EmailComposer implements Initializable {
 
         receiverText.focusedProperty().addListener((obs, oldval, newval) ->
         {
-            if(newval && !Client.Recepients.isEmpty())
+            if(newval && !Client.getRecepients().isEmpty())
             {
-                recommendedUsers.recommendedUsersTab(Client.Mostcommonrecepeints(Client.Recepients), anchorPane, receiverText);
+                recommendedUsers.recommendedUsersTab(Client.mostCommonRecepeints(Client.getRecepients()), anchorPane, receiverText);
             }
         });
 

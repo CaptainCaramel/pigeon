@@ -31,9 +31,6 @@ public class PigeonApplication extends Application
         {
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
             root = FXMLLoader.load(PigeonApplication.class.getResource("/ProfileScene.fxml"));
-
-            dateTimeSincer = LocalDateTimer.localDateTime();
-
             //stage.setFullScreen(true);
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/ConMenu.fxml"));
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));

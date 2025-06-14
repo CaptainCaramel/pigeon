@@ -35,8 +35,7 @@ public class SqlSetupScene
                 SQLServer.userName = username.getText();
                 SQLServer.password = password.getText();
                 SQLServer sqlServer = new SQLServer();
-                warner.setStyle("-fx-text-fill: green;");
-                warner.setText("Connection established");
+                WarnerClass.WarnerError(warner, "Connection established", true);
                 if(remmemberOfSQL.isSelected())
                 {
                     Client.saveSQLInfo();
@@ -46,14 +45,13 @@ public class SqlSetupScene
             {
                 SQLServer.userName = null;
                 SQLServer.password = null;
-                warner.setStyle("-fx-text-fill: red;");
-                warner.setText("Connection with the SQL Server failed");
+                WarnerClass.WarnerError(warner, "Connection with SQLServer failed", false);
+                e.printStackTrace();
             }
         }
         else
         {
-            warner.setStyle("-fx-text-fill: red;");
-            warner.setText("Please input your data");
+            WarnerClass.WarnerError(warner, "Please input information", false);
         }
     }
 

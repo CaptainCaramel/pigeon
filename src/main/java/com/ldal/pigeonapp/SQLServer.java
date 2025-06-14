@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class SQLServer
 {
-    String url = "jdbc:mysql://localhost:3306/sys";
+    String url = "jdbc:mysql://localhost:3306/";
     static String userName;
     static String password;
 
@@ -35,6 +35,8 @@ public class SQLServer
         {
             connection = DriverManager.getConnection(url, userName, password);
             statement = connection.createStatement();
+            dbSetup();
+            statement.execute("use pigeonDB");
 
             signUpStatement = connection.prepareStatement("Insert into user(login, email, hashedpass, recoverypass, dateCreated) " +
                     "values(?, ?, ?, ?, ?)");
@@ -69,7 +71,7 @@ public class SQLServer
                 "email varchar(50)," +
                 "hashedPass varchar(50)," +
                 "recoveryPass varchar(12)," +
-                "dateCreated dateTime," +
+                "dateCreated varchar(30)," +
                 "isAdmin bool," +
                 "isBanned bool" +
                 ")");
@@ -261,7 +263,14 @@ public class SQLServer
             getDateCreatedFromLogin.setString(1, login);
             ResultSet user = getDateCreatedFromLogin.executeQuery();
             user.next();
-            return user.getString("dateCreated");
+            if (user.next())
+            {
+                return user.getString("dateCreated");
+            }
+            else
+            {
+                return null;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
