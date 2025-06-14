@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class SignUpScene implements Initializable
@@ -63,26 +65,56 @@ public class SignUpScene implements Initializable
         }
         else
         {
-            if (User.validateEmail(email1) && User.validateLogin(username1) && User.validatePassword(password1) && !sqlServer.checkDuplicateLogin(username1))
+            if (User.validateEmail(email1) && User.validateLogin(username1) && User.validatePassword(password1) && !sqlServer.checkDuplicateLogin(username1) && !sqlServer.checkDuplicateEmail(email1))
             {
                 String recoverypass = passHasher.backuppassword();
-                sqlServer.SignUp(username1, email1 + "@pigeon.com", passHasher.hasher(password1), recoverypass);
+
+                String formatted = LocalDateTimer.localDateTime();
+
+                sqlServer.SignUp(username1, email1 + "@pigeon.nest", passHasher.hasher(password1), recoverypass, formatted);
                 warning.setText("Successfully signed up, recoverypass: " + recoverypass);
                 warning.setStyle("-fx-text-fill: green");
             }
             else if(!User.validateEmail(email1) || !User.validateLogin(username1))
             {
-                warning.setText("Invalid Login or email");
+                if(email1.length() < 4)
+                {
+                    warning.setText("Email must be over 4 characters long");
+                }
+                else if(email1.length() > 20)
+                {
+                    warning.setText("Email must be under 20 characters long");
+                }
+                else
+                {
+                    warning.setText("Email or username contains invalid characters or restricted words");
+                }
                 warning.setStyle("-fx-text-fill: red");
             }
             else if(!User.validatePassword(password1))
             {
-                warning.setText("Invalid password");
+                if(password1.length() < 8)
+                {
+                    warning.setText("password must be over 8 characters long in login");
+                }
+                else if(password1.length() > 26)
+                {
+                    warning.setText("password must be under 26 characters long ");
+                }
+                else
+                {
+                    warning.setText("Invalid character or restricted word present in username");
+                }
                 warning.setStyle("-fx-text-fill: red");
             }
             else if(sqlServer.checkDuplicateLogin(username1))
             {
                 warning.setText("Duplicate login");
+                warning.setStyle("-fx-text-fill: red");
+            }
+            else if(sqlServer.checkDuplicateEmail(email1))
+            {
+                warning.setText("Duplicate email");
                 warning.setStyle("-fx-text-fill: red");
             }
         }

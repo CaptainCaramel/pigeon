@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -41,6 +42,8 @@ public class EmailReader implements Initializable {
     @FXML
     private Button composerButton;
     @FXML
+    private Label Declareridk;
+    @FXML
     private Button drafterButton;
     ToolBarController toolBarController = new ToolBarController();
     @FXML
@@ -60,6 +63,11 @@ public class EmailReader implements Initializable {
 
     }
 
+    @FXML
+    private void goToComposer(ActionEvent actionEvent) throws IOException {
+        SideBarController.goToComposer(actionEvent);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         SideBarController.inboxButton = inboxButton;
@@ -73,7 +81,18 @@ public class EmailReader implements Initializable {
 
 
         String dateTime = email.getDateTime();
-        senderText.setText(email.getSender().getEmail());
+        if(EmailSelector.folderID != 2)
+        {
+            Declareridk.setText("From: ");
+            senderText.setText(email.getSender().getEmail());
+        }
+        else
+        {
+
+            Declareridk.setText("To: ");
+            senderText.setText(email.getReceiver().getEmail());
+        }
+
         emailText.setText(email.getText());
         subjText.setText(email.getSubject());
         if(dateTime != null)dateText.setText(dateTime.substring(0,10));

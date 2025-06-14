@@ -11,12 +11,15 @@ import javafx.stage.StageStyle;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PigeonApplication extends Application
 {
+    static String dateTimeSincer;
     @Override
     public void start(Stage stage) throws IOException
     {
@@ -27,7 +30,10 @@ public class PigeonApplication extends Application
         if(Client.getUser() != null && Client.isRememberMe())
         {
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
-            root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
+            root = FXMLLoader.load(PigeonApplication.class.getResource("/ProfileScene.fxml"));
+
+            dateTimeSincer = LocalDateTimer.localDateTime();
+
             //stage.setFullScreen(true);
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/ConMenu.fxml"));
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));

@@ -20,6 +20,7 @@ public class SideBarController {
     public static Button composerButton;
     public static Button drafterButton;
     public static Button configureButton;
+    public static Button clearerButton;
 
     public static void goToSelector(Button clickedButton) throws IOException
     {
@@ -68,7 +69,7 @@ public class SideBarController {
     }
 
     public static void initSideBar(){
-        Button[] buttons = {inboxButton, draftsButton, sentButton, spamButton, composerButton, configureButton};
+        Button[] buttons = {inboxButton, draftsButton, sentButton, spamButton, composerButton, configureButton, clearerButton};
         //ystem.out.println(Arrays.toString(buttons));
         for(Button b : buttons){
             b.setStyle("-fx-text-fill: #000000; -fx-background-color: TRANSPARENT");

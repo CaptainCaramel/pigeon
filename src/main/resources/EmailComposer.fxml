@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
@@ -98,7 +98,7 @@
                   </DropShadow>
                </effect>
             </ImageView>
-          <Button fx:id="profilebutton" mnemonicParsing="false" onAction="#profilebutton" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Configure" translateX="1090.0" />
+          <Button fx:id="configureButton" mnemonicParsing="false" onAction="#profilebutton" style="-fx-background-color: transparent;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Configure" translateX="1090.0" />
         </items>
          <effect>
             <DropShadow height="91.35" radius="22.3375" width="0.0">
@@ -108,14 +108,11 @@
             </DropShadow>
          </effect>
       </ToolBar>
-      <ScrollPane hbarPolicy="NEVER" layoutX="225.0" layoutY="211.0" prefHeight="469.0" prefWidth="959.0" style="-fx-background-color: transparent; -fx-background: transparent;">
-         <content>
-            <TextArea fx:id="emailText" prefHeight="1000.0" prefWidth="956.0" style="-fx-background-color: transparent;" stylesheets="@textAreaTransparentBG.css" wrapText="true">
-               <font>
-                  <Font name="Roboto" size="14.0" />
-               </font>
-            </TextArea>
-         </content></ScrollPane>
+      <TextArea fx:id="emailText" layoutX="223.0" layoutY="208.0" prefHeight="453.0" prefWidth="961.0" style="-fx-background-color: transparent; -fx-background: transparent;" stylesheets="@textAreaTransparentBG.css" wrapText="true">
+         <font>
+            <Font name="Roboto" size="14.0" />
+         </font>
+      </TextArea>
       <Label layoutX="656.0" layoutY="52.0" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css" text="COMPOSE">
          <font>
             <Font name="Roboto Medium" size="29.0" />
@@ -146,6 +143,9 @@
                      <HBox.margin>
                         <Insets top="2.0" />
                      </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </Label>
                   <ImageView fitHeight="24.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true" translateX="-10.0" translateY="6.0">
                      <image>
@@ -153,12 +153,18 @@
                      </image>
                      <HBox.margin>
                         <Insets />
-                     </HBox.margin></ImageView>
+                     </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></ImageView>
                </children>
             </HBox>
          </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </Button>
-      <Label fx:id="errorText" layoutX="194.0" layoutY="680.0" prefHeight="30.0" prefWidth="430.0" textFill="#d31a1a">
+      <Label fx:id="errorText" layoutX="215.0" layoutY="662.0" prefHeight="22.0" prefWidth="831.0" textFill="#d31a1a">
          <font>
             <Font name="Roboto Medium Italic" size="24.0" />
          </font>

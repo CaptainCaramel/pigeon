@@ -10,6 +10,10 @@ public class User implements Serializable
     private String email;
     private boolean isBanned;
 
+    static final String[] nonowords = {"niggas","bitch","nigga","nigger","niggers","megreli","dick","cock","pussy","cunt","genital",
+            "fuck","shit","piss","faggot","retard","andria","ass","titties","boobs","boob","tit","slut","whore","slave",
+            "cum","job","sucker","sperm","vagina"};
+
     @Serial
     private final static long serialVersionUID = 7032;
 
@@ -31,11 +35,6 @@ public class User implements Serializable
     public static boolean validateLogin(String login)
     {
         String regex1 = "[^a-zA-Z0-9_-]";
-        final String regex = "niggas|bitch|nigga|nigger|niggers|megreli|dick|cock|pussy|cunt|genital|fuck|shit|piss|faggot|retard|andria|ass|titties|boobs|boob|tit|slut|whore|slave|cum|job|sucker";
-        final String string = "niggaasas";
-        String[] nonowords = {"niggas","bitch","nigga","nigger","niggers","megreli","dick","cock","pussy","cunt","genital",
-                "fuck","shit","piss","faggot","retard","andria","ass","titties","boobs","boob","tit","slut","whore","slave",
-                "cum","job","sucker","sperm","vagina"};
         boolean valid = true;
 
         validateLoop:
@@ -67,10 +66,19 @@ public class User implements Serializable
         String regex1 = "[^a-zA-Z0-9_-]";
         boolean valid = true;
 
-
         validateLoop:
         for (int i = 0; i < email.length(); i++) {
             if((email.charAt(i) + "").matches(regex1)) {valid = false; break validateLoop;}
+        }
+
+        validateLoop1:
+        for (int i = 0; i < nonowords.length; i++)
+        {
+            if (email.toLowerCase().contains(nonowords[i]))
+            {
+                valid = false;
+                break validateLoop1;
+            }
         }
         if(valid) return email.length() >= 4 && email.length() <= 20;
         else return false;

@@ -92,8 +92,9 @@ public class Client implements Serializable {
 
             customLabels = loadedClient.savedCustomLabels;
 
-
-
+                Recepients = loadedClient.Recepients;
+                loadReceipientsInfo();
+            }
             objectInputStream.close();
 
         }catch (IOException | ClassNotFoundException | NullPointerException e){
@@ -146,6 +147,50 @@ public class Client implements Serializable {
         catch (IOException e)
         {
             return false;
+        }
+    }
+    public void loadReceipientsInfo()
+    {
+        try
+        {
+            Recepients.clear();
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath + "\\Recipients.txt"));
+            String line;
+            ArrayList<String> lines = new ArrayList<>();
+            while((line = bufferedReader.readLine()) != null)
+            {
+                lines.add(line.trim());
+            }
+            if(lines.get(lines.size() - 1).equals(getUser().getLogin()))
+            {
+                for(String s : lines)
+                {
+                    Recepients.add(s);
+                }
+                Recepients.remove(Recepients.get(Recepients.size() - 1));
+            }
+            bufferedReader.close();
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void saveReceipientsInfo()
+    {
+        try
+        {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\Recipients.txt"));
+            for(String s : Recepients)
+            {
+                bufferedWriter.write(s);
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.write(getUser().getLogin());
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
     public static void saveSQLInfo()
@@ -297,6 +342,9 @@ public class Client implements Serializable {
         {
             topapperances.add(sortedList.get(i).getKey());
         }
+        for(Map.Entry<String, Integer> entry : frequencymap.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
         return topapperances;
     }
 
@@ -307,7 +355,7 @@ public class Client implements Serializable {
 
         for (Character c : string.toCharArray())
         {
-            if (c.equals(';'))
+            if (c.equals(','))
             {
                 Users.add(currentUser.toString().trim());
                 currentUser.setLength(0);
@@ -319,7 +367,7 @@ public class Client implements Serializable {
         }
         if(!currentUser.isEmpty())
         {
-            Users.add(currentUser.toString());
+            Users.add(currentUser.toString().trim());
         }
         return Users;
     }
