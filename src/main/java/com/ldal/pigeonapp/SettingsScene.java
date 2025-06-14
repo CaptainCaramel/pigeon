@@ -54,6 +54,7 @@ public class SettingsScene
             stage.setScene(scene);
         } catch (IOException e) {throw new RuntimeException(e);}
     }
+    @FXML
     public void Backtomenu(ActionEvent event)
     {
         try

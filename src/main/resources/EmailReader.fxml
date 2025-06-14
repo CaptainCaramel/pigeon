@@ -122,7 +122,7 @@
         <items>
             <ImageView fitHeight="49.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true" scaleX="1.5" scaleY="1.5" scaleZ="1.5" translateX="25.0" translateY="15.0">
                <image>
-                  <Image url="@icon.png" />
+                  <Image url="@mainLogo.png" />
                </image>
                <effect>
                   <DropShadow height="14.66" radius="5.484999999999999" width="9.28">

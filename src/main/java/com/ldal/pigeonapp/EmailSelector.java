@@ -145,6 +145,15 @@ public class EmailSelector implements Initializable {
         SideBarController.goToComposer(actionEvent);
     }
 
+    @FXML
+    private void Faqer(ActionEvent actionEvent) throws IOException
+    {
+        Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/FAQScene.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) (emailListBox.getScene().getWindow());
+        stage.setScene(scene);
+    }
+
 
     @FXML
     private void switchFolder(ActionEvent actionEvent) {
