@@ -62,11 +62,22 @@
             <Font name="Roboto Bold" size="26.0" />
          </font>
       </PasswordField>
-      <Button layoutX="1015.0" layoutY="41.0" mnemonicParsing="false" style="-fx-background-color: #EDB388; -fx-background-radius: 8;" text="Privacy">
+      <Button layoutX="950.0" layoutY="41.0" mnemonicParsing="false" style="-fx-background-color: #EDB388; -fx-background-radius: 8;" text="Privacy">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </Button>
-      <Button fx:id="spamchanger" layoutX="1069.0" layoutY="41.0" mnemonicParsing="false" onAction="#spamchanger" style="-fx-background-color: #EDB388; -fx-background-radius: 8;" text="Spam" />
+      <Button layoutX="1069.0" layoutY="41.0" mnemonicParsing="false" onAction="#spamChanger" style="-fx-background-color: #EDB388; -fx-background-radius: 8;" text="Spam">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button layoutX="1017.0" layoutY="41.0" mnemonicParsing="false" onAction="#labels" prefHeight="25.0" prefWidth="53.0" style="-fx-background-color: #EDB388; -fx-background-radius: 8;" text="Labels">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
    </children>
 </AnchorPane>

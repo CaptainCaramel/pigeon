@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class SQLServer
 {
-    String url = "jdbc:mysql://localhost:3306/pigeonDB";
+    String url = "jdbc:mysql://localhost:3306/sys";
     static String userName;
     static String password;
 
@@ -33,6 +33,8 @@ public class SQLServer
             connection = DriverManager.getConnection(url, userName, password);
             statement = connection.createStatement();
 
+            dbSetup();
+
             signUpStatement = connection.prepareStatement("Insert into user(login, email, hashedpass, recoverypass) " +
                     "values(?, ?, ?, ?)");
 
@@ -53,6 +55,32 @@ public class SQLServer
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void dbSetup() throws SQLException {
+        statement.execute("create database if not exists pigeonDB");
+        statement.execute("use pigeonDB");
+        statement.execute("create table if not exists user(" +
+                "id int primary key auto_increment," +
+                "login varchar(20)," +
+                "email varchar(50)," +
+                "hashedPass varchar(50)," +
+                "recoveryPass varchar(12)," +
+                "dateCreated dateTime," +
+                "isAdmin bool," +
+                "isBanned bool" +
+                ")");
+        statement.execute("create table if not exists mails(" +
+                "id int primary key auto_increment," +
+                "senderID int," +
+                "receiverID int," +
+                "emailText mediumtext," +
+                "attachment mediumblob," +
+                "sendTime datetime," +
+                "subject varchar(75)," +
+                "Foreign key(senderID) references user(id)," +
+                "Foreign key(receiverID) references user(id)" +
+                ")");
     }
 
     public void sqlStatement(String query){
