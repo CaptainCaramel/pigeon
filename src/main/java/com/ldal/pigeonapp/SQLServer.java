@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class SQLServer
 {
-    String url = "jdbc:mysql://localhost:3306/pigeonDB";
+    String url = "jdbc:mysql://localhost:3306/sys";
     static String userName;
     static String password;
 
@@ -26,7 +26,6 @@ public class SQLServer
     private final PreparedStatement updateRecoveryPassword;
     private final PreparedStatement removeAccount;
     private final PreparedStatement getDateCreatedFromLogin;
-    private final PreparedStatement DeleteInboxFromID;
     private final Statement statement;
 
     public SQLServer()
@@ -52,12 +51,37 @@ public class SQLServer
             sendEmailNoAttachment = connection.prepareStatement("Insert into mails(senderID, receiverID, emailText, sendTime, subject) " +
                     "values(?, ?, ?, ?, ?)");
             getEmailFromID = connection.prepareStatement("select * from mails where receiverID = ? order by id desc");
-            DeleteInboxFromID = connection.prepareStatement("delete from mails where receiverID = ? and senderID = ?");
             updateRecoveryPassword = connection.prepareStatement("update user set recoveryPass = ? where login = ?");
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void dbSetup() throws SQLException {
+        statement.execute("create database if not exists pigeonDB");
+        statement.execute("use pigeonDB");
+        statement.execute("create table if not exists user(" +
+                "id int primary key auto_increment," +
+                "login varchar(20)," +
+                "email varchar(50)," +
+                "hashedPass varchar(50)," +
+                "recoveryPass varchar(12)," +
+                "dateCreated dateTime," +
+                "isAdmin bool," +
+                "isBanned bool" +
+                ")");
+        statement.execute("create table if not exists mails(" +
+                "id int primary key auto_increment," +
+                "senderID int," +
+                "receiverID int," +
+                "emailText mediumtext," +
+                "attachment mediumblob," +
+                "sendTime datetime," +
+                "subject varchar(75)," +
+                "Foreign key(senderID) references user(id)," +
+                "Foreign key(receiverID) references user(id)" +
+                ")");
     }
 
     public void sqlStatement(String query){
@@ -331,17 +355,5 @@ public class SQLServer
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-    public void deleteInbox(int id, int id1)
-    {
-        try
-        {
-            DeleteInboxFromID.setInt(1, id);
-            DeleteInboxFromID.setInt(2, id1);
-            DeleteInboxFromID.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 }

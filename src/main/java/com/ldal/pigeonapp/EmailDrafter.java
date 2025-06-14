@@ -128,7 +128,7 @@ public class EmailDrafter implements Initializable {
         Email email = new Email(Client.getUser(), sqlServer.userFromEmail(rec), eText, subj);
 
 
-        Client.EmailSender(email);
+        Client.emailSender(email);
         errorText.setText("*Email sent!");
         receiverText.setText("");
         subjText.setText("");

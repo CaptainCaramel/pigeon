@@ -42,9 +42,8 @@ public class SettingsScene
             Client.setRememberMe(Client.isRememberMe());
         }
     }
-
     @FXML
-    public void spamchanger(ActionEvent event)
+    public void spamChanger(ActionEvent event)
     {
         try
         {
@@ -54,7 +53,6 @@ public class SettingsScene
             stage.setScene(scene);
         } catch (IOException e) {throw new RuntimeException(e);}
     }
-    @FXML
     public void Backtomenu(ActionEvent event)
     {
         try

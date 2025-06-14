@@ -2,7 +2,6 @@ package com.ldal.pigeonapp;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
@@ -14,13 +13,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 public class EmailComposer implements Initializable {
     @FXML
@@ -168,7 +165,10 @@ public class EmailComposer implements Initializable {
             Email individualEmail = new Email(Client.getUser(), sqlServer.userFromEmail(s), eText, subj);
             Client.EmailSender(individualEmail);
 
-            Client.Recepients.add(s);
+            if (!Client.Recepients.contains(s))
+            {
+                Client.Recepients.add(s);
+            }
         }
         Client.saveReceipientsInfo();
         errorText.setStyle("-fx-text-fill: green");
@@ -176,7 +176,6 @@ public class EmailComposer implements Initializable {
         receiverText.setText("");
         subjText.setText("");
         emailText.setText("");
-        recommendedUsers.recommendedUsersTab(Client.Mostcommonrecepeints(Client.Recepients), anchorPane, receiverText);
     }
 
     @Override
@@ -213,7 +212,7 @@ public class EmailComposer implements Initializable {
 
         receiverText.focusedProperty().addListener((obs, oldval, newval) ->
         {
-            if(newval && !Client.Recepients.isEmpty())
+            if(newval)
             {
                 recommendedUsers.recommendedUsersTab(Client.Mostcommonrecepeints(Client.Recepients), anchorPane, receiverText);
             }

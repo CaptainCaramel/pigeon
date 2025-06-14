@@ -47,11 +47,17 @@
             <Font name="Roboto Bold" size="20.0" />
          </font>
       </Button>
-      <Button layoutX="1015.0" layoutY="41.0" mnemonicParsing="false" onAction="#private1" style="-fx-background-color: #EDB388; -fx-background-radius: 8;" text="Privacy" />
+      <Button layoutX="950.0" layoutY="41.0" mnemonicParsing="false" onAction="#private1" prefHeight="25.0" prefWidth="59.0" style="-fx-background-color: #EDB388; -fx-background-radius: 8;" text="Privacy">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
       <Button fx:id="spamchanger" layoutX="1069.0" layoutY="41.0" mnemonicParsing="false" style="-fx-background-color: #EDB388; -fx-background-radius: 8;" text="Spam">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </Button>
       <Button fx:id="spamRemover" layoutX="647.0" layoutY="422.0" mnemonicParsing="false" onAction="#spamRemove" opacity="0.82" prefHeight="42.0" prefWidth="159.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Remove">
          <cursor>
@@ -67,5 +73,10 @@
             <Font name="Roboto Bold" size="26.0" />
          </font>
       </TextField>
+      <Button layoutX="1018.0" layoutY="41.0" mnemonicParsing="false" onAction="#labels" prefHeight="25.0" prefWidth="51.0" style="-fx-background-color: #EDB388; -fx-background-radius: 8;" text="Labels">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
    </children>
 </AnchorPane>
