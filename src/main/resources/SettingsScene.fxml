@@ -11,17 +11,17 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ldal.pigeonapp.SettingsScene">
    <children>
-      <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="720.0" fitWidth="1280.0" layoutX="-7.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@settingsBG.png" />
          </image>
       </ImageView>
-      <Label layoutX="521.0" layoutY="165.0" styleClass="custom-font" stylesheets="@styleforROBOTO.css" text="Privacy">
+      <Label layoutX="525.0" layoutY="102.0" styleClass="custom-font" stylesheets="@styleforROBOTO.css" text="Privacy">
          <font>
             <Font name="Roboto Bold" size="69.0" />
          </font>
       </Label>
-      <Label layoutX="560.0" layoutY="248.0" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Change password">
+      <Label layoutX="291.0" layoutY="236.0" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Change password">
          <font>
             <Font name="Roboto Bold" size="19.0" />
          </font>
@@ -39,7 +39,7 @@
             <Font name="Follow The Arrow" size="22.0" />
          </font>
       </Button>
-      <Button fx:id="loginbutton" layoutX="561.0" layoutY="513.0" mnemonicParsing="false" onAction="#changepassword" opacity="0.82" prefHeight="42.0" prefWidth="159.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Proceed">
+      <Button fx:id="loginbutton" layoutX="288.0" layoutY="519.0" mnemonicParsing="false" onAction="#changepassword" opacity="0.82" prefHeight="42.0" prefWidth="159.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Proceed">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -47,17 +47,17 @@
             <Font name="Roboto Bold" size="20.0" />
          </font>
       </Button>
-      <PasswordField fx:id="currentpassword" layoutX="446.0" layoutY="278.0" opacity="0.47" prefHeight="52.0" prefWidth="388.0" promptText="Current password" style="-fx-background-radius: 12;" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css">
+      <PasswordField fx:id="currentpassword" layoutX="173.0" layoutY="277.0" opacity="0.47" prefHeight="52.0" prefWidth="388.0" promptText="Current password" style="-fx-background-radius: 12;" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css">
          <font>
             <Font name="Roboto Bold" size="26.0" />
          </font>
       </PasswordField>
-      <PasswordField fx:id="newpassword" layoutX="446.0" layoutY="384.0" opacity="0.47" prefHeight="52.0" prefWidth="388.0" promptText="New password" style="-fx-background-radius: 12;" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css">
+      <PasswordField fx:id="newpassword" layoutX="173.0" layoutY="383.0" opacity="0.47" prefHeight="52.0" prefWidth="388.0" promptText="New password" style="-fx-background-radius: 12;" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css">
          <font>
             <Font name="Roboto Bold" size="26.0" />
          </font>
       </PasswordField>
-      <PasswordField fx:id="newpasswordconf" layoutX="446.0" layoutY="445.0" opacity="0.47" prefHeight="52.0" prefWidth="388.0" promptText="Confirm new password" style="-fx-background-radius: 12;" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css">
+      <PasswordField fx:id="newpasswordconf" layoutX="173.0" layoutY="444.0" opacity="0.47" prefHeight="52.0" prefWidth="388.0" promptText="Confirm new password" style="-fx-background-radius: 12;" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css">
          <font>
             <Font name="Roboto Bold" size="26.0" />
          </font>
@@ -78,6 +78,37 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
+      </Button>
+      <Label layoutX="852.0" layoutY="236.0" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Link Gmail">
+         <font>
+            <Font name="Roboto Bold" size="19.0" />
+         </font>
+      </Label>
+      <PasswordField fx:id="gmailInput" layoutX="703.0" layoutY="277.0" opacity="0.47" prefHeight="52.0" prefWidth="277.0" promptText="Gmail address" style="-fx-background-radius: 12;" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css">
+         <font>
+            <Font name="Roboto Bold" size="26.0" />
+         </font>
+      </PasswordField>
+      <PasswordField fx:id="verifInput" layoutX="703.0" layoutY="383.0" opacity="0.47" prefHeight="52.0" prefWidth="388.0" promptText="Verification code" style="-fx-background-radius: 12;" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css">
+         <font>
+            <Font name="Roboto Bold" size="26.0" />
+         </font>
+      </PasswordField>
+      <Button fx:id="loginbutton1" layoutX="818.0" layoutY="454.0" mnemonicParsing="false" onAction="#changepassword" opacity="0.82" prefHeight="42.0" prefWidth="159.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Link">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font name="Roboto Bold" size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="loginbutton11" layoutX="958.0" layoutY="277.0" mnemonicParsing="false" onAction="#changepassword" opacity="0.82" prefHeight="52.0" prefWidth="140.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Send Code">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font name="Roboto Bold" size="20.0" />
+         </font>
       </Button>
    </children>
 </AnchorPane>

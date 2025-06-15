@@ -72,6 +72,7 @@ public class SQLServer
                 "hashedPass varchar(50)," +
                 "recoveryPass varchar(12)," +
                 "dateCreated varchar(30)," +
+                "gmailRecovery varchar(255)," +
                 "isAdmin bool," +
                 "isBanned bool" +
                 ")");
