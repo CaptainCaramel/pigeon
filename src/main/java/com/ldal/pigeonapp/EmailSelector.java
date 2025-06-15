@@ -192,18 +192,18 @@ public class EmailSelector implements Initializable {
                 SQLServer sqlServer = new SQLServer();
                 for(int i = 0; i < fullInbox.size(); i++)
                 {
+                    boolean isInSpam = false;
                     for(int j = 0; j < spam.size(); j++)
                     {
-                        boolean isInSpam = false;
                         if(fullInbox.get(i).getSender().equals(spam.get(j).getSender()))
                         {
                             isInSpam = true;
                             break;
                         }
-                        if(!isInSpam)
-                        {
-                            sqlServer.deleteInbox(Client.getUser().getId(), inbox.get(i).getSender().getId());
-                        }
+                    }
+                    if(!isInSpam)
+                    {
+                        sqlServer.deleteInbox(Client.getUser().getId(), fullInbox.get(i).getSender().getId());
                     }
                 }
                 refreshFolder();
@@ -262,29 +262,92 @@ public class EmailSelector implements Initializable {
         inbox = new ArrayList<>(fullInbox);
         sortToLabels(fullInbox);
         spam = spamitout(fullInbox);
-        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getEmail()));
+        inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getEmail()) || Client.getBlockedblacklist().contains(e.getSender().getEmail()));
 
         drafts = Client.getDrafts();
         sent = Client.getSent();
 
         drafts.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
-        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
-        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getEmail()));
+        sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()) || Client.getBlockedblacklist().contains(e.getReceiver().getEmail()));
+        spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getEmail()) || Client.getBlockedblacklist().contains(e.getSender().getEmail()));
 
         displayFolder();
     }
 
     private void displayFolder()
     {
-        if (folderID == 0) displayFolder(inbox);
-        else if (folderID == 1) displayFolder(drafts);
-        else if (folderID == 2) displayFolder(sent);
-        else if (folderID == 3) displayFolder(spam);
+        if (folderID == 0)
+        {
+            displayFolder(inbox);
+            folderClearer.setText("Clear INBOX out");
+            folderClearer.setDisable(false);
+            folderClearer.setOnAction(e ->
+            {
+                System.out.println("yle");
+                SQLServer sqlServer = new SQLServer();
+                for(int i = 0; i < fullInbox.size(); i++)
+                {
+                    for(int j = 0; j < spam.size(); j++)
+                    {
+                        boolean isInSpam = false;
+                        if(fullInbox.get(i).getSender().equals(spam.get(j).getSender()))
+                        {
+                            isInSpam = true;
+                            break;
+                        }
+                        if(!isInSpam)
+                        {
+                            sqlServer.deleteInbox(Client.getUser().getId(), inbox.get(i).getSender().getId());
+                        }
+                    }
+                }
+                refreshFolder();
+            });
+        }
+        else if (folderID == 1)
+        {
+            folderClearer.setText("Clear DRAFT out");
+            folderClearer.setDisable(false);
+            folderClearer.setOnAction(e ->
+            {
+                Client.FolderDeleter(2);
+                refreshFolder();
+            });
+            displayFolder(drafts);
+        }
+        else if (folderID == 2)
+        {
+            displayFolder(sent);
+            folderClearer.setText("Clear SENT out");
+            folderClearer.setDisable(false);
+            folderClearer.setOnAction(e ->
+            {
+                Client.FolderDeleter(3);
+                refreshFolder();
+            });
+        }
+        else if (folderID == 3)
+        {
+            displayFolder(spam);
+            folderClearer.setText("");
+            folderClearer.setDisable(true);
+        }
         else if (folderID > 3){
             displayFolder(customLabelsArr.get(folderID - 4));
         }
     }
 
+    @FXML
+    private void Faqer(ActionEvent event)
+    {
+        try
+        {
+            Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/FAQScene.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+        } catch (IOException e) {throw new RuntimeException(e);}
+    }
 
     private void displayFolder(ArrayList<Email> folder) {
         sorter.setCursor(Cursor.HAND);

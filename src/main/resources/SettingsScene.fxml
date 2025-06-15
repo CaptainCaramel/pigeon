@@ -70,7 +70,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button layoutX="1069.0" layoutY="41.0" mnemonicParsing="false" onAction="#spamChanger" style="-fx-background-color: #EDB388; -fx-background-radius: 8;" text="Spam">
+      <Button layoutX="1069.0" layoutY="41.0" mnemonicParsing="false" onAction="#spamChanger" style="-fx-background-color: #EDB388; -fx-background-radius: 8;" text="Filter">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>

@@ -22,23 +22,30 @@ public class Client implements Serializable {
 
 
     private static ArrayList<String> spamblacklist = new ArrayList<>();
-    public static ArrayList<String> Recepients = new ArrayList<>();
+    private static ArrayList<String> Recepients = new ArrayList<>();
+    private static ArrayList<String> blockedblacklist = new ArrayList<>();
+
 
     private static ArrayList<CustomLabel> customLabels;
     private ArrayList<CustomLabel> savedCustomLabels;
 
     public static ArrayList<String> getSpamblacklist() {return spamblacklist;}
-    public ArrayList<String> savedspamblacklist;
+    public static ArrayList<String> getBlockedblacklist() {return blockedblacklist;}
+    public static ArrayList<String> getRecepients() {return Recepients;}
 
 
     public static void setSpamblacklist(String user)
     {
         spamblacklist.add(user);
     }
+    public static void setBlockedblacklist(String user) { blockedblacklist.add(user); }
+    public static void setRecepients(String user) { spamblacklist.add(user); }
     public static void removeSpamblacklist(String user)
     {
         spamblacklist.removeIf(s -> s.equals(user));
     }
+    public static void removeBlockedblacklist(String user) { blockedblacklist.removeIf(s -> s.equals(user)); }
+    public static void removeRecepients(String user) { Recepients.removeIf(s -> s.equals(user)); }
 
     public Client()
     {
@@ -86,6 +93,7 @@ public class Client implements Serializable {
     {
         try{
             loadSpamblacklist();
+            loadBlocklist();
             ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filePath + "\\settings.txt")));
             Client loadedClient = (Client)objectInputStream.readObject();
             rememberMe = loadedClient.savedRememberMe;
@@ -111,13 +119,46 @@ public class Client implements Serializable {
 
     public static void loadSpamblacklist()
     {
+        File spamFile = new File(filePath + "\\spamusers.txt");
+        if (!spamFile.exists()) {
+            try {
+                spamFile.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         try
         {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath + "\\spamusers.txt"));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(spamFile));
+
             String line;
             while ((line = bufferedReader.readLine()) != null)
             {
                 spamblacklist.add(line.trim());
+            }
+            bufferedReader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void loadBlocklist()
+    {
+        File blockedfile = new File(filePath + "\\blockedusers.txt");
+        if (!blockedfile.exists()) {
+            try {
+                blockedfile.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        try
+        {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(blockedfile));
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                blockedblacklist.add(line.trim());
             }
             bufferedReader.close();
         } catch (IOException e) {
@@ -130,6 +171,21 @@ public class Client implements Serializable {
         {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\spamusers.txt"));
             for(String user : spamblacklist)
+            {
+                bufferedWriter.write(user);
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void saveBlocklist()
+    {
+        try
+        {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\blockedusers.txt"));
+            for(String user : blockedblacklist)
             {
                 bufferedWriter.write(user);
                 bufferedWriter.newLine();

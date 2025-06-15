@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 public class SignUpScene implements Initializable
 {
     private PassHasher passHasher;
-    private SQLServer sqlServer;
+    private SQLServer sqlServer = new SQLServer();
 
     private User user;
     @FXML
@@ -36,7 +36,7 @@ public class SignUpScene implements Initializable
     public Label warning;
     @FXML
     public Button back;
-
+    String error;
     @FXML
     private void SignUpAction(ActionEvent event)
     {
@@ -60,8 +60,7 @@ public class SignUpScene implements Initializable
 
         if (username1.isEmpty() || password1.isEmpty() || email1.isEmpty())
         {
-            warning.setStyle("-fx-text-fill: red");
-            warning.setText("*Please input your data");
+            WarnerClass.WarnerError(warning, "Please input your data", false);
         }
         else
         {
@@ -73,49 +72,49 @@ public class SignUpScene implements Initializable
 
                 sqlServer.SignUp(username1, email1 + "@pigeon.nest", passHasher.hasher(password1), recoverypass, formatted);
                 warning.setText("Successfully signed up, recoverypass: " + recoverypass);
-                warning.setStyle("-fx-text-fill: green");
+                WarnerClass.WarnerError(warning, "Successfully signed up, recoverypass: " + recoverypass, true);
             }
             else if(!User.validateEmail(email1) || !User.validateLogin(username1))
             {
                 if(email1.length() < 4)
                 {
-                    warning.setText("Email must be over 4 characters long");
+                    error = "Email must be over 4 characters long";
+                    WarnerClass.WarnerError(warning, "Email must be over 4 characters long", false);
                 }
                 else if(email1.length() > 20)
                 {
-                    warning.setText("Email must be under 20 characters long");
+                    error = "Email must be under 20 characters long";
                 }
                 else
                 {
-                    warning.setText("Email or username contains invalid characters or restricted words");
+                    error = "Email or username contains invalid characters or restricted words";
                 }
-                warning.setStyle("-fx-text-fill: red");
+                WarnerClass.WarnerError(warning, error, false);
             }
             else if(!User.validatePassword(password1))
             {
+                String error;
                 if(password1.length() < 8)
                 {
-                    warning.setText("password must be over 8 characters long in login");
+                    error = "password must be over 8 characters long in login";
                 }
                 else if(password1.length() > 26)
                 {
-                    warning.setText("password must be under 26 characters long ");
+                    error = "password must be under 26 characters long";
                 }
                 else
                 {
-                    warning.setText("Invalid character or restricted word present in username");
+                    error = "Invalid character or restricted word present in username";
                 }
-                warning.setStyle("-fx-text-fill: red");
+                WarnerClass.WarnerError(warning, error, false);
             }
             else if(sqlServer.checkDuplicateLogin(username1))
             {
-                warning.setText("Duplicate login");
-                warning.setStyle("-fx-text-fill: red");
+                WarnerClass.WarnerError(warning, "Duplicate login", false);
             }
             else if(sqlServer.checkDuplicateEmail(email1))
             {
-                warning.setText("Duplicate email");
-                warning.setStyle("-fx-text-fill: red");
+                WarnerClass.WarnerError(warning, "Duplicate email", false);
             }
         }
     }
