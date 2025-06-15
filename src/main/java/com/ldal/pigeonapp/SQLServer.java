@@ -7,9 +7,11 @@ import java.util.ArrayList;
 
 public class SQLServer
 {
-    String url = "jdbc:mysql://localhost:3306/sys";
+    String url = "jdbc:mysql://localhost:3306/";
     static String userName;
     static String password;
+
+    PassHasher passHasher = new PassHasher();
 
     private Connection connection;
     private final PreparedStatement signUpStatement;
@@ -27,6 +29,9 @@ public class SQLServer
     private final PreparedStatement removeAccount;
     private final PreparedStatement getDateCreatedFromLogin;
     private final PreparedStatement DeleteInboxFromID;
+    private final PreparedStatement setGmailFromLogin;
+    private final PreparedStatement checkGmailFromLogin;
+    private final PreparedStatement getGmailFromLogin;
     private final Statement statement;
 
     public SQLServer()
@@ -35,12 +40,15 @@ public class SQLServer
         {
             connection = DriverManager.getConnection(url, userName, password);
             statement = connection.createStatement();
+            //dbRemover();
+            dbSetup();
+            //statement.execute("use pigeonDB");
 
             signUpStatement = connection.prepareStatement("Insert into user(login, email, hashedpass, recoverypass, dateCreated) " +
                     "values(?, ?, ?, ?, ?)");
 
             checkLogin = connection.prepareStatement("Select id from user where login = ?");
-            checkEmail = connection.prepareStatement("Select id from user where email = ?");
+            checkEmail = connection.prepareStatement("Select gmailRecovery from user where login = ?");
             checkBackupPassword = connection.prepareStatement("Select recoveryPass from user where login = ?");
             checkPassword = connection.prepareStatement("Select hashedPass from user where login = ?");
             getUserFromLogin = connection.prepareStatement("Select * from user where login = ?");
@@ -52,12 +60,51 @@ public class SQLServer
             sendEmailNoAttachment = connection.prepareStatement("Insert into mails(senderID, receiverID, emailText, sendTime, subject) " +
                     "values(?, ?, ?, ?, ?)");
             getEmailFromID = connection.prepareStatement("select * from mails where receiverID = ? order by id desc");
+            checkGmailFromLogin = connection.prepareStatement("select gmailRecovery from user where login = ?");
             DeleteInboxFromID = connection.prepareStatement("delete from mails where receiverID = ? and senderID = ?");
             updateRecoveryPassword = connection.prepareStatement("update user set recoveryPass = ? where login = ?");
+            setGmailFromLogin = connection.prepareStatement("update user set gmailRecovery = ? where login = ?");
+            getGmailFromLogin = connection.prepareStatement("select gmailRecovery from user where login = ?");
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean checkerGmail(String login)
+    {
+        try
+        {
+            checkGmailFromLogin.setString(1, login);
+            ResultSet resultSet = checkGmailFromLogin.executeQuery();
+            if(resultSet.next())
+            {
+                String gmail = resultSet.getString("gmailRecovery");
+                if(gmail != null && !gmail.isEmpty()) return true;
+                else return false;
+            }
+            else return false;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getterGmail(String login)
+    {
+        try
+        {
+            getGmailFromLogin.setString(1, login);
+            ResultSet dbResult = getGmailFromLogin.executeQuery();
+            dbResult.next();
+            return dbResult.getString("gmailRecovery");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void dbRemover() throws SQLException
+    {
+        statement.execute("drop database pigeonDB");
     }
 
     private void dbSetup() throws SQLException {
@@ -67,9 +114,10 @@ public class SQLServer
                 "id int primary key auto_increment," +
                 "login varchar(20)," +
                 "email varchar(50)," +
-                "hashedPass varchar(50)," +
+                "hashedPass mediumtext," +
                 "recoveryPass varchar(12)," +
-                "dateCreated dateTime," +
+                "dateCreated varchar(30)," +
+                "gmailRecovery varchar(255)," +
                 "isAdmin bool," +
                 "isBanned bool" +
                 ")");
@@ -100,7 +148,7 @@ public class SQLServer
     {
         try
         {
-            updateRecoveryPassword.setString(1, recoverypass);
+            updateRecoveryPassword.setString(1, passHasher.hasher(recoverypass));
             updateRecoveryPassword.setString(2, login);
             updateRecoveryPassword.executeUpdate();
         } catch (SQLException e) {throw new RuntimeException(e);}
@@ -137,10 +185,11 @@ public class SQLServer
        {
            checkBackupPassword.setString(1, login);
            ResultSet dbResult = checkBackupPassword.executeQuery();
-           dbResult.next();
-           System.out.println("recoveryPass: " + recoveryPass);
-           System.out.println("recoveryPass from user: " + dbResult.getString("recoveryPass"));
-           return recoveryPass.matches(dbResult.getString("recoveryPass"));
+           if (dbResult.next())
+           {
+               return passHasher.hasher(recoveryPass).equals(dbResult.getString("recoveryPass"));
+           }
+           return false;
        } catch (SQLException e) {throw new RuntimeException(e);}
    }
 
@@ -259,9 +308,15 @@ public class SQLServer
         try
         {
             getDateCreatedFromLogin.setString(1, login);
-            ResultSet user = getDateCreatedFromLogin.executeQuery();
-            user.next();
-            return user.getString("dateCreated");
+            ResultSet user = getDateCreatedFromLogin.executeQuery();;
+            if (user.next())
+            {
+                return user.getString("dateCreated");
+            }
+            else
+            {
+                return null;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -369,5 +424,16 @@ public class SQLServer
             throw new RuntimeException(e);
         }
 
+    }
+    public void setGmail(String gmail, String login)
+    {
+        try
+        {
+            setGmailFromLogin.setString(1, gmail);
+            setGmailFromLogin.setString(2, login);
+            setGmailFromLogin.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

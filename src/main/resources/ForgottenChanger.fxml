@@ -27,7 +27,7 @@
             <Font name="Roboto Bold" size="19.0" />
          </font>
       </Label>
-      <Label fx:id="warner1" layoutX="448.0" layoutY="591.0" prefHeight="21.0" prefWidth="635.0" textFill="#ff1414">
+      <Label fx:id="warner1" layoutX="449.0" layoutY="591.0" prefHeight="21.0" prefWidth="635.0" textFill="#ff1414">
          <font>
             <Font size="15.0" />
          </font>
@@ -73,5 +73,14 @@
             <Font name="Roboto Bold" size="19.0" />
          </font>
       </Label>
+      <Button layoutX="817.0" layoutY="243.0" mnemonicParsing="false" onAction="#codeSender" opacity="0.82" prefHeight="52.0" prefWidth="159.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Send Code">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font name="Roboto Bold" size="20.0" />
+         </font>
+      </Button>
+      <Label fx:id="warner2" layoutX="760.0" layoutY="228.0" text="Alternative: Send new recovery password to this login" />
    </children>
 </AnchorPane>

@@ -24,6 +24,16 @@ public class SettingsScene
     SQLServer sqlServer = new SQLServer();
     @FXML
     private Label warner;
+    @FXML
+    private TextField gmailer;
+    @FXML
+    private TextField verificationCoder;
+    @FXML
+    private Label warning;
+    private boolean hasSentCode = false;
+    String confcode;
+    String error;
+    String recoverypass;
 
     @FXML
     public void changepassword(ActionEvent event)
@@ -77,5 +87,42 @@ public class SettingsScene
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
         } catch (IOException e) {throw new RuntimeException(e);}
+    }
+
+
+    public void codeSender(ActionEvent event)
+    {
+        if(gmailer.getText().isEmpty())
+        {
+            WarnerClass.WarnerError(warning, "Please input information", false);
+        }
+        else
+        {
+            WarnerClass.WarnerError(warning, "If your gmail is valid you should receiver your code", true);
+            confcode = passHasher.backuppassword();
+            GMAILEmailsender.EmailSender(gmailer.getText(), "", confcode, 1, "");
+            hasSentCode = true;
+        }
+    }
+
+    public void linkUp(ActionEvent event)
+    {
+        if(!hasSentCode)
+        {
+            WarnerClass.WarnerError(warner, "Please send the code first", false);
+        }
+        else
+        {
+            if(confcode.equals(verificationCoder.getText()))
+            {
+                sqlServer.setGmail(gmailer.getText(), Client.getUser().getLogin());
+                WarnerClass.WarnerError(warning, "Your gmail is linked up!", true);
+                GMAILEmailsender.EmailSender(gmailer.getText(), "", "", 2, Client.getUser().getLogin());
+            }
+            else
+            {
+                WarnerClass.WarnerError(warning, "Verification code is incorrect", false);
+            }
+        }
     }
 }

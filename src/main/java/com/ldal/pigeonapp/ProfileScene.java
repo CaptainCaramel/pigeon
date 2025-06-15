@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class ProfileScene implements Initializable
@@ -81,6 +82,6 @@ public class ProfileScene implements Initializable
         IdDeclarer.setText("Account ID: " + Client.getUser().getId());
         String dateCreated = sqlServer.getDateCreatedFromID(Client.getUser().getLogin());
         dateCreatedDeclarer.setText("Date Created: " + dateCreated);
-        lastLogedinDeclarer.setText("Logged In Since: " + PigeonApplication.dateTimeSincer);
+        lastLogedinDeclarer.setText("Logged In Since: " + LocalDateTimer.localDateTime());
     }
 }

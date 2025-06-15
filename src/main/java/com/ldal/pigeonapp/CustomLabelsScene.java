@@ -14,7 +14,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import javax.mail.MessagingException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -89,17 +88,17 @@ public class CustomLabelsScene implements Initializable {
         if(!email.isEmpty() && Client.getSQLServer().validateEmail(email) && !currLabel.emails.contains(email))
         {
             currLabel.emails.add(email);
-            warner.setText(email + " added to this label");
+            WarnerClass.WarnerError(warner, email + " added to this label", true);
             client.saveSettings();
             switchLabel();
         }
         else if(email.isEmpty() || !Client.getSQLServer().validateLogin(email))
         {
-            warner.setText("Invalid user");
+            WarnerClass.WarnerError(warner, "Invalid user", false);
         }
         else
         {
-            warner.setText("User already in this label");
+            WarnerClass.WarnerError(warner, "User already in this label", false);
         }
     }
 
@@ -109,17 +108,17 @@ public class CustomLabelsScene implements Initializable {
         if(!email.isEmpty() && Client.getSQLServer().validateEmail(email) && currLabel.emails.contains(email))
         {
             currLabel.emails.removeIf(e ->(e.equals(email)));
-            warner.setText(email + " removed from this label");
+            WarnerClass.WarnerError(warner, email + " removed from this label", true);
             switchLabel();
 
         }
         else if(email.isEmpty() || !Client.getSQLServer().validateLogin(email))
         {
-            warner.setText("Invalid user");
+            WarnerClass.WarnerError(warner, "Invalid user", false);
         }
         else
         {
-            warner.setText("User not in this label");
+            WarnerClass.WarnerError(warner, "User not in this label", false);
         }
     }
 

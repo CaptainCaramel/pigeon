@@ -29,6 +29,9 @@ public class ForgottenChanger
     private Label warner1;
     SQLServer sqlServer = new SQLServer();
     PassHasher passHasher = new PassHasher();
+    String newRecoverypass;
+    @FXML
+    private Label warner2;
 
     @FXML
     public void Backtomenu(ActionEvent event) throws IOException
@@ -39,22 +42,49 @@ public class ForgottenChanger
         stage.setScene(scene);
     }
 
+    @FXML
     public void changepassword(ActionEvent event)
     {
         if(sqlServer.validateLogin(loginer.getText()) && sqlServer.validateRecoveryPass(loginer.getText(), backuppassword.getText()) && newpasswordconf.getText().equals(newpassword.getText()))
         {
             sqlServer.changePassword(passHasher.hasher(newpassword.getText()), loginer.getText());
-            warner.setStyle("-fx-text-fill: green");
-            String newRecoverypass = passHasher.backuppassword();
+            newRecoverypass = passHasher.backuppassword();
             sqlServer.changeRecoverypass(newRecoverypass, loginer.getText());
-            warner.setText("Password changed successfully");
-            warner1.setStyle("-fx-text-fill: green");
-            warner1.setText("new recoverypass: " + newRecoverypass);
+            WarnerClass.WarnerError(warner, "Password changed successfully", true);
+            WarnerClass.WarnerError(warner1, "new recoverypass: " + newRecoverypass, true);
         }
         else
         {
-            warner.setStyle("-fx-text-fill: red");
-            warner.setText("Invalid Information");
+            WarnerClass.WarnerError(warner, "Invalid information", false);
+        }
+    }
+
+    @FXML
+    public void codeSender(ActionEvent event)
+    {
+        if(loginer.getText().isEmpty())
+        {
+            WarnerClass.WarnerError(warner2, "Please input information", false);
+            return;
+        }
+
+        if(!sqlServer.validateLogin(loginer.getText()))
+        {
+            WarnerClass.WarnerError(warner2, "Invalid user", false);
+            return;
+        }
+        else if(!sqlServer.checkerGmail(loginer.getText()))
+        {
+            WarnerClass.WarnerError(warner2, "Account does not have gmail linked", false);
+            return;
+        }
+        else if(sqlServer.checkerGmail(loginer.getText()))
+        {
+            String newRecoveryPassword = passHasher.backuppassword();
+            System.out.println(newRecoveryPassword);
+            sqlServer.changeRecoverypass(newRecoveryPassword, loginer.getText());
+            GMAILEmailsender.EmailSender(sqlServer.getterGmail(loginer.getText()), newRecoveryPassword, "", 3,"");
+            WarnerClass.WarnerError(warner2, "Email Sent", true);
         }
     }
 }

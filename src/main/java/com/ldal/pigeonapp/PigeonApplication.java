@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,14 +25,12 @@ public class PigeonApplication extends Application
         Scene scene;
         Parent root;
         if(Client.loadSQLInfo()) Client.loadSQLInfo();
-        if(SQLServer.password != null && SQLServer.userName != null) new Client();
+        if(SQLServer.password != null && SQLServer.userName != null) new SQLServer();
+        new Client();
         if(Client.getUser() != null && Client.isRememberMe())
         {
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
             root = FXMLLoader.load(PigeonApplication.class.getResource("/ProfileScene.fxml"));
-
-            dateTimeSincer = LocalDateTimer.localDateTime();
-
             //stage.setFullScreen(true);
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/ConMenu.fxml"));
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
@@ -54,7 +51,6 @@ public class PigeonApplication extends Application
         stage.getIcons().add(icon);
         stage.show();
     }
-
 
     public static void main(String[] args)
     {

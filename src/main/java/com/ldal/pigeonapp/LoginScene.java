@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 public class LoginScene implements Initializable
 {
     private PassHasher passHasher;
-    private SQLServer sqlServer;
+    private SQLServer sqlServer = new SQLServer();
     @FXML
     public Button loginbutton;
     @FXML
@@ -44,19 +44,17 @@ public class LoginScene implements Initializable
         String password1 = password.getText();
 
         if (username1.isEmpty() || password1.isEmpty()) {
-            warning.setText("Please input your data");
+            WarnerClass.WarnerError(warning, "Please input information", false);
         } else
         {
             if (!sqlServer.validateLogin(username1) || !sqlServer.validatePassword(username1, passHasher.hasher(password1)))
             {
-                warning.setStyle("-fx-text-fill: red");
-                warning.setText("Invalid username or password!");
+                WarnerClass.WarnerError(warning, "Invalid information", false);
                 return;
             }
             else
             {
-                warning.setStyle("-fx-text-fill: green");
-                warning.setText("Login successful!");
+                WarnerClass.WarnerError(warning, "Login successful", true);
 
                 Client.login(username1);
                 client.saveSettings();
@@ -101,6 +99,5 @@ public class LoginScene implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         passHasher = new PassHasher();
-        sqlServer = Client.getSQLServer();
     }
 }

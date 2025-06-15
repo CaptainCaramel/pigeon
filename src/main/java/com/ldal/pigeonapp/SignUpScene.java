@@ -4,12 +4,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,22 +27,37 @@ import java.util.ResourceBundle;
 public class SignUpScene implements Initializable
 {
     private PassHasher passHasher;
-    private SQLServer sqlServer;
+    private SQLServer sqlServer = new SQLServer();
 
     private User user;
     @FXML
-    public Button SignUpbutton;
+    private Button SignUpbutton;
     @FXML
-    public TextField username;
+    private TextField username;
     @FXML
-    public TextField password;
+    private TextField password;
     @FXML
-    public TextField email;
+    private TextField email;
     @FXML
-    public Label warning;
+    private Label warning;
     @FXML
-    public Button back;
-
+    private Button back;
+    @FXML
+    private TextField recoveryemail;
+    @FXML
+    private AnchorPane anchorPane;
+    @FXML
+    private AnchorPane linkGmailAnchorPane;
+    @FXML
+    private TextField gmailer;
+    @FXML
+    private TextField verificationCoder;
+    @FXML
+    private Label warner;
+    private boolean hasSentCode = false;
+    String confcode;
+    String error;
+    String recoverypass;
     @FXML
     private void SignUpAction(ActionEvent event)
     {
@@ -60,62 +81,63 @@ public class SignUpScene implements Initializable
 
         if (username1.isEmpty() || password1.isEmpty() || email1.isEmpty())
         {
-            warning.setStyle("-fx-text-fill: red");
-            warning.setText("*Please input your data");
+            WarnerClass.WarnerError(warning, "Please input your data", false);
         }
         else
         {
             if (User.validateEmail(email1) && User.validateLogin(username1) && User.validatePassword(password1) && !sqlServer.checkDuplicateLogin(username1) && !sqlServer.checkDuplicateEmail(email1))
             {
-                String recoverypass = passHasher.backuppassword();
+                recoverypass = passHasher.backuppassword();
 
                 String formatted = LocalDateTimer.localDateTime();
 
                 sqlServer.SignUp(username1, email1 + "@pigeon.nest", passHasher.hasher(password1), recoverypass, formatted);
                 warning.setText("Successfully signed up, recoverypass: " + recoverypass);
-                warning.setStyle("-fx-text-fill: green");
+                WarnerClass.WarnerError(warning, "Successfully signed up, recoverypass: " + recoverypass, true);
+
+                linkGmailAnchorPane.setVisible(true);
             }
             else if(!User.validateEmail(email1) || !User.validateLogin(username1))
             {
                 if(email1.length() < 4)
                 {
-                    warning.setText("Email must be over 4 characters long");
+                    error = "Email must be over 4 characters long";
+                    WarnerClass.WarnerError(warning, "Email must be over 4 characters long", false);
                 }
                 else if(email1.length() > 20)
                 {
-                    warning.setText("Email must be under 20 characters long");
+                    error = "Email must be under 20 characters long";
                 }
                 else
                 {
-                    warning.setText("Email or username contains invalid characters or restricted words");
+                    error = "Email or username contains invalid characters or restricted words";
                 }
-                warning.setStyle("-fx-text-fill: red");
+                WarnerClass.WarnerError(warning, error, false);
             }
             else if(!User.validatePassword(password1))
             {
+                String error;
                 if(password1.length() < 8)
                 {
-                    warning.setText("password must be over 8 characters long in login");
+                    error = "password must be over 8 characters long in login";
                 }
                 else if(password1.length() > 26)
                 {
-                    warning.setText("password must be under 26 characters long ");
+                    error = "password must be under 26 characters long";
                 }
                 else
                 {
-                    warning.setText("Invalid character or restricted word present in username");
+                    error = "Invalid character or restricted word present in username";
                 }
-                warning.setStyle("-fx-text-fill: red");
+                WarnerClass.WarnerError(warning, error, false);
             }
             else if(sqlServer.checkDuplicateLogin(username1))
             {
-                warning.setText("Duplicate login");
-                warning.setStyle("-fx-text-fill: red");
+                WarnerClass.WarnerError(warning, "Duplicate login", false);
             }
             else if(sqlServer.checkDuplicateEmail(email1))
             {
-                warning.setText("Duplicate email");
-                warning.setStyle("-fx-text-fill: red");
+                WarnerClass.WarnerError(warning, "Duplicate email", false);
             }
         }
     }
@@ -123,6 +145,46 @@ public class SignUpScene implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         passHasher = new PassHasher();
-        sqlServer = Client.getSQLServer();
+        linkGmailAnchorPane.setVisible(false);
+    }
+
+    public void codeSender(ActionEvent event)
+    {
+        if(gmailer.getText().isEmpty())
+        {
+            WarnerClass.WarnerError(warner, "Please input information", false);
+        }
+        else
+        {
+            WarnerClass.WarnerError(warner, "If your gmail is valid you should receiver your code", true);
+            confcode = passHasher.backuppassword();
+            GMAILEmailsender.EmailSender(gmailer.getText(), "", confcode, 1, "");
+            hasSentCode = true;
+        }
+    }
+
+    public void linkUp(ActionEvent event)
+    {
+        if(!hasSentCode)
+        {
+            WarnerClass.WarnerError(warner, "Please send the code first", false);
+        }
+        else
+        {
+            if(confcode.equals(verificationCoder.getText()))
+            {
+                WarnerClass.WarnerError(warner, "Your gmail is linked up!", true);
+                sqlServer.setGmail(gmailer.getText(), username.getText());
+                GMAILEmailsender.EmailSender(gmailer.getText(), recoverypass, "", 0, username.getText());
+            }
+            else if(verificationCoder.getText().isEmpty())
+            {
+                WarnerClass.WarnerError(warner, "Please input the verification code", false);
+            }
+            else
+            {
+                WarnerClass.WarnerError(warner, "Verification code is incorrect", false);
+            }
+        }
     }
 }

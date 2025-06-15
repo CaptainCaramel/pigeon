@@ -22,23 +22,31 @@ public class Client implements Serializable {
 
 
     private static ArrayList<String> spamblacklist = new ArrayList<>();
-    public static ArrayList<String> Recepients = new ArrayList<>();
+    private static ArrayList<String> Recepients = new ArrayList<>();
+    private static ArrayList<String> blockedblacklist = new ArrayList<>();
+
 
     private static ArrayList<CustomLabel> customLabels;
     private ArrayList<CustomLabel> savedCustomLabels;
 
     public static ArrayList<String> getSpamblacklist() {return spamblacklist;}
-    public ArrayList<String> savedspamblacklist;
+    public static ArrayList<String> getBlockedblacklist() {return blockedblacklist;}
+    public static ArrayList<String> getRecepients() {return Recepients;}
 
 
     public static void setSpamblacklist(String user)
     {
         spamblacklist.add(user);
     }
+    public static void setBlockedblacklist(String user) { blockedblacklist.add(user); }
+    public static void setRecepients(String user) { Recepients.add(user); }
     public static void removeSpamblacklist(String user)
     {
         spamblacklist.removeIf(s -> s.equals(user));
     }
+    public static void removeBlockedblacklist(String user) { blockedblacklist.removeIf(s -> s.equals(user)); }
+    public static void removeRecepients(String user) { Recepients.removeIf(s -> s.equals(user)); }
+
     public Client()
     {
         if (!loadSettings())
@@ -67,21 +75,25 @@ public class Client implements Serializable {
                 }
             }
 
-        }catch (IOException e){
+        }catch (IOException e)
+        {
             throw new RuntimeException(e);
         }
         sqlServer = new SQLServer();
         CustomLabel.setLabelAmount(customLabels.size());
     }
 
+
     public static ArrayList<CustomLabel> getCustomLabels() {
         if(customLabels == null) return new ArrayList<>();
         return customLabels;
     }
 
-    public boolean loadSettings(){
+    public boolean loadSettings()
+    {
         try{
             loadSpamblacklist();
+            loadBlocklist();
             ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filePath + "\\settings.txt")));
             Client loadedClient = (Client)objectInputStream.readObject();
             rememberMe = loadedClient.savedRememberMe;
@@ -92,12 +104,13 @@ public class Client implements Serializable {
 
             customLabels = loadedClient.savedCustomLabels;
 
-                Recepients = loadedClient.Recepients;
-                loadReceipientsInfo();
-            }
+            Recepients = loadedClient.Recepients;
+            loadReceipientsInfo();
             objectInputStream.close();
 
-        }catch (IOException | ClassNotFoundException | NullPointerException e){
+        }
+        catch (IOException | ClassNotFoundException | NullPointerException e)
+    {
             e.printStackTrace();
             return false;
         }
@@ -106,13 +119,46 @@ public class Client implements Serializable {
 
     public static void loadSpamblacklist()
     {
+        File spamFile = new File(filePath + "\\spamusers.txt");
+        if (!spamFile.exists()) {
+            try {
+                spamFile.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         try
         {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath + "\\spamusers.txt"));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(spamFile));
+
             String line;
             while ((line = bufferedReader.readLine()) != null)
             {
                 spamblacklist.add(line.trim());
+            }
+            bufferedReader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void loadBlocklist()
+    {
+        File blockedfile = new File(filePath + "\\blockedusers.txt");
+        if (!blockedfile.exists()) {
+            try {
+                blockedfile.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        try
+        {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(blockedfile));
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                blockedblacklist.add(line.trim());
             }
             bufferedReader.close();
         } catch (IOException e) {
@@ -125,6 +171,21 @@ public class Client implements Serializable {
         {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\spamusers.txt"));
             for(String user : spamblacklist)
+            {
+                bufferedWriter.write(user);
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void saveBlocklist()
+    {
+        try
+        {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\blockedusers.txt"));
+            for(String user : blockedblacklist)
             {
                 bufferedWriter.write(user);
                 bufferedWriter.newLine();
@@ -225,7 +286,8 @@ public class Client implements Serializable {
         user = sqlServer.logIn(username);
     }
 
-    public static void emailDrafter(Email email){
+    public static void emailDrafter(Email email)
+    {
         try
         {
             ArrayList<Email> drafts = getDrafts();
@@ -260,7 +322,8 @@ public class Client implements Serializable {
                 ArrayList<Email> sents = getSent();
 
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filePath + "\\Sent.txt")));
-                for(Email e : sents) {
+                for(Email e : sents)
+                {
                     objectOutputStream.writeObject(e);
                 }
                 objectOutputStream.writeObject(email);
@@ -280,20 +343,23 @@ public class Client implements Serializable {
             return sqlServer.getInbox(user.getId());
     }
 
-    public static ArrayList<Email> getDrafts() {
+    public static ArrayList<Email> getDrafts()
+    {
         ArrayList<Email> draftEmails = new ArrayList<>();
         try
         {
             ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filePath + "\\Draft.txt")));
 
             Email cEmail = (Email) objectInputStream.readObject();
-            while(cEmail != null){
+            while(cEmail != null)
+            {
                 draftEmails.add(cEmail);
                 cEmail = (Email) objectInputStream.readObject();
             }
 
         }
-        catch (EOFException eof){
+        catch (EOFException eof)
+        {
             System.out.println("Drafts read!");
         }
         catch (IOException | ClassNotFoundException e)
@@ -310,13 +376,15 @@ public class Client implements Serializable {
             ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filePath + "\\Sent.txt")));
 
             Email cEmail = (Email) objectInputStream.readObject();
-            while(cEmail != null){
+            while(cEmail != null)
+            {
                 draftEmails.add(cEmail);
                 cEmail = (Email) objectInputStream.readObject();
             }
 
         }
-        catch (EOFException eof){
+        catch (EOFException eof)
+        {
             System.out.println("Sents read!");
         }
         catch (IOException | ClassNotFoundException e)
@@ -326,7 +394,7 @@ public class Client implements Serializable {
         return draftEmails;
     }
 
-    public ArrayList<String> mostCommonRecepeints(ArrayList<String> recepients)
+    public static ArrayList<String> mostCommonRecepeints(ArrayList<String> recepients)
     {
         HashMap<String, Integer> frequencymap = new HashMap<>();
         for(String  str : recepients)
@@ -348,7 +416,7 @@ public class Client implements Serializable {
         return topapperances;
     }
 
-    public ArrayList<String> indorGroupChecker (String string)
+    public static ArrayList<String> indorGroupChecker(String string)
     {
         StringBuilder currentUser = new StringBuilder();
         ArrayList<String> Users = new ArrayList<>();
@@ -370,6 +438,46 @@ public class Client implements Serializable {
             Users.add(currentUser.toString().trim());
         }
         return Users;
+    }
+
+    public static void FolderDeleter(int decision) {
+        if (decision == 1) {
+            try {
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\Spam.txt"));
+                bufferedWriter.write("");
+                System.out.println("Spam folder cleared out");
+                bufferedWriter.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (decision == 2) {
+            try {
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\Draft.txt"));
+                bufferedWriter.write("");
+                System.out.println("Draft folder cleared out");
+                bufferedWriter.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (decision == 3) {
+            try {
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\Sent.txt"));
+                bufferedWriter.write("");
+                System.out.println("Sent folder cleared out");
+                bufferedWriter.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (decision == 4) {
+            try {
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath + "\\Inbox.txt"));
+                bufferedWriter.write("");
+                System.out.println("Inbox folder cleared out");
+                bufferedWriter.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public static User getUser() {

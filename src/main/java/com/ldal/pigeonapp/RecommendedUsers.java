@@ -77,7 +77,7 @@ public class RecommendedUsers
                 }
                 else
                 {
-                    receiver.setText(receiver.getText() + "," + s);
+                    receiver.setText(receiver.getText() + ", " + s);
                 }
             });
         }
