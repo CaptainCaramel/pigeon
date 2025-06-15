@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -53,7 +54,7 @@ public class EmailSelector implements Initializable {
     @FXML
     private AnchorPane anchorPane;
     @FXML
-    private VBox sideBarVbox;
+    private VBox labelsVbox;
     @FXML
     private ChoiceBox<String> sorter;
     @FXML
@@ -77,6 +78,7 @@ public class EmailSelector implements Initializable {
     static ArrayList<Email> spam;
     static ArrayList<Email> deleted = new ArrayList<>();
     ArrayList<Email> fullInbox;
+    ArrayList<ArrayList<Email>> customLabelsArr = new ArrayList<>();
 
     public ArrayList<Email> spamitout(ArrayList<Email> Inbox) {
         ArrayList<Email> spam = new ArrayList<>();
@@ -87,6 +89,19 @@ public class EmailSelector implements Initializable {
             }
         }
         return spam;
+    }
+
+    private void sortToLabels(ArrayList<Email> inbox){
+        ArrayList<CustomLabel> customLabels = Client.getCustomLabels();
+        for(CustomLabel c : customLabels){
+            ArrayList<Email> labelArr = new ArrayList<>();
+            for(Email e : inbox){
+                if(c.emails.contains(e.getSender().getEmail())){
+                    labelArr.add(e);
+                }
+            }
+            customLabelsArr.add(labelArr);
+        }
     }
 
     @FXML
@@ -106,6 +121,16 @@ public class EmailSelector implements Initializable {
         } else if (folderID == 3) {
             folder = spam;
             declareText.setText("SPAM");
+        } else if (folderID > 3){
+
+            ArrayList<Button> cLabelButtons = SideBarController.labelButtons;
+            int i;
+            for (i = 0; i < cLabelButtons.size(); i++) {
+                if (cLabelButtons.get(i).equals(clickedButton)) break;
+            }
+
+            folderID = 4 + i;
+            declareText.setText(Client.getCustomLabels().get(i).getLabelName().toUpperCase());
         }
 
         for (int i = 0; i < eButtons.size(); i++) {
@@ -145,11 +170,16 @@ public class EmailSelector implements Initializable {
         SideBarController.goToComposer(actionEvent);
     }
 
+    @FXML
+    private void goToLabels(ActionEvent actionEvent) throws IOException {
+        SideBarController.goToLabels((Button)actionEvent.getSource());
+    }
+
 
     @FXML
     private void switchFolder(ActionEvent actionEvent) {
         eButtons.clear();
-
+        ArrayList<Button> cLabelButtons = SideBarController.labelButtons;
         Button clickedButton = (Button) actionEvent.getSource();
         if (clickedButton.equals(inboxButton)) {
             folderID = 0;
@@ -179,7 +209,7 @@ public class EmailSelector implements Initializable {
                 refreshFolder();
             });
         }
-        if (clickedButton.equals(draftsButton)) {
+        else if (clickedButton.equals(draftsButton)) {
             folderID = 1;
             displayFolder(drafts);
             declareText.setText("DRAFTS");
@@ -191,7 +221,7 @@ public class EmailSelector implements Initializable {
                 refreshFolder();
             });
         }
-        if (clickedButton.equals(sentButton)) {
+        else if (clickedButton.equals(sentButton)) {
             folderID = 2;
             displayFolder(sent);
             declareText.setText("SENT");
@@ -203,12 +233,25 @@ public class EmailSelector implements Initializable {
                 refreshFolder();
             });
         }
-        if (clickedButton.equals(spamButton)) {
+        else if (clickedButton.equals(spamButton)) {
             folderID = 3;
             displayFolder(spam);
             declareText.setText("SPAM");
             folderClearer.setText("");
             folderClearer.setDisable(true);
+        }
+        else if (cLabelButtons.contains(clickedButton)){
+            int i;
+            for (i = 0; i < cLabelButtons.size(); i++) {
+                if (cLabelButtons.get(i).equals(clickedButton)) break;
+            }
+
+            folderID = 4 + i;
+            displayFolder(customLabelsArr.get(i));
+            declareText.setText(Client.getCustomLabels().get(i).getLabelName().toUpperCase());
+            folderClearer.setText("");
+            folderClearer.setDisable(true);
+
         }
     }
 
@@ -216,8 +259,9 @@ public class EmailSelector implements Initializable {
     public void refreshFolder()
     {
         fullInbox = Client.getInbox();
-        spam = spamitout(fullInbox);
         inbox = new ArrayList<>(fullInbox);
+        sortToLabels(fullInbox);
+        spam = spamitout(fullInbox);
         inbox.removeIf(e -> Client.getSpamblacklist().contains(e.getSender().getEmail()));
 
         drafts = Client.getDrafts();
@@ -227,10 +271,7 @@ public class EmailSelector implements Initializable {
         sent.removeIf(e -> !e.getSender().getLogin().equals(Client.getUser().getLogin()));
         spam.removeIf(e -> !Client.getSpamblacklist().contains(e.getSender().getEmail()));
 
-        if (folderID == 0) displayFolder(inbox);
-        else if (folderID == 1) displayFolder(drafts);
-        else if (folderID == 2) displayFolder(sent);
-        else if (folderID == 3) displayFolder(spam);
+        displayFolder();
     }
 
     private void displayFolder()
@@ -239,6 +280,9 @@ public class EmailSelector implements Initializable {
         else if (folderID == 1) displayFolder(drafts);
         else if (folderID == 2) displayFolder(sent);
         else if (folderID == 3) displayFolder(spam);
+        else if (folderID > 3){
+            displayFolder(customLabelsArr.get(folderID - 4));
+        }
     }
 
 
@@ -415,6 +459,7 @@ public class EmailSelector implements Initializable {
         SideBarController.composerButton = composerButton;
         SideBarController.configureButton = configureButton;
         SideBarController.clearerButton = folderClearer;
+        SideBarController.labelsVbox = labelsVbox;
 
         SideBarController.inboxButton.setCursor(Cursor.HAND);
         SideBarController.draftsButton.setCursor(Cursor.HAND);

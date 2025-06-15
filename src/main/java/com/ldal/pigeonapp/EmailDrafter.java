@@ -44,6 +44,11 @@ public class EmailDrafter implements Initializable {
     private VBox sideBarVbox;
 
     @FXML
+    private void goToLabels(ActionEvent actionEvent) throws IOException {
+        SideBarController.goToLabels((Button)actionEvent.getSource());
+    }
+
+    @FXML
     private AnchorPane carefulAnchorPane;
 
     private int goToFolder = 0;

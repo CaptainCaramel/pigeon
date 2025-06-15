@@ -46,7 +46,7 @@ public class EmailComposer implements Initializable {
     private Label errorText;
 
     @FXML
-    private VBox sideBarVbox;
+    private VBox labelsVbox;
 
     @FXML
     private AnchorPane carefulAnchorPane;
@@ -123,6 +123,11 @@ public class EmailComposer implements Initializable {
     }
 
     @FXML
+    private void goToLabels(ActionEvent actionEvent) throws IOException {
+        SideBarController.goToLabels((Button)actionEvent.getSource());
+    }
+
+    @FXML
     private void sendEmail(ActionEvent actionEvent){
         SQLServer sqlServer = new SQLServer();
 
@@ -130,7 +135,7 @@ public class EmailComposer implements Initializable {
         String subj = subjText.getText();
         String eText = emailText.getText();
 
-        ArrayList<String> everyReceiver = Client.Indorgroupchecker(rec);
+        ArrayList<String> everyReceiver = Client.indorGroupChecker(rec);
 
         if(subj.length() > 75)
         {
@@ -163,7 +168,7 @@ public class EmailComposer implements Initializable {
         for (String s : everyReceiver)
         {
             Email individualEmail = new Email(Client.getUser(), sqlServer.userFromEmail(s), eText, subj);
-            Client.EmailSender(individualEmail);
+            Client.emailSender(individualEmail);
 
             Client.Recepients.add(s);
         }
@@ -173,7 +178,7 @@ public class EmailComposer implements Initializable {
         receiverText.setText("");
         subjText.setText("");
         emailText.setText("");
-        recommendedUsers.recommendedUsersTab(Client.Mostcommonrecepeints(Client.Recepients), anchorPane, receiverText);
+        recommendedUsers.recommendedUsersTab(Client.mostCommonRecepeints(Client.Recepients), anchorPane, receiverText);
     }
 
     @Override
@@ -185,6 +190,7 @@ public class EmailComposer implements Initializable {
         SideBarController.spamButton = spamButton;
         SideBarController.composerButton = composerButton;
         SideBarController.configureButton = configureButton;
+        SideBarController.labelsVbox = labelsVbox;
 
         SideBarController.inboxButton.setCursor(Cursor.HAND);
         SideBarController.draftsButton.setCursor(Cursor.HAND);
@@ -212,7 +218,7 @@ public class EmailComposer implements Initializable {
         {
             if(newval && !Client.Recepients.isEmpty())
             {
-                recommendedUsers.recommendedUsersTab(Client.Mostcommonrecepeints(Client.Recepients), anchorPane, receiverText);
+                recommendedUsers.recommendedUsersTab(Client.mostCommonRecepeints(Client.Recepients), anchorPane, receiverText);
             }
         });
 

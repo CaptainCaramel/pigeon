@@ -35,6 +35,7 @@ public class SQLServer
         {
             connection = DriverManager.getConnection(url, userName, password);
             statement = connection.createStatement();
+            statement.execute("use pigeonDB");
 
             signUpStatement = connection.prepareStatement("Insert into user(login, email, hashedpass, recoverypass, dateCreated) " +
                     "values(?, ?, ?, ?, ?)");
@@ -370,4 +371,6 @@ public class SQLServer
         }
 
     }
+
+
 }

@@ -68,6 +68,11 @@ public class EmailReader implements Initializable {
         SideBarController.goToComposer(actionEvent);
     }
 
+    @FXML
+    private void goToLabels(ActionEvent actionEvent) throws IOException {
+        SideBarController.goToLabels((Button)actionEvent.getSource());
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         SideBarController.inboxButton = inboxButton;

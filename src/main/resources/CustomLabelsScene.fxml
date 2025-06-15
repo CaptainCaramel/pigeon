@@ -16,7 +16,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ldal.pigeonapp.CustomLabelsScene">
    <children>
-      <ImageView fitHeight="720.0" fitWidth="1281.0" layoutY="-6.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="720.0" fitWidth="1281.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@settingsBG.png" />
          </image>
@@ -111,7 +111,7 @@
             <Font name="Follow The Arrow" size="22.0" />
          </font>
       </Button>
-      <AnchorPane fx:id="newLabelContextMenu" disable="true" layoutX="764.0" layoutY="180.0" prefHeight="191.0" prefWidth="388.0" visible="false">
+      <AnchorPane fx:id="newLabelContextMenu" layoutX="764.0" layoutY="211.0" prefHeight="191.0" prefWidth="388.0">
          <children>
             <Rectangle fill="#e4715a" height="145.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 30; -fx-arc-width: 30;" width="336.0">
                <effect>

@@ -29,24 +29,16 @@ public class PigeonApplication extends Application
         if(SQLServer.password != null && SQLServer.userName != null) new Client();
         if(Client.getUser() != null && Client.isRememberMe())
         {
-            //root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
             root = FXMLLoader.load(PigeonApplication.class.getResource("/ProfileScene.fxml"));
-
             dateTimeSincer = LocalDateTimer.localDateTime();
-
-            //stage.setFullScreen(true);
-            //root = FXMLLoader.load(PigeonApplication.class.getResource("/ConMenu.fxml"));
-            //root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
         }
         else
         {
-            //root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
             root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
-            //stage.setFullScreen(true);
-            //root = FXMLLoader.load(PigeonApplication.class.getResource("/ConMenu.fxml"));
-            //root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
+
         }
 
+        stage.setResizable(false);
         scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Pigeon");
