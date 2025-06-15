@@ -52,7 +52,6 @@ public class SettingsScene
             Client.setRememberMe(Client.isRememberMe());
         }
     }
-
     @FXML
     public void spamChanger(ActionEvent event)
     {

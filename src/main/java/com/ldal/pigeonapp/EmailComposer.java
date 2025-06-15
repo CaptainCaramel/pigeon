@@ -46,7 +46,7 @@ public class EmailComposer implements Initializable {
     private Label errorText;
 
     @FXML
-    private VBox sideBarVbox;
+    private VBox labelsVbox;
 
     @FXML
     private AnchorPane carefulAnchorPane;
@@ -123,6 +123,11 @@ public class EmailComposer implements Initializable {
     }
 
     @FXML
+    private void goToLabels(ActionEvent actionEvent) throws IOException {
+        SideBarController.goToLabels((Button)actionEvent.getSource());
+    }
+
+    @FXML
     private void sendEmail(ActionEvent actionEvent){
         SQLServer sqlServer = new SQLServer();
 
@@ -181,6 +186,7 @@ public class EmailComposer implements Initializable {
         SideBarController.spamButton = spamButton;
         SideBarController.composerButton = composerButton;
         SideBarController.configureButton = configureButton;
+        SideBarController.labelsVbox = labelsVbox;
 
         SideBarController.inboxButton.setCursor(Cursor.HAND);
         SideBarController.draftsButton.setCursor(Cursor.HAND);
