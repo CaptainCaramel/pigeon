@@ -63,5 +63,9 @@
             <Font name="Roboto Medium" size="29.0" />
          </font>
       </Label>
+      <Label fx:id="SplashScreenTexter" layoutX="710.0" layoutY="-20.0" prefHeight="346.0" prefWidth="570.0" rotate="15.3">
+         <font>
+            <Font size="36.0" />
+         </font></Label>
    </children>
 </AnchorPane>

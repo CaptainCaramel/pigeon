@@ -29,6 +29,7 @@ public class PigeonApplication extends Application
         new Client();
         if(Client.getUser() != null && Client.isRememberMe())
         {
+
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/LoginScene.fxml"));
             root = FXMLLoader.load(PigeonApplication.class.getResource("/ProfileScene.fxml"));
             //stage.setFullScreen(true);
@@ -44,6 +45,7 @@ public class PigeonApplication extends Application
             //root = FXMLLoader.load(PigeonApplication.class.getResource("/EmailSelector.fxml"));
         }
 
+        stage.setResizable(false);
         scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Pigeon");
