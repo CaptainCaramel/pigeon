@@ -80,10 +80,12 @@ public class ForgottenChanger
         }
         else if(sqlServer.checkerGmail(loginer.getText()))
         {
-            String newRecoveryPassword = passHasher.backuppassword();
-            System.out.println(newRecoveryPassword);
-            sqlServer.changeRecoverypass(newRecoveryPassword, loginer.getText());
-            GMAILEmailsender.EmailSender(sqlServer.getterGmail(loginer.getText()), newRecoveryPassword, "", 3,"");
+            new Thread(() ->
+            {
+                String newRecoveryPassword = passHasher.backuppassword();
+                sqlServer.changeRecoverypass(newRecoveryPassword, loginer.getText());
+                GMAILEmailsender.EmailSender(sqlServer.getterGmail(loginer.getText()), newRecoveryPassword, "", 3,"");
+            }).start();
             WarnerClass.WarnerError(warner2, "Email Sent", true);
         }
     }

@@ -97,10 +97,14 @@ public class SettingsScene
         }
         else
         {
+            new Thread(() ->
+            {
+                confcode = passHasher.backuppassword();
+                GMAILEmailsender.EmailSender(gmailer.getText(), "", confcode, 1, "");
+                hasSentCode = true;
+            }).start();
+
             WarnerClass.WarnerError(warning, "If your gmail is valid you should receiver your code", true);
-            confcode = passHasher.backuppassword();
-            GMAILEmailsender.EmailSender(gmailer.getText(), "", confcode, 1, "");
-            hasSentCode = true;
         }
     }
 
@@ -114,9 +118,12 @@ public class SettingsScene
         {
             if(confcode.equals(verificationCoder.getText()))
             {
-                sqlServer.setGmail(gmailer.getText(), Client.getUser().getLogin());
+                new Thread(() ->
+                {
+                    sqlServer.setGmail(gmailer.getText(), Client.getUser().getLogin());
+                    GMAILEmailsender.EmailSender(gmailer.getText(), "", "", 2, Client.getUser().getLogin());
+                }).start();
                 WarnerClass.WarnerError(warning, "Your gmail is linked up!", true);
-                GMAILEmailsender.EmailSender(gmailer.getText(), "", "", 2, Client.getUser().getLogin());
             }
             else
             {

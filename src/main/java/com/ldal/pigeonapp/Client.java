@@ -13,7 +13,7 @@ public class Client implements Serializable {
     @Serial
     private static final long serialVersionUID = 2309L;
 
-    private static final String filePath = new File("").getAbsolutePath();
+    private static final String filePath = "C:\\Users\\User\\Documents\\Pigeon\\pigeon\\out\\artifacts\\PigeonApp_jar";
 
     private static SQLServer sqlServer = null;
 
@@ -214,8 +214,18 @@ public class Client implements Serializable {
     {
         try
         {
+            File recipientsFile = new File(filePath + "\\Recipients.txt");
+            if (!recipientsFile.exists()) {
+                try {
+                    recipientsFile.createNewFile();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
             Recepients.clear();
             BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath + "\\Recipients.txt"));
+
             String line;
             ArrayList<String> lines = new ArrayList<>();
             while((line = bufferedReader.readLine()) != null)

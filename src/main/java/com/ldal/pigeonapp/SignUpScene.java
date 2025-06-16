@@ -156,10 +156,13 @@ public class SignUpScene implements Initializable
         }
         else
         {
+            new Thread(() ->
+            {
+                confcode = passHasher.backuppassword();
+                GMAILEmailsender.EmailSender(gmailer.getText(), "", confcode, 1, "");
+                hasSentCode = true;
+            }).start();
             WarnerClass.WarnerError(warner, "If your gmail is valid you should receiver your code", true);
-            confcode = passHasher.backuppassword();
-            GMAILEmailsender.EmailSender(gmailer.getText(), "", confcode, 1, "");
-            hasSentCode = true;
         }
     }
 
@@ -173,9 +176,12 @@ public class SignUpScene implements Initializable
         {
             if(confcode.equals(verificationCoder.getText()))
             {
+                new Thread(() ->
+                {
+                    sqlServer.setGmail(gmailer.getText(), username.getText());
+                    GMAILEmailsender.EmailSender(gmailer.getText(), recoverypass, "", 0, username.getText());
+                }).start();
                 WarnerClass.WarnerError(warner, "Your gmail is linked up!", true);
-                sqlServer.setGmail(gmailer.getText(), username.getText());
-                GMAILEmailsender.EmailSender(gmailer.getText(), recoverypass, "", 0, username.getText());
             }
             else if(verificationCoder.getText().isEmpty())
             {

@@ -113,6 +113,9 @@
                      </children>
                   </HBox>
                </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Button>
          </children></VBox>
       <Rectangle fill="#e17c65" height="730.0" layoutX="151.0" layoutY="-10.0" stroke="TRANSPARENT" strokeType="INSIDE" width="6.0" />

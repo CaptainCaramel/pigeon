@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -92,17 +93,13 @@
             <Font name="Roboto Bold" size="20.0" />
          </font>
       </Button>
-      <PasswordField fx:id="gmailer" layoutX="736.0" layoutY="288.0" opacity="0.47" prefHeight="52.0" prefWidth="230.0" promptText="Gmail" style="-fx-background-radius: 12;" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css">
-         <font>
-            <Font name="Roboto Bold" size="26.0" />
-         </font>
-      </PasswordField>
       <PasswordField fx:id="verificationCoder" layoutX="736.0" layoutY="388.0" opacity="0.47" prefHeight="52.0" prefWidth="388.0" promptText="Verification Code" style="-fx-background-radius: 12;" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css">
          <font>
             <Font name="Roboto Bold" size="26.0" />
          </font>
       </PasswordField>
       <Label layoutX="736.0" layoutY="271.0" text="This will re-write your gmail if you have already linked it" textFill="WHITE" />
+      <TextField fx:id="gmailer" layoutX="736.0" layoutY="289.0" opacity="0.47" prefWidth="230.0" promptText="Gmail" style="-fx-background-radius: 12;" styleClass="custom-font-smaller" stylesheets="@styleforROBOTO.css" />
       <Button layoutX="954.0" layoutY="288.0" mnemonicParsing="false" onAction="#codeSender" opacity="0.82" prefHeight="52.0" prefWidth="159.0" style="-fx-background-radius: 10; -fx-background-color: #de7259;" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="Send Code">
          <cursor>
             <Cursor fx:constant="HAND" />

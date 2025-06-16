@@ -63,7 +63,7 @@
                 <Font name="Roboto Bold" size="19.0" />
             </font>
         </Label>
-        <Label layoutX="192.0" layoutY="423.0" prefHeight="24.0" prefWidth="399.0" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="It's also accessible if you set a recovery email.">
+        <Label layoutX="192.0" layoutY="423.0" prefHeight="24.0" prefWidth="399.0" styleClass="custom-font-even-smaller" stylesheets="@styleforROBOTO.css" text="It's also accessible if you set a recovery gmail.">
             <font>
                 <Font name="Roboto Bold" size="19.0" />
             </font>
