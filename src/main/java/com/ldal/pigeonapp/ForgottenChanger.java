@@ -45,13 +45,17 @@ public class ForgottenChanger
     @FXML
     public void changepassword(ActionEvent event)
     {
-        if(sqlServer.validateLogin(loginer.getText()) && sqlServer.validateRecoveryPass(loginer.getText(), backuppassword.getText()) && newpasswordconf.getText().equals(newpassword.getText()))
+        if(sqlServer.validateLogin(loginer.getText()) && User.validatePassword(newpassword.getText()) && sqlServer.validateRecoveryPass(loginer.getText(), backuppassword.getText()) && newpasswordconf.getText().equals(newpassword.getText()))
         {
             sqlServer.changePassword(passHasher.hasher(newpassword.getText()), loginer.getText());
             newRecoverypass = passHasher.backuppassword();
             sqlServer.changeRecoverypass(newRecoverypass, loginer.getText());
             WarnerClass.WarnerError(warner, "Password changed successfully", true);
             WarnerClass.WarnerError(warner1, "new recoverypass: " + newRecoverypass, true);
+        }
+        else if(!sqlServer.validateRecoveryPass(loginer.getText(), backuppassword.getText()))
+        {
+            WarnerClass.WarnerError(warner, "Invalid recoveryPass", false);
         }
         else
         {
