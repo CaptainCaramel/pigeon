@@ -85,16 +85,20 @@ public class CustomLabelsScene implements Initializable {
     @FXML
     public void emailAdd(ActionEvent actionEvent) {
         String email = emailInput.getText();
-        if(!email.isEmpty() && Client.getSQLServer().validateEmail(email) && !currLabel.emails.contains(email))
+        if(!email.isEmpty() && Client.getSQLServer().validatePigeonEmail(email) && !currLabel.emails.contains(email))
         {
             currLabel.emails.add(email);
             WarnerClass.WarnerError(warner, email + " added to this label", true);
             client.saveSettings();
             switchLabel();
         }
-        else if(email.isEmpty() || !Client.getSQLServer().validateLogin(email))
+        else if(!Client.getSQLServer().validatePigeonEmail(email))
         {
             WarnerClass.WarnerError(warner, "Invalid user", false);
+        }
+        else if(email.isEmpty())
+        {
+            WarnerClass.WarnerError(warner, "Please input information", false);
         }
         else
         {
@@ -105,14 +109,14 @@ public class CustomLabelsScene implements Initializable {
     @FXML
     public void emailRemove(ActionEvent actionEvent) {
         String email = emailInput.getText();
-        if(!email.isEmpty() && Client.getSQLServer().validateEmail(email) && currLabel.emails.contains(email))
+        if(!email.isEmpty() && Client.getSQLServer().validatePigeonEmail(email) && currLabel.emails.contains(email))
         {
             currLabel.emails.removeIf(e ->(e.equals(email)));
             WarnerClass.WarnerError(warner, email + " removed from this label", true);
             switchLabel();
 
         }
-        else if(email.isEmpty() || !Client.getSQLServer().validateLogin(email))
+        else if(email.isEmpty() || !Client.getSQLServer().validatePigeonEmail(email))
         {
             WarnerClass.WarnerError(warner, "Invalid user", false);
         }
@@ -203,7 +207,7 @@ public class CustomLabelsScene implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         client = new Client();
 
-        labels = Client.getCustomLabels();
+            labels = Client.getCustomLabels();
         if(labels.isEmpty()) currLabel = null;
         else currLabel = labels.getFirst();
 

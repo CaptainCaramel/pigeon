@@ -11,6 +11,7 @@ public class CustomLabel implements Serializable {
     private int labelID;
     private static int labelAmount;
     public ArrayList<String> emails;
+    private User user;
 
     @Serial
     private final static long serialVersionUID = 2508L;
@@ -20,6 +21,11 @@ public class CustomLabel implements Serializable {
         setLabelName(labelName);
         setLabelID(labelAmount);
         labelAmount++;
+        user = Client.getUser();
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public static boolean hasUniqueName(String labelName){

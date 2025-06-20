@@ -57,13 +57,14 @@ public class SpamSettingsScene
     public void spamAdd(ActionEvent event)
     {
         String userinput1 = userinput.getText();
-        if(!userinput1.isEmpty() && Client.getSQLServer().validateEmail(userinput1) && !Client.getSpamblacklist().contains(userinput1))
+        System.out.println(userinput.getText());
+        if(!userinput1.isEmpty() && Client.getSQLServer().validatePigeonEmail(userinput1) && !Client.getSpamblacklist().contains(userinput1))
         {
             Client.setSpamblacklist(userinput1);
             WarnerClass.WarnerError(warner, userinput1 + " spamlisted", true);
-            Client.saveBlocklist();
+            Client.saveSpamBlacklist();
         }
-        else if(!Client.getSQLServer().validateLogin(userinput1))
+        else if(!Client.getSQLServer().validatePigeonEmail(userinput1))
         {
             WarnerClass.WarnerError(warner, "Invalid user", false);
         }
@@ -80,13 +81,13 @@ public class SpamSettingsScene
     public void blockAdd(ActionEvent event)
     {
         String userinput1 = userinput.getText();
-        if(!userinput1.isEmpty() && Client.getSQLServer().validateEmail(userinput1) && !Client.getBlockedblacklist().contains(userinput1) && !userinput1.equals(Client.getUser().getEmail()))
+        if(!userinput1.isEmpty() && Client.getSQLServer().validatePigeonEmail(userinput1) && !Client.getBlockedblacklist().contains(userinput1) && !userinput1.equals(Client.getUser().getEmail()))
         {
             Client.setBlockedblacklist(userinput1);
             WarnerClass.WarnerError(warner, userinput1 + " Blocked", true);
             Client.saveBlocklist();
         }
-        else if(Client.getSQLServer().validateLogin(userinput1))
+        else if(!Client.getSQLServer().validatePigeonEmail(userinput1))
         {
             WarnerClass.WarnerError(warner, "Invalid user", false);
         }
@@ -107,7 +108,7 @@ public class SpamSettingsScene
     public void spamRemove(ActionEvent event)
     {
         String userinput1 = userinput.getText();
-        if(!userinput1.isEmpty() && Client.getSQLServer().validateEmail(userinput1) && Client.getSpamblacklist().contains(userinput1))
+        if(!userinput1.isEmpty() && Client.getSQLServer().validatePigeonEmail(userinput1) && Client.getSpamblacklist().contains(userinput1))
         {
             Client.removeSpamblacklist(userinput1);
             WarnerClass.WarnerError(warner, userinput1 + " removed from spamlist", true);
@@ -126,17 +127,17 @@ public class SpamSettingsScene
     public void blockRemove(ActionEvent event)
     {
         String userinput1 = userinput.getText();
-        if(!userinput1.isEmpty() && Client.getSQLServer().validateEmail(userinput1) && Client.getBlockedblacklist().contains(userinput1))
+        if(!userinput1.isEmpty() && Client.getSQLServer().validatePigeonEmail(userinput1) && Client.getBlockedblacklist().contains(userinput1))
         {
             Client.removeBlockedblacklist(userinput1);
             WarnerClass.WarnerError(warner, userinput1 + " UnBlocked", true);
-            Client.saveSpamBlacklist();
+            Client.saveBlocklist();
         }
-        else if(!Client.getSQLServer().validateEmail(userinput1))
+        else if(!Client.getSQLServer().validatePigeonEmail(userinput1))
         {
             WarnerClass.WarnerError(warner, "Invalid user", false);
         }
-        else if(!Client.getSpamblacklist().contains(userinput1))
+        else if(!Client.getBlockedblacklist().contains(userinput1))
         {
             WarnerClass.WarnerError(warner, "User isn't Blocked", false);
         }

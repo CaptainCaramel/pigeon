@@ -32,6 +32,7 @@ public class SQLServer
     private final PreparedStatement setGmailFromLogin;
     private final PreparedStatement checkGmailFromLogin;
     private final PreparedStatement getGmailFromLogin;
+    private final PreparedStatement checkPigeonEmail;
     private final Statement statement;
 
     public SQLServer()
@@ -48,6 +49,7 @@ public class SQLServer
 
             checkLogin = connection.prepareStatement("Select id from user where login = ?");
             checkEmail = connection.prepareStatement("Select gmailRecovery from user where login = ?");
+            checkPigeonEmail = connection.prepareStatement("Select * from user where email = ?");
             checkBackupPassword = connection.prepareStatement("Select recoveryPass from user where login = ?");
             checkPassword = connection.prepareStatement("Select hashedPass from user where login = ?");
             getUserFromLogin = connection.prepareStatement("Select * from user where login = ?");
@@ -170,6 +172,19 @@ public class SQLServer
         try{
             checkEmail.setString(1, email);
             ResultSet dbResult = checkEmail.executeQuery();
+
+            return dbResult.isBeforeFirst();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean validatePigeonEmail(String email)
+    {
+        try{
+            checkPigeonEmail.setString(1, email);
+            ResultSet dbResult = checkPigeonEmail.executeQuery();
 
             return dbResult.isBeforeFirst();
 

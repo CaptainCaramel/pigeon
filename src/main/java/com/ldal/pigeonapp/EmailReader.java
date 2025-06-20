@@ -97,7 +97,6 @@ public class EmailReader implements Initializable {
             Declareridk.setText("To: ");
             senderText.setText(email.getReceiver().getEmail());
         }
-
         emailText.setText(email.getText());
         subjText.setText(email.getSubject());
         if(dateTime != null)dateText.setText(dateTime.substring(0,10));

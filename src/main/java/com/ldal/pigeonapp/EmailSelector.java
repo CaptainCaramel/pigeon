@@ -96,7 +96,7 @@ public class EmailSelector implements Initializable {
         for(CustomLabel c : customLabels){
             ArrayList<Email> labelArr = new ArrayList<>();
             for(Email e : inbox){
-                if(c.emails.contains(e.getSender().getEmail())){
+                if(c.emails.contains(e.getSender().getEmail()) && !Client.getBlockedblacklist().contains(e.getSender().getEmail()) && e.getReceiver().getEmail().equals(Client.getUser().getEmail())){
                     labelArr.add(e);
                 }
             }
@@ -112,15 +112,22 @@ public class EmailSelector implements Initializable {
         if (folderID == 0) {
             folder = inbox;
             declareText.setText("INBOX");
+            sorter.setDisable(false);
+            sorter.setVisible(true);
         } else if (folderID == 1) {
             declareText.setText("DRAFT");
             folder = drafts;
+            sorter.setDisable(true);
+            sorter.setVisible(false);
         } else if (folderID == 2) {
             folder = sent;
             declareText.setText("SENT");
+            sorter.setDisable(false);
+            sorter.setVisible(true);
         } else if (folderID == 3) {
             folder = spam;
             declareText.setText("SPAM");
+            sorter.setDisable(false);
         } else if (folderID > 3){
 
             ArrayList<Button> cLabelButtons = SideBarController.labelButtons;
@@ -131,6 +138,9 @@ public class EmailSelector implements Initializable {
 
             folderID = 4 + i;
             declareText.setText(Client.getCustomLabels().get(i).getLabelName().toUpperCase());
+            sorter.setDisable(false);
+            sorter.setVisible(true);
+            sorter.show();
         }
 
         for (int i = 0; i < eButtons.size(); i++) {
@@ -186,7 +196,9 @@ public class EmailSelector implements Initializable {
             displayFolder(inbox);
             declareText.setText("INBOX");
             folderClearer.setText("Clear INBOX out");
+            sorter.setDisable(false);
             folderClearer.setDisable(false);
+            sorter.setVisible(true);
             folderClearer.setOnAction(e ->
             {
                 SQLServer sqlServer = new SQLServer();
@@ -215,6 +227,8 @@ public class EmailSelector implements Initializable {
             declareText.setText("DRAFTS");
             folderClearer.setText("Clear DRAFT out");
             folderClearer.setDisable(false);
+            sorter.setDisable(true);
+            sorter.setVisible(false);
             folderClearer.setOnAction(e ->
             {
                 Client.FolderDeleter(2);
@@ -227,6 +241,8 @@ public class EmailSelector implements Initializable {
             declareText.setText("SENT");
             folderClearer.setText("Clear SENT out");
             folderClearer.setDisable(false);
+            sorter.setDisable(false);
+            sorter.setVisible(true);
             folderClearer.setOnAction(e ->
             {
                 Client.FolderDeleter(3);
@@ -238,11 +254,15 @@ public class EmailSelector implements Initializable {
             displayFolder(spam);
             declareText.setText("SPAM");
             folderClearer.setText("");
+            sorter.setDisable(false);
+            sorter.setVisible(true);
             folderClearer.setDisable(true);
         }
-        else if (cLabelButtons.contains(clickedButton)){
+        else
+        {
             int i;
-            for (i = 0; i < cLabelButtons.size(); i++) {
+            for (i = 0; i < cLabelButtons.size(); i++)
+            {
                 if (cLabelButtons.get(i).equals(clickedButton)) break;
             }
 
@@ -251,7 +271,6 @@ public class EmailSelector implements Initializable {
             declareText.setText(Client.getCustomLabels().get(i).getLabelName().toUpperCase());
             folderClearer.setText("");
             folderClearer.setDisable(true);
-
         }
     }
 
@@ -283,7 +302,6 @@ public class EmailSelector implements Initializable {
             folderClearer.setDisable(false);
             folderClearer.setOnAction(e ->
             {
-                System.out.println("yle");
                 SQLServer sqlServer = new SQLServer();
                 for(int i = 0; i < fullInbox.size(); i++)
                 {
@@ -332,8 +350,15 @@ public class EmailSelector implements Initializable {
             folderClearer.setText("");
             folderClearer.setDisable(true);
         }
-        else if (folderID > 3){
+        else if (folderID > 3)
+        {
             displayFolder(customLabelsArr.get(folderID - 4));
+
+            ArrayList<Button> cLabelButtons = SideBarController.labelButtons;
+
+            declareText.setText("Custom Label");
+            folderClearer.setText("");
+            folderClearer.setDisable(true);
         }
     }
 

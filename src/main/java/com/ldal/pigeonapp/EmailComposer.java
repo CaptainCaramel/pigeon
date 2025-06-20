@@ -137,6 +137,11 @@ public class EmailComposer implements Initializable {
 
         ArrayList<String> everyReceiver = Client.indorGroupChecker(rec);
 
+        if(rec.isEmpty())
+        {
+            WarnerClass.WarnerError(errorText, "Receiver cannot be empty", false);
+            return;
+        }
         if(subj.length() > 75)
         {
             WarnerClass.WarnerError(errorText, "Subject max length(75) exceeded!", false);

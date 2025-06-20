@@ -3,6 +3,7 @@ package com.ldal.pigeonapp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -93,6 +94,7 @@ public class SideBarController {
         Button[] btn = {inboxButton, draftsButton, sentButton, spamButton, composerButton, configureButton, clearerButton};
         ArrayList<Button> buttons = new ArrayList<>(List.of(btn));
         for (CustomLabel c : Client.getCustomLabels()){
+            if(!c.getUser().equals(Client.getUser())) continue;
             Button button = new Button();
             button.setText(c.getLabelName());
             button.getStylesheets().add(cssURL);
@@ -104,6 +106,7 @@ public class SideBarController {
                     throw new RuntimeException(ex);
                 }
             });
+            button.setCursor(Cursor.HAND);
 
             labelButtons.add(button);
 
