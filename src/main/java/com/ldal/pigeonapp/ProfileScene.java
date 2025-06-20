@@ -91,9 +91,10 @@ public class ProfileScene implements Initializable
 
         SplashScreensTexts = new String[]
                 {
-                        "Don't forget to checkout Cruellete!",
-                        "Don't forget to checkout Shiftendo!",
-                        "Don't forget to checkout\nFusionBlast!",
+                        "Don't forget to check out Cruellete!",
+                        "Don't forget to check out Shiftendo!",
+                        "Don't forget to check out\nFusion Blast!",
+                        "Don't forget to check out\n@CaptainCaramel (On YT)!",
                         "There’s no deeper lore. Or is there?",
                         "Don't you dare go hollow!",
                         "We were gonna add a battle pass\nhere but nah.",
@@ -104,15 +105,16 @@ public class ProfileScene implements Initializable
                         "*Not enough insight to comprehend this splash tip*",
                         "Zero pigeons were harmed in the\n\t making of this app.",
                         "From: Hanako\nSubject: NocturneOp55N1\n\tMeet me at the embers.",
-                        "From: Monte | To: Noct\nThe game was rigged from\n    the beginning.",
+                        "From: Monte | To: Noct\nThe game was rigged from\n the beginning.",
                         "\tI see.\n\tSo this thing...\n\tin the palm of my hand...\n\tis a heart",
                         "R2-D2 tried to decode our code...\nhe gave up.",
-                        "CC you fuse,\nGugena you blast\n    and Tolchok...you just be tolchok",
+                        "CC you fuse,\nGugena you blast\n and Tolchok...you just be tolchok",
                         "I heard there was a knight\nthat went hollow",
                         "We made it to to the major leagues\n\tchoom!"
                 };
 
         Random random = new Random();
         WarnerClass.WarnerError(SplashScreenTexter, SplashScreensTexts[random.nextInt(SplashScreensTexts.length)], true);
+        SplashScreenTexter.setStyle("-fx-text-fill: darkgray; -fx-font-size: 18; -fx-opacity: 0.82;");
     }
 }

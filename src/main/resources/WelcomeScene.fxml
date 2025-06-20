@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ldal.pigeonapp.WelcomeScene">
    <children>
-      <ImageView fitHeight="730.0" fitWidth="1297.0" layoutX="-7.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@loginBackgroud.png" />
          </image>

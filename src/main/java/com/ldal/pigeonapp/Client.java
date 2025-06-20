@@ -4,16 +4,17 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class Client implements Serializable {
+public class Client implements Serializable
+{
     private static boolean rememberMe;
     private boolean savedRememberMe;
-
-
 
     @Serial
     private static final long serialVersionUID = 2309L;
 
-    private static final String filePath = "C:\\Users\\User\\Documents\\Pigeon\\pigeon\\out\\artifacts\\PigeonApp_jar";
+    private static final String filePath = (System.getenv("LOCALAPPDATA")) + "/pigeon";
+
+    File pigeon = new File(filePath);
 
     private static SQLServer sqlServer = null;
 
@@ -49,25 +50,21 @@ public class Client implements Serializable {
 
     public Client()
     {
-        if (!loadSettings())
-        {
-            //default settingebi
-
-            rememberMe = false;
-            customLabels = new ArrayList<>();
-            spamblacklist = new ArrayList<>();
-
-
-            saveSettings();
-        }
-
         try {
+
+            if(pigeon.mkdir() == true)
+            {
+                System.out.println("gutentag00");
+            }
+
             File sent = new File(filePath + "\\Sent.txt");
             File draft = new File(filePath + "\\Draft.txt");
             File spam = new File(filePath + "\\Spam.txt");
             File settings = new File(filePath + "\\settings.txt");
+            File receipients = new File(filePath + "\\Recipients.txt");
+            File SQLInfo = new File(filePath + "\\SQLInfo.txt");
 
-            File[] files = {sent, draft, spam ,settings};
+            File[] files = {sent, draft, spam ,settings, receipients, SQLInfo};
 
             for (File file : files) {
                 if (!file.exists()) {
@@ -79,7 +76,19 @@ public class Client implements Serializable {
         {
             throw new RuntimeException(e);
         }
-        sqlServer = new SQLServer();
+
+        if (!loadSettings())
+        {
+            //default settingebi
+
+            rememberMe = false;
+            customLabels = new ArrayList<>();
+            spamblacklist = new ArrayList<>();
+
+            saveSettings();
+        }
+
+        //sqlServer = new SQLServer();
         CustomLabel.setLabelAmount(customLabels.size());
     }
 
@@ -100,12 +109,12 @@ public class Client implements Serializable {
 
             if(rememberMe) {
                 user = loadedClient.savedUser;
+                loadReceipientsInfo();
             }
 
             customLabels = loadedClient.savedCustomLabels;
 
             Recepients = loadedClient.Recepients;
-            loadReceipientsInfo();
             objectInputStream.close();
 
         }
@@ -207,6 +216,8 @@ public class Client implements Serializable {
         }
         catch (IOException e)
         {
+            SQLServer.userName = null;
+            SQLServer.password = null;
             return false;
         }
     }
@@ -232,6 +243,7 @@ public class Client implements Serializable {
             {
                 lines.add(line.trim());
             }
+            if(lines.size() == 0) return;
             if(lines.get(lines.size() - 1).equals(getUser().getLogin()))
             {
                 for(String s : lines)
@@ -508,5 +520,9 @@ public class Client implements Serializable {
 
     public static void setCustomLabels(ArrayList<CustomLabel> customLabels) {
         Client.customLabels = customLabels;
+    }
+
+    public static void setSqlServer(SQLServer sqlServer) {
+        Client.sqlServer = sqlServer;
     }
 }

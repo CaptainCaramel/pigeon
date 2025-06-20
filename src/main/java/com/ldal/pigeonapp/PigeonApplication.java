@@ -24,9 +24,12 @@ public class PigeonApplication extends Application
     {
         Scene scene;
         Parent root;
-        if(Client.loadSQLInfo()) Client.loadSQLInfo();
-        if(SQLServer.password != null && SQLServer.userName != null) new SQLServer();
         new Client();
+        Client.loadSQLInfo();
+        if(SQLServer.password != null && SQLServer.userName != null)
+        {
+            Client.setSqlServer(new SQLServer());
+        }
         if(Client.getUser() != null && Client.isRememberMe())
         {
 
