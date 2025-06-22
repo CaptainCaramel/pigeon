@@ -17,6 +17,8 @@ public class User implements Serializable
     @Serial
     private final static long serialVersionUID = 7032;
 
+    ArrayList<Email> receivedEmails;
+
     User(int id, String login, String email){
         setId(id);
         setLogin(login);

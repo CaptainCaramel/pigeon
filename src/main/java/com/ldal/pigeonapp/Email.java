@@ -14,7 +14,8 @@ public class Email implements Serializable
     @Serial
     private static final long serialVersionUID = 2009L;
 
-    Email(User sender, User receiver, String text, String subject){
+    Email(User sender, User receiver, String text, String subject)
+    {
         setSender(sender);
         setReceiver(receiver);
         setText(text);
@@ -93,7 +94,8 @@ public class Email implements Serializable
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "To : " + receiver.getEmail() + ";" +
                 "\nSubject : " + subject +
                 "\nAt : " + dateTime +
