@@ -78,7 +78,7 @@
                   <Font name="Roboto Medium" size="20.0" />
                </font>
             </Label>
-            <Button layoutX="594.0" layoutY="452.0" mnemonicParsing="false" onAction="#Backtomenu" prefHeight="19.0" prefWidth="71.0" style="-fx-background-color: transparent; -fx-background-radius: 15;" text="Maybe later" textFill="#363636">
+            <Button layoutX="594.0" layoutY="452.0" mnemonicParsing="false" onAction="#gmailTurnerOff" prefHeight="19.0" prefWidth="71.0" style="-fx-background-color: transparent; -fx-background-radius: 15;" text="Maybe later" textFill="#363636">
                <font>
                   <Font name="Roboto Bold" size="10.0" />
                </font>
@@ -114,7 +114,7 @@
                   <Font size="10.0" />
                </font>
             </Label>
-            <Button fx:id="Backtomenu" layoutX="389.0" layoutY="261.0" mnemonicParsing="false" onAction="#Backtomenu" opacity="0.82" prefHeight="33.0" prefWidth="35.0" style="-fx-background-radius: 10; -fx-background-color: #de7259; -fx-label-padding: -40; -fx-padding: -40;" styleClass="custom-font" text="X">
+            <Button fx:id="Backtomenu" layoutX="389.0" layoutY="261.0" mnemonicParsing="false" onAction="#gmailTurnerOff" opacity="0.82" prefHeight="33.0" prefWidth="35.0" style="-fx-background-radius: 10; -fx-background-color: #de7259; -fx-label-padding: -40; -fx-padding: -40;" styleClass="custom-font" text="X">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

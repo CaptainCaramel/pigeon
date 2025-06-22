@@ -148,6 +148,13 @@ public class SignUpScene implements Initializable
         linkGmailAnchorPane.setVisible(false);
     }
 
+    @FXML
+    public void gmailTurnerOff(ActionEvent event)
+    {
+        linkGmailAnchorPane.setVisible(false);
+        linkGmailAnchorPane.setDisable(true);
+    }
+
     public void codeSender(ActionEvent event)
     {
         if(gmailer.getText().isEmpty())

@@ -340,7 +340,7 @@ public class SQLServer
             signUpStatement.setString(1, login);
             signUpStatement.setString(2, email);
             signUpStatement.setString(3, hashedPass);
-            signUpStatement.setString(4, recoveryPass);
+            signUpStatement.setString(4, passHasher.hasher(recoveryPass));
             signUpStatement.setString(5, dateCreated);
 
             signUpStatement.execute();

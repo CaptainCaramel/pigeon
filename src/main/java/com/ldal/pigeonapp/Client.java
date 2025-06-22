@@ -113,7 +113,13 @@ public class Client implements Serializable
             }
 
             customLabels = loadedClient.savedCustomLabels;
-
+            customLabels.removeIf(e -> !e.getUser().equals(Client.getUser()));
+            for (int c = 0; c < customLabels.size(); c++)
+            {
+                CustomLabel cl = customLabels.get(c);
+                cl.setLabelID(c);
+                customLabels.set(c, cl);
+            }
             Recepients = loadedClient.Recepients;
             objectInputStream.close();
 
