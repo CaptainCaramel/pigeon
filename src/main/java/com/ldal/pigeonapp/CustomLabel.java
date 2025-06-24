@@ -36,6 +36,10 @@ public class CustomLabel implements Serializable {
         return true;
     }
 
+    public static void decrementAmount(){
+        labelAmount--;
+    }
+
     public String getLabelName() {
         return labelName;
     }

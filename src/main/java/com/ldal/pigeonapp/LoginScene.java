@@ -57,6 +57,7 @@ public class LoginScene implements Initializable
                 WarnerClass.WarnerError(warning, "Login successful", true);
 
                 Client.login(username1);
+                client.loadLabels();
                 client.saveSettings();
                 System.out.println(Client.getUser().getLogin());
 

@@ -2,6 +2,8 @@ package com.ldal.pigeonapp;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.ArrayList;
 
 public class User implements Serializable
 {
@@ -104,7 +106,7 @@ public class User implements Serializable
     }
 
     public void setId(int id) throws NegativeIDException{
-        if(id < 0) {
+        if(id < -1) {
             throw new NegativeIDException("User ID cannot be negative!");
         }
         this.id = id;
