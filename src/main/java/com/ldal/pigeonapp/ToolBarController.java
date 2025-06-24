@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
+import java.util.ArrayList;
 
 public class ToolBarController
 {
@@ -104,6 +105,7 @@ public class ToolBarController
             try
             {
                 Client.setRememberMe(false);
+                Client.setCustomLabels(new ArrayList<>());
                 client.saveSettings();
                 Parent root = FXMLLoader.load(PigeonApplication.class.getResource("/WelcomeScene.fxml"));
                 Scene scene = new Scene(root);

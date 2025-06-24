@@ -89,12 +89,23 @@ public class SideBarController {
 
     public static void initSideBar(){
         labelButtons = new ArrayList<>();
+
+
+        for (int c = 0; c < Client.getCustomLabels().size(); c++)
+        {
+            CustomLabel cl = Client.getCustomLabels().get(c);
+            cl.setLabelID(c);
+            Client.getCustomLabels().set(c, cl);
+        }
+
+
+
+
         String cssURL = SideBarController.class.getResource("/styleforROBOTO.css").toExternalForm();
 
         Button[] btn = {inboxButton, draftsButton, sentButton, spamButton, composerButton, configureButton, clearerButton};
         ArrayList<Button> buttons = new ArrayList<>(List.of(btn));
         for (CustomLabel c : Client.getCustomLabels()){
-            if(!c.getUser().equals(Client.getUser())) continue;
             Button button = new Button();
             button.setText(c.getLabelName());
             button.getStylesheets().add(cssURL);
@@ -113,7 +124,7 @@ public class SideBarController {
             buttons.add(button);
             labelsVbox.getChildren().add(button);
         }
-        //system.out.println(Arrays.toString(buttons));
+
         for(Button b : buttons){
             b.setStyle("-fx-text-fill: #000000; -fx-background-color: TRANSPARENT");
             b.setOnMouseEntered(event -> b.setStyle("-fx-text-fill: #e17c65; -fx-background-color: TRANSPARENT"));

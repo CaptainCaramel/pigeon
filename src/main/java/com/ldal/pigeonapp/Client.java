@@ -12,11 +12,13 @@ public class Client implements Serializable
     @Serial
     private static final long serialVersionUID = 2309L;
 
-    private static final String filePath = (System.getenv("LOCALAPPDATA")) + "/pigeon";
+    private static final String filePath = (System.getenv("LOCALAPPDATA")) + "\\pigeon";
 
     File pigeon = new File(filePath);
 
     private static SQLServer sqlServer = null;
+
+    private static String labelPath = "";
 
     private static User user;
     private User savedUser;
@@ -28,7 +30,6 @@ public class Client implements Serializable
 
 
     private static ArrayList<CustomLabel> customLabels;
-    private ArrayList<CustomLabel> savedCustomLabels;
 
     public static ArrayList<String> getSpamblacklist() {return spamblacklist;}
     public static ArrayList<String> getBlockedblacklist() {return blockedblacklist;}
@@ -52,10 +53,7 @@ public class Client implements Serializable
     {
         try {
 
-            if(pigeon.mkdir() == true)
-            {
-                System.out.println("gutentag00");
-            }
+            pigeon.mkdir();
 
             File sent = new File(filePath + "\\Sent.txt");
             File draft = new File(filePath + "\\Draft.txt");
@@ -82,14 +80,12 @@ public class Client implements Serializable
             //default settingebi
 
             rememberMe = false;
-            customLabels = new ArrayList<>();
             spamblacklist = new ArrayList<>();
 
             saveSettings();
         }
-
         //sqlServer = new SQLServer();
-        CustomLabel.setLabelAmount(customLabels.size());
+
     }
 
 
@@ -100,27 +96,25 @@ public class Client implements Serializable
 
     public boolean loadSettings()
     {
+        File settingsFile = new File(filePath + "\\settings.txt");
+        if (settingsFile.length() == 0)
+        {
+            return false;
+        }
+
         try{
             loadSpamblacklist();
             loadBlocklist();
             ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filePath + "\\settings.txt")));
             Client loadedClient = (Client)objectInputStream.readObject();
             rememberMe = loadedClient.savedRememberMe;
-
             if(rememberMe) {
                 user = loadedClient.savedUser;
+                labelPath = filePath + "\\labels_" + user.getLogin() + ".txt";
+                loadLabels();
                 loadReceipientsInfo();
             }
 
-            customLabels = loadedClient.savedCustomLabels;
-            customLabels.removeIf(e -> !e.getUser().equals(Client.getUser()));
-            for (int c = 0; c < customLabels.size(); c++)
-            {
-                CustomLabel cl = customLabels.get(c);
-                cl.setLabelID(c);
-                customLabels.set(c, cl);
-            }
-            Recepients = loadedClient.Recepients;
             objectInputStream.close();
 
         }
@@ -130,6 +124,54 @@ public class Client implements Serializable
             return false;
         }
         return true;
+    }
+
+    public void saveLabels(){
+        try{
+
+            File labelFile = new File(labelPath);
+            if(!labelFile.exists()) labelFile.createNewFile();
+
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(labelPath)));
+
+            for(CustomLabel c : customLabels){
+                objectOutputStream.writeObject(c);
+            }
+
+            objectOutputStream.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void loadLabels(){
+
+        customLabels = new ArrayList<>();
+
+        try{
+
+             ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(labelPath)));
+
+             CustomLabel label;
+             while((label = (CustomLabel) objectInputStream.readObject()) != null){
+                 customLabels.add(label);
+                 System.out.println(label.getLabelName());
+             }
+
+             objectInputStream.close();
+
+        } catch(EOFException f){
+            System.out.println("labels read");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (FileNotFoundException fnf){
+            saveLabels();
+        } catch (IOException e){
+            throw new RuntimeException(e);
+        }
+        System.out.println(customLabels);
+        CustomLabel.setLabelAmount(customLabels.size());
     }
 
     public static void loadSpamblacklist()
@@ -300,7 +342,6 @@ public class Client implements Serializable
         try{
             savedRememberMe = rememberMe;
             if(rememberMe)savedUser = user;
-            savedCustomLabels = customLabels;
 
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filePath + "\\settings.txt")));
             objectOutputStream.writeObject(this);
@@ -312,6 +353,8 @@ public class Client implements Serializable
 
     public static void login(String username){
         user = sqlServer.logIn(username);
+        labelPath = filePath + "\\labels_" + user.getLogin() + ".txt";
+
     }
 
     public static void emailDrafter(Email email)

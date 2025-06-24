@@ -128,7 +128,29 @@ public class CustomLabelsScene implements Initializable {
 
     @FXML
     public void labelDelete(ActionEvent actionEvent) {
+        if(currLabel == null) return;
+        CustomLabel labelToSet;
 
+        if(CustomLabel.getLabelAmount() > 1 && currLabel.getLabelID() != 0) labelToSet = labels.get(currLabel.getLabelID() - 1);
+        else if (CustomLabel.getLabelAmount() > 1 && currLabel.getLabelID() == 0) labelToSet = labels.get(1);
+        else labelToSet = null;
+
+        labels.remove(currLabel);
+
+        for (int c = 0; c < labels.size(); c++)
+        {
+            CustomLabel cl = labels.get(c);
+            cl.setLabelID(c);
+            labels.set(c, cl);
+        }
+
+        currLabel = labelToSet;
+
+        switchLabel();
+
+        CustomLabel.decrementAmount();
+        Client.setCustomLabels(labels);
+        client.saveLabels();
     }
 
     @FXML
@@ -193,21 +215,26 @@ public class CustomLabelsScene implements Initializable {
     @FXML
     private void createLabel(ActionEvent actionEvent){
         String lName = labelNameInput.getText();
-        if(lName.isEmpty() || !CustomLabel.hasUniqueName(lName)) return;
+        if(lName.isEmpty() || !CustomLabel.hasUniqueName(lName)) {
+            warner.setText("Duplicate label name!");
+            return;
+        }
+        labelNameInput.setText("");
+
         CustomLabel label = new CustomLabel(lName);
         labels.add(label);
         currLabel = label;
         switchLabel();
         closeLabelCreator(new ActionEvent());
         Client.setCustomLabels(labels);
-        client.saveSettings();
+        client.saveLabels();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         client = new Client();
 
-            labels = Client.getCustomLabels();
+        labels = Client.getCustomLabels();
         if(labels.isEmpty()) currLabel = null;
         else currLabel = labels.getFirst();
 

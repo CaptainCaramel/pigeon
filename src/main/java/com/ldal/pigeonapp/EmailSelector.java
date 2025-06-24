@@ -352,6 +352,11 @@ public class EmailSelector implements Initializable {
         }
         else if (folderID > 3)
         {
+            if(customLabelsArr == null || customLabelsArr.isEmpty()) {
+                folderID = 0;
+                displayFolder();
+            }
+
             displayFolder(customLabelsArr.get(folderID - 4));
 
             ArrayList<Button> cLabelButtons = SideBarController.labelButtons;

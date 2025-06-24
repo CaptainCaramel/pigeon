@@ -129,9 +129,7 @@ public class SQLServer
                 "emailText mediumtext," +
                 "attachment mediumblob," +
                 "sendTime datetime," +
-                "subject varchar(75)," +
-                "Foreign key(senderID) references user(id)," +
-                "Foreign key(receiverID) references user(id)" +
+                "subject varchar(75)" +
                 ")");
     }
 
@@ -300,7 +298,7 @@ public class SQLServer
             if(!user.getBoolean("isAdmin"))return new User(user.getInt("id"), user.getString("login"), user.getString("email"));
             else return new Admin(user.getInt("id"), user.getString("login"), user.getString("email"));
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return new User(-1, "", "DeletedUser");
         }
     }
 
