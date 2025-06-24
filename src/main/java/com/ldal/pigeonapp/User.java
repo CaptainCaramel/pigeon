@@ -3,7 +3,10 @@ package com.ldal.pigeonapp;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
+<<<<<<< Updated upstream
 import java.util.ArrayList;
+=======
+>>>>>>> Stashed changes
 
 public class User implements Serializable
 {
