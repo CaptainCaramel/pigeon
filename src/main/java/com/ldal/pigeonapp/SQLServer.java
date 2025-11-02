@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 public class SQLServer
 {
-    String url = "jdbc:mysql://localhost:3306/";
-    static String userName;
-    static String password;
+    String url = "jdbc:mysql://sql7.freesqldatabase.com:3306/sql7805733";
+    static String userName = "sql7805733";
+    static String password = "5Ku4wg8YE3";
 
     PassHasher passHasher = new PassHasher();
 
@@ -39,10 +39,12 @@ public class SQLServer
     {
         try
         {
+            String userName = "sql7805733";
+            String password = "5Ku4wg8YE3";
             connection = DriverManager.getConnection(url, userName, password);
             statement = connection.createStatement();
             dbSetup();
-            statement.execute("use pigeonDB");
+            //statement.execute("use pigeonDB");
 
             signUpStatement = connection.prepareStatement("Insert into user(login, email, hashedpass, recoverypass, dateCreated) " +
                     "values(?, ?, ?, ?, ?)");
@@ -108,9 +110,10 @@ public class SQLServer
         statement.execute("drop database pigeonDB");
     }
 
-    private void dbSetup() throws SQLException {
-        statement.execute("create database if not exists pigeonDB");
-        statement.execute("use pigeonDB");
+    private void dbSetup() throws SQLException
+    {
+        //statement.execute("create database if not exists pigeonDB");
+        //statement.execute("use pigeonDB");
         statement.execute("create table if not exists user(" +
                 "id int primary key auto_increment," +
                 "login varchar(20)," +
